@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'src/pre_sets.dart';
 import 'src/lobbyUI.dart';
 
 void main() {
@@ -17,6 +16,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var selectedIndex = 1;
+  List<LobbyPlayerInputTile> playerList = [new LobbyPlayerInputTile()];
+
+  addPlayer() {
+    playerList.add(new LobbyPlayerInputTile());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,27 +41,26 @@ class _MyAppState extends State<MyApp> {
           child: Icon(Icons.add),
           onPressed: () {
             setState(() {
-              animal = PreSets().getRandomAnimal();
+              addPlayer();
             });
           },
         ),
 
 
-        body: ListView(
-          scrollDirection: Axis.vertical,
+        body: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    LobbyHeader(),
-                    LobbyPlayerInputTile(),
-                    LobbyTestBox(),
-                  ],
+            LobbyHeader(),
+
+            Expanded(
+              child: ListView.builder(   // list of players
+                  shrinkWrap: true,
+                  itemCount: playerList.length,
+                  itemBuilder: (_, index) => playerList[index],
                 ),
-              ],
             ),
+            
+
+            AddPlayerButton(),
           ],
         ),
 
