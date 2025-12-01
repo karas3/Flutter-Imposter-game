@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'src/lobbyUI.dart';
+import 'src/lobby.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,10 +17,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var selectedIndex = 1;
-  List<LobbyPlayerInputTile> playerList = [new LobbyPlayerInputTile()];
 
-  addPlayer() {
-    playerList.add(new LobbyPlayerInputTile());
+  addPlayercallback() {
+    print("Called back!");
+    setState(() {
+      lobby.addPlayer();
+    });
   }
 
   @override
@@ -37,30 +40,20 @@ class _MyAppState extends State<MyApp> {
         ),
 
 
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            setState(() {
-              addPlayer();
-            });
-          },
-        ),
-
-
         body: Column(
           children: [
             LobbyHeader(),
 
-            Expanded(
+            Flexible(
               child: ListView.builder(   // list of players
                   shrinkWrap: true,
-                  itemCount: playerList.length,
-                  itemBuilder: (_, index) => playerList[index],
+                  itemCount: lobby.getPlayerListLenght(),
+                  itemBuilder: (_, index) => lobby.getPlayer(index),
                 ),
             ),
             
 
-            AddPlayerButton(),
+            AddPlayerButton(callbackFunction:addPlayercallback),
           ],
         ),
 

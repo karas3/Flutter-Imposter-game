@@ -73,12 +73,14 @@ class LobbyPlayerInputTile extends StatelessWidget {
 
 
 class AddPlayerButton extends StatelessWidget {
-  const AddPlayerButton({super.key});
+  final Function callbackFunction;
+  const AddPlayerButton({super.key, required this.callbackFunction});
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: () {
+        callbackFunction();
       },
       style: ButtonStyle(
         fixedSize: WidgetStatePropertyAll(const Size(350, 100)),
