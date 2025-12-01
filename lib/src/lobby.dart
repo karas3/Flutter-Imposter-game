@@ -15,6 +15,10 @@ class Lobby {
     _playerList.add(new LobbyPlayerInputTile());
   }
 
+  removePlayer(index) {
+    _playerList.removeAt(index);
+  }
+
   getPlayer(index) {
     return _playerList[index];
   }

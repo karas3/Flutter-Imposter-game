@@ -16,6 +16,7 @@ class LobbyHeader extends StatelessWidget {
 
 
 class LobbyPlayerInputTile extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Center(      // centers elements
@@ -29,7 +30,7 @@ class LobbyPlayerInputTile extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(15.0)),
               color: const Color.fromARGB(255, 197, 197, 197),
               boxShadow: [
-                BoxShadow(
+                BoxShadow(  
                   color: const Color.fromARGB(255, 0, 0, 0),
                   offset: Offset(3, 3),
                   blurRadius: 5,
@@ -39,18 +40,20 @@ class LobbyPlayerInputTile extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Container(                                 // small color stripe
+//==================================    Small Color Stripe   ================================== 
+                Container(                     
                   margin: EdgeInsets.only(left: 20.0),
                   height: 100,
                   width: 40,
-                  decoration: BoxDecoration(                          // style of small color stripe
+                  decoration: BoxDecoration(                          
                     color: const Color.fromARGB(255, 0, 110, 255),
                   ),
                 ),
-                Container(    // Container for input field
+//==================================    Container for input field   ==================================
+                Container(                        
                   alignment: Alignment.center,
-                  margin: EdgeInsets.only(left: 20),
-                  width: 240,
+                  margin: EdgeInsets.only(left: 20, right: 5),
+                  width: 210,
                   height: 100,
                   child: TextFormField(                   //input field
                     decoration: const InputDecoration(
@@ -62,6 +65,27 @@ class LobbyPlayerInputTile extends StatelessWidget {
                     ),
                   ),
                 ),
+//==================================    Delete button   ==================================
+                OutlinedButton(
+                  onPressed: () {
+
+                  }, 
+                  style: ButtonStyle(
+                    minimumSize: WidgetStatePropertyAll(Size.zero),
+                    fixedSize: WidgetStatePropertyAll(const Size(40, 40)),
+                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
+                    padding: WidgetStatePropertyAll(EdgeInsets.all(0)),
+                    side: WidgetStatePropertyAll(BorderSide(                                                                // set border width and color
+                      width: 3.5,
+                      color: Colors.red,
+                    )),
+                  ),
+                  child: Icon(
+                    size: 40,
+                    Icons.close,
+                    color: Colors.red,
+                  )
+                )
               ],
             ),
           ),
@@ -70,6 +94,8 @@ class LobbyPlayerInputTile extends StatelessWidget {
     );
   }
 }
+
+
 
 
 class AddPlayerButton extends StatelessWidget {

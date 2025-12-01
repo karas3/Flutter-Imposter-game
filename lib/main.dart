@@ -19,7 +19,6 @@ class _MyAppState extends State<MyApp> {
   var selectedIndex = 1;
 
   addPlayercallback() {
-    print("Called back!");
     setState(() {
       lobby.addPlayer();
     });
@@ -79,11 +78,6 @@ class _MyAppState extends State<MyApp> {
               label: "informations"
             ),
           ]
-        ),
-
-
-        drawer: Drawer(
-          child: Text("Cos"),
         ),
       ),
     );
