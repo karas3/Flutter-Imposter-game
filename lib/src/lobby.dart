@@ -1,30 +1,28 @@
-// import 'package:flutter/material.dart';
-
 import 'lobbyUI.dart';
 
-// class Player {
-//   String _name = "";
-//   var _color = Color.fromARGB(0, 0, 0, 0);
-//   var _role = "";
-// }
+class Lobby{
+  final Function(int) removeCallback;   
+  List<LobbyPlayerInputTile> _playerList = [];  
+  Lobby({required this.removeCallback});  //lobby constructor
+  
 
-class Lobby {
-  List<LobbyPlayerInputTile> _playerList = [new LobbyPlayerInputTile()];
-
-  addPlayer() {
-    _playerList.add(new LobbyPlayerInputTile());
+  void init() {
+   _playerList = [new LobbyPlayerInputTile(index: 0, removeCallbackFunction: removeCallback)];  // add first input tile element
   }
 
-  removePlayer(index) {
+  void addPlayer() {
+    var index = _playerList.length;   // get index at which container is storred in array. Used for deleting input tile later
+    _playerList.add(new LobbyPlayerInputTile(index: index, removeCallbackFunction: removeCallback));
+  }
+
+  void removePlayer(index) {    //remove player input tile at index
     _playerList.removeAt(index);
   }
 
-  getPlayer(index) {
+  getPlayer(index) {     // used to display list
     return _playerList[index];
   }
-  getPlayerListLenght() {
+  int getPlayerListLenght() {   // used to display list
     return _playerList.length;
   }
 }
-
-var lobby = Lobby();

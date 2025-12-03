@@ -15,8 +15,21 @@ class LobbyHeader extends StatelessWidget {
 }
 
 
-class LobbyPlayerInputTile extends StatelessWidget {
+class LobbyPlayerInputTile extends StatefulWidget {
+  final Function removeCallbackFunction;
+  final index;
 
+  const LobbyPlayerInputTile({
+    Key? key,
+    required this.index,
+    required this.removeCallbackFunction,
+  }) : super(key: key);
+
+  @override
+  State<LobbyPlayerInputTile> createState() => LobbyPlayerInputTileState();
+}
+
+class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
   @override
   Widget build(BuildContext context) {
     return Center(      // centers elements
@@ -40,35 +53,38 @@ class LobbyPlayerInputTile extends StatelessWidget {
             ),
             child: Row(
               children: [
+                Text(                                           // DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
+                  widget.index.toString()
+                ),
 //==================================    Small Color Stripe   ================================== 
-                Container(                     
-                  margin: EdgeInsets.only(left: 20.0),
-                  height: 100,
-                  width: 40,
-                  decoration: BoxDecoration(                          
-                    color: const Color.fromARGB(255, 0, 110, 255),
-                  ),
-                ),
-//==================================    Container for input field   ==================================
-                Container(                        
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(left: 20, right: 5),
-                  width: 210,
-                  height: 100,
-                  child: TextFormField(                   //input field
-                    decoration: const InputDecoration(
-                      hintText: "Input player 1",
-                      border: UnderlineInputBorder(),
-                    ),
-                    style: TextStyle(
-                      fontSize: 24
-                    ),
-                  ),
-                ),
+//                 Container(                     
+//                   margin: EdgeInsets.only(left: 20.0),
+//                   height: 100,
+//                   width: 40,
+//                   decoration: BoxDecoration(                          
+//                     color: const Color.fromARGB(255, 0, 110, 255),
+//                   ),
+//                 ),
+// //==================================    Container for input field   ==================================
+//                 Container(                        
+//                   alignment: Alignment.center,
+//                   margin: EdgeInsets.only(left: 20, right: 5),
+//                   width: 210,
+//                   height: 100,
+//                   child: TextFormField(                   //input field
+//                     decoration: const InputDecoration(
+//                       hintText: "Input player 1",
+//                       border: UnderlineInputBorder(),
+//                     ),
+//                     style: TextStyle(
+//                       fontSize: 24
+//                     ),
+//                   ),
+//                 ),
 //==================================    Delete button   ==================================
                 OutlinedButton(
                   onPressed: () {
-
+                    widget.removeCallbackFunction(widget.index);
                   }, 
                   style: ButtonStyle(
                     minimumSize: WidgetStatePropertyAll(Size.zero),

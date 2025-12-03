@@ -16,21 +16,36 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late Lobby lobby;   // declare variable but not assign it
   var selectedIndex = 1;
+  @override
+  void initState() {
+    super.initState();      // check if every thing is initialized
+    lobby = Lobby(removeCallback: removePlayercallback);  // pass the callback to constructor of lobby class
+    lobby.init();   // runs init method to create first container
+  } 
 
-  addPlayercallback() {
+  addPlayercallback() {   // callback to rebuild scene and create new input tile
     setState(() {
       lobby.addPlayer();
     });
   }
 
+  removePlayercallback(index) { // callback to rebuild scene and delete input tile at index
+    setState(() {
+      lobby.removePlayer(index);
+    });
+  }
+  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp( 
-      theme: ThemeData(useMaterial3: false, scaffoldBackgroundColor: const Color.fromARGB(255, 228, 228, 228)),   //page backgroundcolor
+      theme: ThemeData(useMaterial3: false, scaffoldBackgroundColor: const Color.fromARGB(255, 228, 228, 228)),   //page background color
 
       
       home: Scaffold(
+//==================================    Top title bar   ==================================  
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 50, 125, 175),   //top bar color
           centerTitle: true,
@@ -43,16 +58,17 @@ class _MyAppState extends State<MyApp> {
           children: [
             LobbyHeader(),
 
+//==================================    List of players   ================================== 
             Flexible(
-              child: ListView.builder(   // list of players
-                  shrinkWrap: true,
+              child: ListView.builder(
+                  shrinkWrap: true,             // makes list not take entire page height             
                   itemCount: lobby.getPlayerListLenght(),
                   itemBuilder: (_, index) => lobby.getPlayer(index),
                 ),
             ),
             
 
-            AddPlayerButton(callbackFunction:addPlayercallback),
+            AddPlayerButton(callbackFunction: addPlayercallback),   // gray button at bottom of page
           ],
         ),
 
