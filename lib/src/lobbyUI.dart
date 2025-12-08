@@ -17,13 +17,14 @@ class LobbyHeader extends StatelessWidget {
 
 class LobbyPlayerInputTile extends StatefulWidget {
   final Function removeCallbackFunction;
-  final index;
+  final int id;
+  final TextEditingController controller;
 
   const LobbyPlayerInputTile({
-    Key? key,
-    required this.index,
-    required this.removeCallbackFunction,
-  }) : super(key: key);
+    required this.removeCallbackFunction,     
+    required this.id,  // to remove object later
+    required this.controller,       // Makes input persistent for shifting
+  });
 
   @override
   State<LobbyPlayerInputTile> createState() => LobbyPlayerInputTileState();
@@ -53,45 +54,43 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
             ),
             child: Row(
               children: [
-                Text(                                           // DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
-                  widget.index.toString()
-                ),
 //==================================    Small Color Stripe   ================================== 
-//                 Container(                     
-//                   margin: EdgeInsets.only(left: 20.0),
-//                   height: 100,
-//                   width: 40,
-//                   decoration: BoxDecoration(                          
-//                     color: const Color.fromARGB(255, 0, 110, 255),
-//                   ),
-//                 ),
-// //==================================    Container for input field   ==================================
-//                 Container(                        
-//                   alignment: Alignment.center,
-//                   margin: EdgeInsets.only(left: 20, right: 5),
-//                   width: 210,
-//                   height: 100,
-//                   child: TextFormField(                   //input field
-//                     decoration: const InputDecoration(
-//                       hintText: "Input player 1",
-//                       border: UnderlineInputBorder(),
-//                     ),
-//                     style: TextStyle(
-//                       fontSize: 24
-//                     ),
-//                   ),
-//                 ),
+                Container(                     
+                  margin: EdgeInsets.only(left: 20.0),
+                  height: 100,
+                  width: 40,
+                  decoration: BoxDecoration(                          
+                    color: const Color.fromARGB(255, 0, 110, 255),
+                  ),
+                ),
+//==================================    Container for input field   ==================================
+                Container(                        
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(left: 20, right: 5),
+                  width: 210,
+                  height: 100,
+                  child: TextFormField(                   //input field
+                    controller: widget.controller,
+                    decoration: const InputDecoration(
+                      hintText: "Input player 1",
+                      border: UnderlineInputBorder(),
+                    ),
+                    style: TextStyle(
+                      fontSize: 24
+                    ),
+                  ),
+                ),
 //==================================    Delete button   ==================================
                 OutlinedButton(
                   onPressed: () {
-                    widget.removeCallbackFunction(widget.index);
+                    widget.removeCallbackFunction(widget.id);
                   }, 
                   style: ButtonStyle(
                     minimumSize: WidgetStatePropertyAll(Size.zero),
                     fixedSize: WidgetStatePropertyAll(const Size(40, 40)),
                     shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
                     padding: WidgetStatePropertyAll(EdgeInsets.all(0)),
-                    side: WidgetStatePropertyAll(BorderSide(                                                                // set border width and color
+                    side: WidgetStatePropertyAll(BorderSide(  // set border width and color
                       width: 3.5,
                       color: Colors.red,
                     )),
@@ -115,14 +114,14 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
 
 
 class AddPlayerButton extends StatelessWidget {
-  final Function callbackFunction;
-  const AddPlayerButton({super.key, required this.callbackFunction});
+  final Function addPlayercallback;
+  const AddPlayerButton({required this.addPlayercallback});
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: () {
-        callbackFunction();
+        addPlayercallback();
       },
       style: ButtonStyle(
         fixedSize: WidgetStatePropertyAll(const Size(350, 100)),

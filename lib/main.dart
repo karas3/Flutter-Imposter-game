@@ -16,26 +16,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late Lobby lobby;   // declare variable but not assign it
+  var lobby = Lobby();
   var selectedIndex = 1;
-  @override
-  void initState() {
-    super.initState();      // check if every thing is initialized
-    lobby = Lobby(removeCallback: removePlayercallback);  // pass the callback to constructor of lobby class
-    lobby.init();   // runs init method to create first container
-  } 
-
-  addPlayercallback() {   // callback to rebuild scene and create new input tile
-    setState(() {
-      lobby.addPlayer();
-    });
-  }
-
-  removePlayercallback(index) { // callback to rebuild scene and delete input tile at index
-    setState(() {
-      lobby.removePlayer(index);
-    });
-  }
   
 
   @override
@@ -61,14 +43,31 @@ class _MyAppState extends State<MyApp> {
 //==================================    List of players   ================================== 
             Flexible(
               child: ListView.builder(
-                  shrinkWrap: true,             // makes list not take entire page height             
-                  itemCount: lobby.getPlayerListLenght(),
-                  itemBuilder: (_, index) => lobby.getPlayer(index),
-                ),
+                shrinkWrap: true,             // makes list not take entire page height             
+                itemCount: lobby.getPlayerListLenght(),
+                itemBuilder: (_, index) {
+                  final player = lobby.getPlayer(index);
+                  return LobbyPlayerInputTile(
+                    controller: player.getController(),    
+                    id: index,                          //id for later removal
+                    removeCallbackFunction: (int id) {
+                      setState(() {
+                        lobby.removePlayer(id);
+                      });
+                    },
+                  );
+                },
+              ),
             ),
             
 
-            AddPlayerButton(callbackFunction: addPlayercallback),   // gray button at bottom of page
+            AddPlayerButton(
+              addPlayercallback: () {   // callback to rebuild scene and create new input tile
+                setState(() {
+                  lobby.addPlayer();
+                });
+              }  // END of callback function
+            ),   // gray button at bottom of page
           ],
         ),
 
