@@ -9,7 +9,7 @@ class Player {
 }
 
 class Lobby{ 
-  List<Player> _playerList = [];  
+  List<Player> _playerList = [new Player()];  
 
   void addPlayer() {                //adds empty player input tile
     _playerList.add(new Player());

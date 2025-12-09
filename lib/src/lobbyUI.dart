@@ -46,7 +46,7 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
               boxShadow: [
                 BoxShadow(  
                   color: const Color.fromARGB(255, 0, 0, 0),
-                  offset: Offset(3, 3),
+                  offset: Offset(4, 4),
                   blurRadius: 5,
                   spreadRadius: 0,
                 )
@@ -112,7 +112,7 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
 
 
 
-
+//==================================    Add player button (grey transparent one)   ==================================
 class AddPlayerButton extends StatelessWidget {
   final Function addPlayercallback;
   const AddPlayerButton({required this.addPlayercallback});
@@ -136,6 +136,50 @@ class AddPlayerButton extends StatelessWidget {
         color: Colors.grey,
         size: 75,
         ),
+    );
+  }
+}
+
+//==================================    Start button (Green at bottom of page)   ==================================
+class StartButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 15),  // move button a little bit from bottom of page
+      decoration: BoxDecoration( 
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(  
+            color: const Color.fromARGB(255, 0, 0, 0),
+            offset: Offset(4, 4),
+            blurRadius: 5,
+            spreadRadius: 0,
+          )
+        ],
+      ),
+
+      child: FilledButton(
+        onPressed: () {
+          
+        },
+        style: ButtonStyle(
+          fixedSize: WidgetStatePropertyAll(const Size(250, 75)),
+          backgroundColor: WidgetStatePropertyAll(const Color.fromARGB(255, 66, 175, 33)),
+          shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
+          side: WidgetStatePropertyAll(BorderSide(                                                                // set border width and color
+            width: 5,
+            color: Color.fromARGB(255, 33, 136, 1),
+            )),
+        ),
+        child: Container(
+          margin: EdgeInsets.only(top: 4), // Centers text
+          child: Text(
+            "START",
+            style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: Color.fromARGB(179, 1, 49, 8)),
+            textAlign: TextAlign.center,
+          ),
+        )
+      ),
     );
   }
 }

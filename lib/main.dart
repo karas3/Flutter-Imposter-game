@@ -41,33 +41,40 @@ class _MyAppState extends State<MyApp> {
             LobbyHeader(),
 
 //==================================    List of players   ================================== 
-            Flexible(
-              child: ListView.builder(
-                shrinkWrap: true,             // makes list not take entire page height             
-                itemCount: lobby.getPlayerListLenght(),
+            Flexible(   //Fixes overflow of list
+              child: ListView.builder(             
+                itemCount: lobby.getPlayerListLenght() + 1,
                 itemBuilder: (_, index) {
-                  final player = lobby.getPlayer(index);
-                  return LobbyPlayerInputTile(
-                    controller: player.getController(),    
-                    id: index,                          //id for later removal
-                    removeCallbackFunction: (int id) {
-                      setState(() {
-                        lobby.removePlayer(id);
-                      });
-                    },
-                  );
+
+                  if(index < lobby.getPlayerListLenght()) {   // player Input Tile
+                    final player = lobby.getPlayer(index);  //get Player object from list of Player objects
+                    return LobbyPlayerInputTile(
+                      controller: player.getController(),    
+                      id: index,                          //id for later removal
+                      removeCallbackFunction: (int id) {  //callback to rebuild the scene and delete one of input tiles
+                        setState(() {
+                          lobby.removePlayer(id);
+                        });
+                      },
+                    );
+                  } 
+
+                  else {  // Gray button at bottom
+                    return Center(  // Fixes button infinite width
+                      child: AddPlayerButton (
+                        addPlayercallback: () {   // callback to rebuild scene and create new input tile
+                          setState(() {
+                            lobby.addPlayer();
+                          });
+                        }
+                      ),
+                    );
+                  }
                 },
               ),
             ),
             
-
-            AddPlayerButton(
-              addPlayercallback: () {   // callback to rebuild scene and create new input tile
-                setState(() {
-                  lobby.addPlayer();
-                });
-              }  // END of callback function
-            ),   // gray button at bottom of page
+            StartButton(),
           ],
         ),
 
