@@ -1,10 +1,16 @@
-import 'package:flutter/material.dart';
+import 'dart:math' show Random;
+import 'package:flutter/material.dart' show TextEditingController, Color;
 
 class Player {
   final TextEditingController _nameController = TextEditingController();    // Makes input persistent for shifting
+  final Color _color = Color.fromARGB(255, Random().nextInt(255) + 1, Random().nextInt(255) + 1, Random().nextInt(255) + 1);
 
   getController() {
     return _nameController;
+  }
+
+  getColor() {
+    return _color;
   }
 }
 

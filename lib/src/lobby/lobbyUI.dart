@@ -17,13 +17,15 @@ class LobbyHeader extends StatelessWidget {
 
 class LobbyPlayerInputTile extends StatefulWidget {
   final Function removeCallbackFunction;
-  final int id;
   final TextEditingController controller;
+  final Color color;
+  final int id;
 
   const LobbyPlayerInputTile({
-    required this.removeCallbackFunction,     
+    required this.removeCallbackFunction,   
+    required this.controller,       // Makes input persistent for shifting  
+    required this.color,
     required this.id,  // to remove object later
-    required this.controller,       // Makes input persistent for shifting
   });
 
   @override
@@ -60,7 +62,7 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
                   height: 100,
                   width: 40,
                   decoration: BoxDecoration(                          
-                    color: const Color.fromARGB(255, 0, 110, 255),
+                    color: widget.color,
                   ),
                 ),
 //==================================    Container for input field   ==================================
@@ -71,8 +73,8 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
                   height: 100,
                   child: TextFormField(                   //input field
                     controller: widget.controller,
-                    decoration: const InputDecoration(
-                      hintText: "Input player 1",
+                    decoration: InputDecoration(
+                      hintText: "Input player " + (widget.id + 1).toString(),
                       border: UnderlineInputBorder(),
                     ),
                     style: TextStyle(
@@ -145,7 +147,7 @@ class StartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 15),  // move button a little bit from bottom of page
+      margin: EdgeInsets.only(bottom: 15, top: 15),  // move button a little bit from bottom of page
       decoration: BoxDecoration( 
         borderRadius: BorderRadius.circular(10),
         boxShadow: [

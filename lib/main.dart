@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'src/lobbyUI.dart';
-import 'src/lobby.dart';
+import 'src/lobby/lobbyPage.dart';
+import 'src/homePage.dart';
+import 'src/infoPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,14 +17,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var lobby = Lobby();
-  var selectedIndex = 1;
+  int _selectedIndex = 0;  // home
+
+  List<Widget> _screens = [
+    HomePage(),
+    Lobbypage(),
+    InfoPage(),
+  ];
   
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext cosntext) {
     return MaterialApp( 
       theme: ThemeData(useMaterial3: false, scaffoldBackgroundColor: const Color.fromARGB(255, 228, 228, 228)),   //page background color
+      debugShowCheckedModeBanner: false,
 
       
       home: Scaffold(
@@ -31,59 +38,22 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 50, 125, 175),   //top bar color
           centerTitle: true,
-          title: const Text("Imposter Game"),   // text on top bar
+          title: const Text(
+            "Imposter Game",
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 255, 255, 255)),
+          ),   // text on top bar
           elevation: 20,  //Set shadow on top bar
         ),
 
 
-        body: Column(
-          children: [
-            LobbyHeader(),
-
-//==================================    List of players   ================================== 
-            Flexible(   //Fixes overflow of list
-              child: ListView.builder(             
-                itemCount: lobby.getPlayerListLenght() + 1,
-                itemBuilder: (_, index) {
-
-                  if(index < lobby.getPlayerListLenght()) {   // player Input Tile
-                    final player = lobby.getPlayer(index);  //get Player object from list of Player objects
-                    return LobbyPlayerInputTile(
-                      controller: player.getController(),    
-                      id: index,                          //id for later removal
-                      removeCallbackFunction: (int id) {  //callback to rebuild the scene and delete one of input tiles
-                        setState(() {
-                          lobby.removePlayer(id);
-                        });
-                      },
-                    );
-                  } 
-
-                  else {  // Gray button at bottom
-                    return Center(  // Fixes button infinite width
-                      child: AddPlayerButton (
-                        addPlayercallback: () {   // callback to rebuild scene and create new input tile
-                          setState(() {
-                            lobby.addPlayer();
-                          });
-                        }
-                      ),
-                    );
-                  }
-                },
-              ),
-            ),
-            
-            StartButton(),
-          ],
-        ),
+        body: _screens[_selectedIndex],
 
 
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedIndex,
+          currentIndex: _selectedIndex,
           onTap: (index) {
             setState(() {
-              selectedIndex = index;
+              _selectedIndex = index;
             });
           },
           items: const [
