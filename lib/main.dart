@@ -4,6 +4,9 @@ import 'src/lobby/lobbyPage.dart';
 import 'src/homePage.dart';
 import 'src/infoPage.dart';
 
+import 'src/lobby/lobby.dart';
+import 'src/UIElements/customBottomNavigationBar.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -18,59 +21,35 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;  // home
-
-  List<Widget> _screens = [
-    HomePage(),
-    Lobbypage(),
-    InfoPage(),
-  ];
+  final PageController _pageController = PageController();    // Controls pages next to each other so it is possible to swipe between them
+  var lobby = Lobby();    // needs to be defined in main so data doesn't get wiped out while switching between pages in bottom navigation bar
   
 
   @override
   Widget build(BuildContext cosntext) {
     return MaterialApp( 
-      theme: ThemeData(useMaterial3: false, scaffoldBackgroundColor: const Color.fromARGB(255, 228, 228, 228)),   //page background color
+      theme: ThemeData(scaffoldBackgroundColor: const Color.fromARGB(255, 228, 228, 228)),   //page background color
       debugShowCheckedModeBanner: false,
 
       
       home: Scaffold(
-//==================================    Top title bar   ==================================  
-        appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 50, 125, 175),   //top bar color
-          centerTitle: true,
-          title: const Text(
-            "Imposter Game",
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 255, 255, 255)),
-          ),   // text on top bar
-          elevation: 20,  //Set shadow on top bar
-        ),
-
-
-        body: _screens[_selectedIndex],
-
-
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: (index) {
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: (index) {
             setState(() {
               _selectedIndex = index;
             });
           },
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "home",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.play_arrow),
-              label: "play",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.info),
-              label: "informations"
-            ),
-          ]
+          children: <Widget>[
+            HomePage(),
+            Lobbypage(lobby: lobby,),
+            InfoPage(),
+          ],
         ),
+      
+
+
+        bottomNavigationBar: CustomBottomNavigationBar(pageController: _pageController, selectedIndex: _selectedIndex)
       ),
     );
   }

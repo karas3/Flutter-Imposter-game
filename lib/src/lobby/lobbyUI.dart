@@ -1,19 +1,5 @@
 import 'package:flutter/material.dart';
-
-class LobbyHeader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,    // text aligment
-      margin: EdgeInsets.all(10),
-      child: const Text(
-            "Create Lobby",
-            style: TextStyle(height: 1, fontSize: 40, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-}
-
+import '../categorySelectionPage.dart';
 
 class LobbyPlayerInputTile extends StatefulWidget {
   final Function removeCallbackFunction;
@@ -162,7 +148,12 @@ class StartButton extends StatelessWidget {
 
       child: FilledButton(
         onPressed: () {
-          
+          Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (context) => CategorySelectionPage(),
+            ),
+          );
         },
         style: ButtonStyle(
           fixedSize: WidgetStatePropertyAll(const Size(250, 75)),
@@ -171,7 +162,7 @@ class StartButton extends StatelessWidget {
           side: WidgetStatePropertyAll(BorderSide(                                                                // set border width and color
             width: 5,
             color: Color.fromARGB(255, 33, 136, 1),
-            )),
+          )),
         ),
         child: Container(
           margin: EdgeInsets.only(top: 4), // Centers text
