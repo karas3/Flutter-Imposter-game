@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'lobbyUI.dart';
 import 'lobby.dart';
 import '../UIElements/customAppBar.dart';
+import '../categorySelection/categorySelectionPage.dart';
 
 class Lobbypage extends StatefulWidget {
   final Lobby lobby;  //needs to be defined in main so data doesn't get wiped out while switching between pages in bottom navigation bar
@@ -35,10 +36,10 @@ class _LobbypageState extends State<Lobbypage> {
                     return LobbyPlayerInputTile(
                       controller: player.getController(), 
                       color:  player.getColor(),   
-                      id: index,                          //id for later removal
-                      removeCallbackFunction: (int id) {  //callback to rebuild the scene and delete one of input tiles
+                      id: index,                          //id
+                      removeCallbackFunction: () {  //callback to rebuild the scene and delete one of input tiles
                         setState(() {
-                          widget.lobby.removePlayer(id);
+                          widget.lobby.removePlayer(index);
                         });
                       },
                     );
@@ -58,7 +59,7 @@ class _LobbypageState extends State<Lobbypage> {
               ),
             ),
             
-            StartButton(),
+            StartButton(nextPage: CategorySelectionPage(),),
           ],
         ),
       ),

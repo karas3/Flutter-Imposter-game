@@ -26,7 +26,6 @@ class Lobby{
   }
 
 
-
   getPlayer(int index) {            // used to display list
     return _playerList[index];
   }

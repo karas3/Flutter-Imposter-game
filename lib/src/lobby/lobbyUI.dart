@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../categorySelectionPage.dart';
 
 class LobbyPlayerInputTile extends StatefulWidget {
   final Function removeCallbackFunction;
@@ -71,7 +70,7 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
 //==================================    Delete button   ==================================
                 OutlinedButton(
                   onPressed: () {
-                    widget.removeCallbackFunction(widget.id);
+                    widget.removeCallbackFunction();
                   }, 
                   style: ButtonStyle(
                     minimumSize: WidgetStatePropertyAll(Size.zero),
@@ -117,25 +116,38 @@ class AddPlayerButton extends StatelessWidget {
         side: WidgetStatePropertyAll(BorderSide(                                                                // set border width and color
           width: 3.5,
           color: Color.fromARGB(52, 0, 0, 0),
-          )),
+        )),
       ),
       child: Icon(
         Icons.add,
         color: Colors.grey,
         size: 75,
-        ),
+      ),
     );
   }
 }
 
 //==================================    Start button (Green at bottom of page)   ==================================
-class StartButton extends StatelessWidget {
+class StartButton extends StatefulWidget {
+  final Widget nextPage;
+
+  StartButton({
+    required this.nextPage,
+  });
+
+  @override
+  State<StartButton> createState() => _StartButtonState();
+}
+
+class _StartButtonState extends State<StartButton> {
+  final borderRadius = 50.0;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 15, top: 15),  // move button a little bit from bottom of page
       decoration: BoxDecoration( 
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(  
             color: const Color.fromARGB(255, 0, 0, 0),
@@ -151,14 +163,14 @@ class StartButton extends StatelessWidget {
           Navigator.push(
             context, 
             MaterialPageRoute(
-              builder: (context) => CategorySelectionPage(),
+              builder: (context) => widget.nextPage,
             ),
           );
         },
         style: ButtonStyle(
           fixedSize: WidgetStatePropertyAll(const Size(250, 75)),
           backgroundColor: WidgetStatePropertyAll(const Color.fromARGB(255, 66, 175, 33)),
-          shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
+          shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius))),
           side: WidgetStatePropertyAll(BorderSide(                                                                // set border width and color
             width: 5,
             color: Color.fromARGB(255, 33, 136, 1),

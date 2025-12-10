@@ -17,6 +17,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      selectedFontSize: 16,
+      unselectedFontSize: 12,
+      selectedItemColor: Colors.blueAccent,
       currentIndex: widget.selectedIndex,
         onTap: (index) {
             widget.pageController.animateToPage(
