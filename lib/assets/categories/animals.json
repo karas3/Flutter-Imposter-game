@@ -1,0 +1,37 @@
+{
+    "name": "animals",
+    "words": [
+        "Elephant",
+        "Dog",
+        "Cat",
+        "Fly",
+        "Frog",
+        "Ant",
+        "Fish",
+        "Whale",
+        "Lion",
+        "Horse",
+        "Shark",
+        "Tiger",
+        "Monkey",
+        "Lizard",
+        "Snake"
+    ],
+    "hints": [
+        "Big",
+        "Friend",
+        "Friend",
+        "Annoying",
+        "Swamp",
+        "Small",
+        "Water",
+        "Water",
+        "King",
+        "Fast",
+        "blood",
+        "Stripes",
+        "Human",
+        "Dragon",
+        "Poison"
+    ]
+}
