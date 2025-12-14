@@ -1,3 +1,3 @@
-# flutter_application_1
+Dart imposter party Game
 
-A new Flutter project.
+project under construction
