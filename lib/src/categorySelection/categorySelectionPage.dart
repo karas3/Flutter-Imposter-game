@@ -5,7 +5,6 @@ import 'categorySelection.dart';
 import 'categorySelectionUI.dart';
 import '../lobby/lobbyUI.dart' show StartButton;
 
-
 class CategorySelectionPage extends StatefulWidget {
   const CategorySelectionPage({super.key});
 
@@ -14,21 +13,22 @@ class CategorySelectionPage extends StatefulWidget {
 }
 
 class _CategorySelectionPageState extends State<CategorySelectionPage> {
-  List<Future<Category>> categories = [
-    loadCategoryFromJson()
-  ];
+  Future<List<Category>> categories = loadCategoryFromJson();
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: "Choose categories"),
       body: FutureBuilder(
-        future: Future.wait(categories), // convert <List<Future<Category>>> to <Future<List<Category>>>
+        future: categories,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } 
-        else{
+        else if (!snapshot.hasData) {               // On beggining snapshot has no data which returns unnecessary error
+          return Center(child: Text('No Data!'));   
+        }
+        else {
            return Column(
             children: [
               Flexible(

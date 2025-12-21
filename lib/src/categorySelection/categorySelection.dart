@@ -1,10 +1,23 @@
 import 'package:flutter/services.dart';
 import 'dart:convert';
 
-Future<Category> loadCategoryFromJson() async {
-  final jsonString = await rootBundle.loadString('lib/assets/categories/animals.json');
-  final jsonMap = jsonDecode(jsonString);
-  return Category.fromJson(jsonMap);
+Future<List<Category>> loadCategoryFromJson() async {
+  List<Category> categories = [];
+  List<dynamic> filesList = await getFilesList();
+
+  for(int i = 0; i < filesList.length; i++) {
+    final jsonString = await rootBundle.loadString("assets/categories/${filesList[i]}");
+    final jsonMap = jsonDecode(jsonString);
+    categories.add(Category.createCategory(jsonMap));
+  }
+
+  return categories;
+}
+
+Future<List<dynamic>> getFilesList() async {
+  final _jsonString = await rootBundle.loadString("assets/categories/filesList.json");
+  final Map<String, dynamic> _jsonMap = jsonDecode(_jsonString);
+  return _jsonMap['files'];
 }
 
 class Category {
@@ -21,7 +34,7 @@ class Category {
     this._id,
   );
 
-  factory Category.fromJson(Map<String, dynamic> json) {
+  factory Category.createCategory(Map<String, dynamic> json) {
     return Category(json["name"], json["words"], json["hints"], 0);
   }
 
