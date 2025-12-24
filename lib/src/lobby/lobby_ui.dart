@@ -6,7 +6,7 @@ class LobbyPlayerInputTile extends StatefulWidget {
   final Color color;
   final int id;
 
-  const LobbyPlayerInputTile({
+  const LobbyPlayerInputTile({super.key, 
     required this.removeCallbackFunction,   
     required this.controller,       // Makes input persistent for shifting  
     required this.color,
@@ -59,7 +59,7 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
                   child: TextFormField(                   //input field
                     controller: widget.controller,
                     decoration: InputDecoration(
-                      hintText: "Input player " + (widget.id + 1).toString(),
+                      hintText: "Input player ${widget.id + 1}",
                       border: UnderlineInputBorder(),
                     ),
                     style: TextStyle(
@@ -102,7 +102,7 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
 //==================================    Add player button (grey transparent one)   ==================================
 class AddPlayerButton extends StatelessWidget {
   final Function addPlayercallback;
-  const AddPlayerButton({required this.addPlayercallback});
+  const AddPlayerButton({super.key, required this.addPlayercallback});
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +131,7 @@ class AddPlayerButton extends StatelessWidget {
 class StartButton extends StatefulWidget {
   final Widget nextPage;
 
-  StartButton({
+  const StartButton({super.key, 
     required this.nextPage,
   });
 
@@ -159,6 +159,7 @@ class _StartButtonState extends State<StartButton> {
       ),
 
       child: FilledButton(
+// ===================================== REDIRECT ================================================
         onPressed: () {
           Navigator.push(
             context, 

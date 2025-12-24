@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'lobbyUI.dart';
+import 'lobby_ui.dart';
 import 'lobby.dart';
-import '../UIElements/customAppBar.dart';
-import '../categorySelection/categorySelectionPage.dart';
+import '../ui_elements/custom_app_bar.dart';
+import '../category_managment/category_selection/category_selection_page.dart';
 
 class Lobbypage extends StatefulWidget {
   final Lobby lobby;  //needs to be defined in main so data doesn't get wiped out while switching between pages in bottom navigation bar
 
-  const Lobbypage({
+  const Lobbypage({super.key, 
     required this.lobby,
   });
 

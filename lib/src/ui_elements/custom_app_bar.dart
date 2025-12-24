@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
 
-  const CustomAppBar({
+  const CustomAppBar({super.key, 
     required this.title,
   });
 

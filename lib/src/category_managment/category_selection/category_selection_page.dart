@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../UIElements/customAppBar.dart';
-import 'categorySelection.dart';
-import 'categorySelectionUI.dart';
-import '../lobby/lobbyUI.dart' show StartButton;
+import '../../ui_elements/custom_app_bar.dart';
+import '../../lobby/lobby_ui.dart' show StartButton;
+
+import '../load_categories_from_json.dart';
+import 'category_selection.dart';
+import 'category_selection_ui.dart';
 
 class CategorySelectionPage extends StatefulWidget {
   const CategorySelectionPage({super.key});
@@ -13,6 +15,7 @@ class CategorySelectionPage extends StatefulWidget {
 }
 
 class _CategorySelectionPageState extends State<CategorySelectionPage> {
+// ======================================== LIST OF CATEGORIES ========================================
   Future<List<Category>> categories = loadCategoryFromJson();
   
   @override
@@ -31,6 +34,15 @@ class _CategorySelectionPageState extends State<CategorySelectionPage> {
         else {
            return Column(
             children: [
+// ======================================== TOP GRAY TEXT ========================================
+              Text(
+                "Hold to edit category",
+                style: TextStyle(
+                  color: Color.fromARGB(255, 114, 114, 114)
+                ),
+              ),
+
+// ======================================== GRID OF CATEGORIES ========================================              
               Flexible(
                 child: GridView.count(
                   crossAxisCount: 2,  // 2 columns
@@ -39,6 +51,7 @@ class _CategorySelectionPageState extends State<CategorySelectionPage> {
                       child: CategoryButton(
                         category: snapshot.data![index].getName(),
                         selected: snapshot.data![index].getSelected(),
+                        id: index,
                         setSelectedCallback: () {
                           setState(() {
                             snapshot.data![index].getSelected() ? snapshot.data![index].setSelected(false) : snapshot.data![index].setSelected(true);
@@ -49,6 +62,8 @@ class _CategorySelectionPageState extends State<CategorySelectionPage> {
                   }),
                 ),
               ),
+
+// ======================================== START BUTTOn ======================================== 
               StartButton(nextPage: CategorySelectionPage())  //For now placeholder which routes to itself
             ],
           ); 

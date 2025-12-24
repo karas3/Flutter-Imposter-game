@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'src/lobby/lobbyPage.dart';
-import 'src/homePage.dart';
-import 'src/infoPage.dart';
+import 'src/lobby/lobby_page.dart';
+import 'src/home_page.dart';
+import 'src/info_page.dart';
 
 import 'src/lobby/lobby.dart';
-import 'src/UIElements/customBottomNavigationBar.dart';
+import 'src/ui_elements/custom_bottom_navigation_bar.dart';
 
 void main() {
   runApp(const MyApp());

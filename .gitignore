@@ -1,6 +1,17 @@
-
-pubspec.lock
-
+# Dart / Flutter
 .dart_tool/
-
+.packages
 build/
+
+# Flutter generated
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+
+# IDEs
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 
+import '../category_edit/category_edit_page.dart';
+
 class CategoryButton extends StatefulWidget {
   final String category;
   final Function setSelectedCallback;
   final bool selected;
+  final int id;
 
-  const CategoryButton({
+  const CategoryButton({super.key, 
     required this.category,
     required this.setSelectedCallback,
     required this.selected,
+    required this.id,
   });
 
   @override
-  State<CategoryButton> createState() => _categoryButtonState();
+  State<CategoryButton> createState() => _CategoryButtonState();
 }
 
-class _categoryButtonState extends State<CategoryButton> {
+class _CategoryButtonState extends State<CategoryButton> {
   final double size = 170;
   @override
   Widget build(BuildContext context) {
@@ -38,6 +42,16 @@ class _categoryButtonState extends State<CategoryButton> {
           child: TextButton(
             onPressed: () {
               widget.setSelectedCallback();
+            },
+            onLongPress: () {
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => CategoryEditPage(
+                    id: widget.id,
+                  ),
+                ),
+              );
             },
             style: ButtonStyle(
               overlayColor: WidgetStatePropertyAll(Colors.transparent),   // Deletes purple circle which displays for a moment after button is clicked

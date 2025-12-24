@@ -4,7 +4,7 @@ class CustomBottomNavigationBar extends StatefulWidget{
   final PageController pageController;
   final int selectedIndex;
 
-  const CustomBottomNavigationBar({
+  const CustomBottomNavigationBar({super.key, 
     required this.pageController,
     required this.selectedIndex,
   });

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'UIElements/customAppBar.dart';
+import 'ui_elements/custom_app_bar.dart';
 
 class InfoPage extends StatelessWidget {
+  const InfoPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
