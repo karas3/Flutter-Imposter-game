@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'src/lobby/lobby_page.dart';
 import 'src/home_page.dart';
 import 'src/info_page.dart';
 
-import 'src/lobby/lobby.dart';
+import 'src/ui_elements/app_theme.dart';
 import 'src/ui_elements/custom_bottom_navigation_bar.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => AppTheme(),
+      child: const MyApp(),
+    ),
+  );
 }
-
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -22,15 +27,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;  // home
   final PageController _pageController = PageController();    // Controls pages next to each other so it is possible to swipe between them
-  var lobby = Lobby();    // needs to be defined in main so data doesn't get wiped out while switching between pages in bottom navigation bar
-  
 
   @override
   Widget build(BuildContext cosntext) {
-    return MaterialApp( 
-      theme: ThemeData(scaffoldBackgroundColor: const Color.fromARGB(255, 228, 228, 228)),   //page background color
-      debugShowCheckedModeBanner: false,
 
+    return MaterialApp( 
+      debugShowCheckedModeBanner: false,
+      theme: context.watch<AppTheme>().getTheme(),
       
       home: Scaffold(
         body: PageView(
@@ -42,7 +45,7 @@ class _MyAppState extends State<MyApp> {
           },
           children: <Widget>[
             HomePage(),
-            Lobbypage(lobby: lobby,),
+            Lobbypage(),
             InfoPage(),
           ],
         ),

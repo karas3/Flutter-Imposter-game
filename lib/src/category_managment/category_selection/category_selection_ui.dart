@@ -1,8 +1,65 @@
 import 'package:flutter/material.dart';
 
 import '../category_edit/category_edit_page.dart';
+import '../category_object.dart';
 
-class CategoryButton extends StatefulWidget {
+
+class InfoText extends StatelessWidget {
+  const InfoText({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "Hold to edit category",
+      style: TextStyle(
+        color: Color.fromARGB(255, 114, 114, 114)
+      ),
+    );
+  }
+}
+
+
+
+// ======================================== GRID OF CATEGORIES ========================================
+class CategoriesGrid extends StatefulWidget {
+  final List<Category> categoriesList;
+
+  const CategoriesGrid({super.key,
+    required this.categoriesList,
+  });
+
+  @override
+  State<CategoriesGrid> createState() => _CategoriesGridState();
+}
+
+class _CategoriesGridState extends State<CategoriesGrid> {
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: GridView.count(
+        crossAxisCount: 2,  // 2 columns
+        children: List.generate(widget.categoriesList.length, (index) { 
+          return Center(
+            child: CategoryButton(
+              category: widget.categoriesList[index].getName(),
+              selected: widget.categoriesList[index].getSelected(),
+              id: index,
+              setSelectedCallback: () {
+                setState(() {
+                  widget.categoriesList[index].getSelected() ? widget.categoriesList[index].setSelected(false) : widget.categoriesList[index].setSelected(true);
+                });
+              },  
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+
+
+class CategoryButton extends StatelessWidget {
   final String category;
   final Function setSelectedCallback;
   final bool selected;
@@ -15,12 +72,8 @@ class CategoryButton extends StatefulWidget {
     required this.id,
   });
 
-  @override
-  State<CategoryButton> createState() => _CategoryButtonState();
-}
-
-class _CategoryButtonState extends State<CategoryButton> {
   final double size = 170;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -28,27 +81,27 @@ class _CategoryButtonState extends State<CategoryButton> {
         AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,                     
-          width: widget.selected ? size : size - 10,  // Entire button width                 
-          height: widget.selected ? size : size - 10, // Entire button height
+          width: selected ? size : size - 10,  // Entire button width                 
+          height: selected ? size : size - 10, // Entire button height
           decoration: BoxDecoration(
-            color: widget.selected ? Color.fromARGB(101, 0, 174, 255) : Colors.transparent,
+            color: selected ? Color.fromARGB(101, 0, 174, 255) : Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(30)),
             border: Border.all(
-                color: widget.selected ? const Color.fromARGB(255, 34, 116, 141) :  Color.fromARGB(255, 146, 146, 146),
+                color: selected ? const Color.fromARGB(255, 34, 116, 141) :  Color.fromARGB(255, 146, 146, 146),
                 width: 3.5,
             ),
           ),
         
           child: TextButton(
             onPressed: () {
-              widget.setSelectedCallback();
+              setSelectedCallback();
             },
             onLongPress: () {
               Navigator.push(
                 context, 
                 MaterialPageRoute(
                   builder: (context) => CategoryEditPage(
-                    id: widget.id,
+                    id: id,
                   ),
                 ),
               );
@@ -60,10 +113,10 @@ class _CategoryButtonState extends State<CategoryButton> {
               duration: Duration(milliseconds: 300),
               curve: Curves.easeInOut,   
               style: TextStyle(
-                fontSize: widget.selected ? 20 : 18,
+                fontSize: selected ? 20 : 18,
               ),
               child: Text(
-                widget.category,
+                category,
                 style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
               ),
             ),

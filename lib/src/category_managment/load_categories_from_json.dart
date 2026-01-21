@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'dart:convert';
 
-import 'category_selection/category_selection.dart';
+import 'category_object.dart';
 
 
 Future<List<Category>> loadCategoryFromJson() async {

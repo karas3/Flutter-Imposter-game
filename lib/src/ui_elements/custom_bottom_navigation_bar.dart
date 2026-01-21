@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomBottomNavigationBar extends StatefulWidget{
+class CustomBottomNavigationBar extends StatelessWidget{
   final PageController pageController;
   final int selectedIndex;
 
@@ -10,19 +10,14 @@ class CustomBottomNavigationBar extends StatefulWidget{
   });
 
   @override
-  State<CustomBottomNavigationBar> createState() => _CustomBottomNavigationBarState();
-}
-
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       selectedFontSize: 16,
       unselectedFontSize: 12,
       selectedItemColor: Colors.blueAccent,
-      currentIndex: widget.selectedIndex,
+      currentIndex: selectedIndex,
         onTap: (index) {
-            widget.pageController.animateToPage(
+            pageController.animateToPage(
               index,
               duration: const Duration(milliseconds: 300),
               curve: Curves.ease,

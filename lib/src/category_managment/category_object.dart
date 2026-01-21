@@ -1,7 +1,12 @@
+import 'package:flutter/material.dart';
+
 class Category {
   final String _name;
   final List<dynamic> _words;
   final List<dynamic> _hints;
+  final List<TextEditingController> _wordsController = [];
+  final List<TextEditingController> _hintsController = [];
+
   bool _selected = false;
 
   Category(
@@ -29,6 +34,25 @@ class Category {
   }
   String getHint(int index) {
     return _hints[index].toString();
+  }
+
+  TextEditingController getWordController(int index) {
+    _wordsController.add(TextEditingController());
+    _wordsController[index].text = getWord(index);
+    return _wordsController[index];
+  }
+
+  TextEditingController getHintController(int index) {
+    _hintsController.add(TextEditingController());
+    _hintsController[index].text = getHint(index);
+    return _hintsController[index];
+  }
+
+  void addEntry() {
+    _words.add("");
+    _hints.add("");
+    _wordsController.add(TextEditingController());
+    _hintsController.add(TextEditingController());
   }
 
 //==================================    setters  ==================================

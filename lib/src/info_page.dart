@@ -8,7 +8,7 @@ class InfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Imposter Game"),
+      appBar: CustomAppBar(title: "Info page"),
       body: Center(
         child: Text(
           "Info page",

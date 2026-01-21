@@ -3,7 +3,7 @@ import '../../ui_elements/custom_app_bar.dart';
 
 import 'category_edit_ui.dart';
 import '../load_categories_from_json.dart';
-import '../category_selection/category_selection.dart';
+import '../category_object.dart';
 
 class CategoryEditPage extends StatefulWidget {
   final int id;
@@ -23,7 +23,6 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: "Edit category"),
-
       body: FutureBuilder(
         future: categories,
         builder: (BuildContext context, AsyncSnapshot snapshot) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../category_selection/category_selection.dart';
+import '../category_object.dart';
 
-class CategoryTextHeader extends StatefulWidget {
+class CategoryTextHeader extends StatelessWidget {
   final String category;
 
   const CategoryTextHeader({super.key,
@@ -9,14 +9,9 @@ class CategoryTextHeader extends StatefulWidget {
   });
 
   @override
-  State<CategoryTextHeader> createState() => _CategoryTextHeaderState();
-}
-
-class _CategoryTextHeaderState extends State<CategoryTextHeader> {
-  @override
   Widget build(BuildContext context) {
     return Text(
-      "Category: ${widget.category}",
+      "Category: $category",
       style: TextStyle(
         fontSize: 30,
         fontWeight: FontWeight.bold,
@@ -26,7 +21,7 @@ class _CategoryTextHeaderState extends State<CategoryTextHeader> {
 }
 
 
-
+// =============================================== TABLE BUILDER =========================================================
 class CategoryTable extends StatefulWidget {
   final Category category;
 
@@ -46,25 +41,33 @@ class _CategoryTableState extends State<CategoryTable> {
         children: [
           Row(
             children: [
-              CategoryTableMember(data: "Words", header: true, layoutLeft: true),
-              CategoryTableMember(data: "Hints", header: true, layoutLeft: false),
+              CategoryTableHeader(data: "Words", wordData: true),
+              CategoryTableHeader(data: "Hints", wordData: false),
             ],
           ),
           Flexible(
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [Color.fromARGB(153, 56, 56, 56), Color.fromARGB(255, 228, 228, 228)], begin: Alignment.topCenter, end: Alignment.bottomCenter, stops: [0.5, 0.95])
+                gradient: LinearGradient(colors: [Color.fromARGB(153, 56, 56, 56), Theme.of(context).colorScheme.surface], begin: Alignment.topCenter, end: Alignment.bottomCenter, stops: [0.5, 0.95])
               ),
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: widget.category.getLenght(),
+                itemCount: widget.category.getLenght() + 1,
                 itemBuilder: (BuildContext context, int index) {  
-                  return Row(
-                    children: [
-                      CategoryTableMember(data: widget.category.getWord(index), header: false, layoutLeft: true),
-                      CategoryTableMember(data: widget.category.getHint(index), header: false, layoutLeft: false),
-                    ],
-                  );
+                  if(index < widget.category.getLenght()) {
+                    return Row(
+                      children: [
+                        CategoryTableMember(data: widget.category.getWord(index), wordData: true, controller: widget.category.getWordController(index)),
+                        CategoryTableMember(data: widget.category.getHint(index), wordData: false, controller: widget.category.getHintController(index)),
+                      ],
+                    );
+                  } else {
+                    return AddWordHintPairButton(callback: () {
+                      setState(() {
+                        widget.category.addEntry();
+                      });
+                    });
+                  }
                 }
               ),
             ),
@@ -77,82 +80,140 @@ class _CategoryTableState extends State<CategoryTable> {
 
 
 
-class CategoryTableMember extends StatefulWidget {
+class CategoryTableHeader extends StatelessWidget {
   final double fontSize = 24;
 
-  final bool header;
-  final bool layoutLeft;  // drawing border
+  final bool wordData;  // drawing border
   final String data;
 
-  const CategoryTableMember({super.key,
+  const CategoryTableHeader({super.key,
     required this.data,
-    required this.layoutLeft,
-    required this.header
+    required this.wordData,
   });
 
   @override
-  State<CategoryTableMember> createState() => _CategoryTableMemberState();
+  Widget build(BuildContext context) {
+    double paddingLeft = 0;
+    double paddingRight = 0;
+    if(wordData) {
+      paddingRight = 2;
+    } else {
+      paddingLeft = 2;
+    }
+
+    return Expanded(
+      flex: 5,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(width: 4, color: Color.fromARGB(153, 56, 56, 56)), 
+            left: BorderSide(width: paddingLeft, color: Color.fromARGB(153, 56, 56, 56)),
+            right: BorderSide(width: paddingRight, color: Color.fromARGB(153, 56, 56, 56)), 
+          ),
+        ),
+        child: Center(
+          child: Text(
+            data,    
+            style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-class _CategoryTableMemberState extends State<CategoryTableMember> {
+
+
+class CategoryTableMember extends StatelessWidget {
+  final double fontSize = 24;
+
+  final bool wordData;  // drawing border
+  final String data;
+  final TextEditingController controller;
+
+  const CategoryTableMember({super.key,
+    required this.data,
+    required this.wordData,
+    required this.controller,
+  });
+
   @override
   Widget build(BuildContext context) {
 
     // to set where to draw border
     double paddingLeft = 0;
     double paddingRight = 0;
-    if(widget.layoutLeft) {
+    String _hint;
+    if(wordData) {
       paddingRight = 2;
+      _hint = "Enter Word";
     } else {
       paddingLeft = 2;
+      _hint = "Enter Hint";
     }
 
-    if(widget.header) {
-      return Expanded(
-        flex: 5,
+// ====================================================== TEXT FILEDS ======================================================
+    return Expanded(
+      flex: 5,
+      child: Padding(
+        padding: EdgeInsets.only(left: paddingLeft, right: paddingRight),
         child: Container(
           decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(width: 4, color: Color.fromARGB(153, 56, 56, 56)), 
-              left: BorderSide(width: paddingLeft, color: Color.fromARGB(153, 56, 56, 56)),
-              right: BorderSide(width: paddingRight, color: Color.fromARGB(153, 56, 56, 56)), 
-            ),
+            color: Theme.of(context).colorScheme.surface,
           ),
           child: Center(
-            child: Text(
-              widget.data,    
+            child: TextFormField(                   //input field
+              controller: controller,
+              decoration: InputDecoration(
+                hintText: _hint,
+                border: UnderlineInputBorder(),
+              ),
               style: TextStyle(
-                fontSize: widget.fontSize,
-                fontWeight: FontWeight.bold
+                fontSize: 24
               ),
             ),
           ),
         ),
-      );
-    } else {
-      return Expanded(
-        flex: 5,
-        child: Padding(
-          padding: EdgeInsets.only(left: paddingLeft, right: paddingRight),
-          child: Container(
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 228, 228, 228)
-            ),
-            child: Center(
-              child: TextFormField(                   //input field
-                initialValue: widget.data,
-                decoration: InputDecoration(
-                  hintText: "Input Words",
-                  border: UnderlineInputBorder(),
-                ),
-                style: TextStyle(
-                  fontSize: 24
-                ),
-              ),
-            ),
+      ),
+    );
+  }
+}
+//==================================    Add player button (grey transparent one)   ==================================
+class AddWordHintPairButton extends StatelessWidget {
+  final VoidCallback callback;
+  
+  const AddWordHintPairButton({super.key,
+    required this.callback,
+   });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Center(
+        child: FilledButton(
+          onPressed: () {
+            callback();
+          },
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.surface),
+            fixedSize: WidgetStatePropertyAll(const Size(250, 75)),
+            shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
+            side: WidgetStatePropertyAll(BorderSide(                                                                // set border width and color
+              width: 3.5,
+              color: Color.fromARGB(52, 0, 0, 0),
+            )),
+          ),
+          child: Icon(
+            Icons.add,
+            color: Colors.grey,
+            size: 75,
           ),
         ),
-      );
-    }
+      ),
+    );
   }
 }

@@ -4,7 +4,7 @@ import '../../ui_elements/custom_app_bar.dart';
 import '../../lobby/lobby_ui.dart' show StartButton;
 
 import '../load_categories_from_json.dart';
-import 'category_selection.dart';
+import '../category_object.dart';
 import 'category_selection_ui.dart';
 
 class CategorySelectionPage extends StatefulWidget {
@@ -15,8 +15,7 @@ class CategorySelectionPage extends StatefulWidget {
 }
 
 class _CategorySelectionPageState extends State<CategorySelectionPage> {
-// ======================================== LIST OF CATEGORIES ========================================
-  Future<List<Category>> categories = loadCategoryFromJson();
+  Future<List<Category>> categories = loadCategoryFromJson();   
   
   @override
   Widget build(BuildContext context) {
@@ -34,37 +33,9 @@ class _CategorySelectionPageState extends State<CategorySelectionPage> {
         else {
            return Column(
             children: [
-// ======================================== TOP GRAY TEXT ========================================
-              Text(
-                "Hold to edit category",
-                style: TextStyle(
-                  color: Color.fromARGB(255, 114, 114, 114)
-                ),
-              ),
-
-// ======================================== GRID OF CATEGORIES ========================================              
-              Flexible(
-                child: GridView.count(
-                  crossAxisCount: 2,  // 2 columns
-                  children: List.generate(snapshot.data!.length, (index) { 
-                    return Center(
-                      child: CategoryButton(
-                        category: snapshot.data![index].getName(),
-                        selected: snapshot.data![index].getSelected(),
-                        id: index,
-                        setSelectedCallback: () {
-                          setState(() {
-                            snapshot.data![index].getSelected() ? snapshot.data![index].setSelected(false) : snapshot.data![index].setSelected(true);
-                          });
-                        },  
-                      ),
-                    );
-                  }),
-                ),
-              ),
-
-// ======================================== START BUTTOn ======================================== 
-              StartButton(nextPage: CategorySelectionPage())  //For now placeholder which routes to itself
+              InfoText(),
+              CategoriesGrid(categoriesList: snapshot.data!), 
+              StartButton(nextPage: CategorySelectionPage()),  //For now placeholder which routes to itself
             ],
           ); 
           }

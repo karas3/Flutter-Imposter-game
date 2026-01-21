@@ -1,4 +1,53 @@
 import 'package:flutter/material.dart';
+import 'lobby.dart';
+
+class LobbyPlayerInputTileList extends StatefulWidget {
+  const LobbyPlayerInputTileList({super.key});
+
+  @override
+  State<LobbyPlayerInputTileList> createState() => _LobbyPlayerInputTileListState();
+}
+
+class _LobbyPlayerInputTileListState extends State<LobbyPlayerInputTileList> {
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(   //Fixes overflow of list
+      child: ListView.builder(             
+        itemCount: Lobby.getPlayerListLenght() + 1,
+        itemBuilder: (_, index) {
+
+          if(index < Lobby.getPlayerListLenght()) {   // player Input Tile
+            final player = Lobby.getPlayer(index);  //get Player object from list of Player objects
+            return LobbyPlayerInputTile(
+              controller: player.getController(), 
+              color:  player.getColor(),   
+              id: index,                          //id
+              removeCallbackFunction: () {  //callback to rebuild the scene and delete one of input tiles
+                setState(() {
+                  Lobby.removePlayer(index);
+                });
+              },
+            );
+          } 
+          else {  // Gray button at bottom
+            return Center(  // Fixes button infinite width
+              child: AddPlayerButton (
+                addPlayercallback: () {   // callback to rebuild scene and create new input tile
+                  setState(() {
+                    Lobby.addPlayer();
+                  });
+                }
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+
+
+
 
 class LobbyPlayerInputTile extends StatefulWidget {
   final Function removeCallbackFunction;
@@ -22,7 +71,8 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
   Widget build(BuildContext context) {
     return Center(      // centers elements
       child: Stack(
-        children: [
+//==================================    Box and it's shadow    ================================== 
+        children: [ 
           Container(
             margin: EdgeInsets.only(bottom: 20),
             height: 100,
@@ -102,7 +152,9 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
 //==================================    Add player button (grey transparent one)   ==================================
 class AddPlayerButton extends StatelessWidget {
   final Function addPlayercallback;
-  const AddPlayerButton({super.key, required this.addPlayercallback});
+  const AddPlayerButton({super.key, 
+  required this.addPlayercallback,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +180,8 @@ class AddPlayerButton extends StatelessWidget {
 }
 
 //==================================    Start button (Green at bottom of page)   ==================================
-class StartButton extends StatefulWidget {
+class StartButton extends StatelessWidget {
+  final borderRadius = 50.0;
   final Widget nextPage;
 
   const StartButton({super.key, 
@@ -136,16 +189,9 @@ class StartButton extends StatefulWidget {
   });
 
   @override
-  State<StartButton> createState() => _StartButtonState();
-}
-
-class _StartButtonState extends State<StartButton> {
-  final borderRadius = 50.0;
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 15, top: 15),  // move button a little bit from bottom of page
+    return Container(   // button shadow
+      margin: EdgeInsets.only(bottom: 15, top: 15),
       decoration: BoxDecoration( 
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
@@ -158,13 +204,12 @@ class _StartButtonState extends State<StartButton> {
         ],
       ),
 
-      child: FilledButton(
-// ===================================== REDIRECT ================================================
+      child: FilledButton(    //button
         onPressed: () {
           Navigator.push(
             context, 
             MaterialPageRoute(
-              builder: (context) => widget.nextPage,
+              builder: (context) => nextPage,
             ),
           );
         },

@@ -1,30 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
+import 'app_theme.dart';
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
-  const CustomAppBar({super.key, 
+  const CustomAppBar({super.key,
     required this.title,
   });
 
   @override
-  State<CustomAppBar> createState() => _CustomAppBarState();
-  
-  @override
   Size get preferredSize => const Size.fromHeight(50);
-}
 
-class _CustomAppBarState extends State<CustomAppBar>  {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Color.fromARGB(255, 50, 125, 175),   //top bar color
+      backgroundColor: Theme.of(context).colorScheme.primary,
+
       centerTitle: true,
       title: Text(
-        widget.title,
+        title,
         style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 255, 255, 255)),
       ),   // text on top bar
-      elevation: 20,  //Set shadow on top bar
+
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 7),
+          child: IconButton(
+            icon: const Icon(Icons.dark_mode),
+            onPressed: () {
+              context.read<AppTheme>().switchTheme();
+            },
+          ),
+        )
+      ],
     );
   }
 }
