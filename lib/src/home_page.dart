@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: Text(
           "Home page",
-          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 0, 0, 0)),
+          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
         ),
       ),
     );

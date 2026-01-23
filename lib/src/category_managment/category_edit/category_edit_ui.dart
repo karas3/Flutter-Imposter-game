@@ -10,11 +10,14 @@ class CategoryTextHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      "Category: $category",
-      style: TextStyle(
-        fontSize: 30,
-        fontWeight: FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: Text(
+        "Category: $category",
+        style: TextStyle(
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -48,7 +51,7 @@ class _CategoryTableState extends State<CategoryTable> {
           Flexible(
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [Color.fromARGB(153, 56, 56, 56), Theme.of(context).colorScheme.surface], begin: Alignment.topCenter, end: Alignment.bottomCenter, stops: [0.5, 0.95])
+                gradient: LinearGradient(colors: [Theme.of(context).colorScheme.outline, Theme.of(context).colorScheme.surface], begin: Alignment.topCenter, end: Alignment.bottomCenter, stops: [0.5, 0.95])
               ),
               child: ListView.builder(
                 shrinkWrap: true,
@@ -106,9 +109,9 @@ class CategoryTableHeader extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(width: 4, color: Color.fromARGB(153, 56, 56, 56)), 
-            left: BorderSide(width: paddingLeft, color: Color.fromARGB(153, 56, 56, 56)),
-            right: BorderSide(width: paddingRight, color: Color.fromARGB(153, 56, 56, 56)), 
+            bottom: BorderSide(width: 4, color: Theme.of(context).colorScheme.outline), 
+            left: BorderSide(width: paddingLeft, color: Theme.of(context).colorScheme.outline),
+            right: BorderSide(width: paddingRight, color: Theme.of(context).colorScheme.outline), 
           ),
         ),
         child: Center(
@@ -146,13 +149,13 @@ class CategoryTableMember extends StatelessWidget {
     // to set where to draw border
     double paddingLeft = 0;
     double paddingRight = 0;
-    String _hint;
+    String hint;
     if(wordData) {
       paddingRight = 2;
-      _hint = "Enter Word";
+      hint = "Enter Word";
     } else {
       paddingLeft = 2;
-      _hint = "Enter Hint";
+      hint = "Enter Hint";
     }
 
 // ====================================================== TEXT FILEDS ======================================================
@@ -168,7 +171,7 @@ class CategoryTableMember extends StatelessWidget {
             child: TextFormField(                   //input field
               controller: controller,
               decoration: InputDecoration(
-                hintText: _hint,
+                hintText: hint,
                 border: UnderlineInputBorder(),
               ),
               style: TextStyle(
@@ -204,12 +207,12 @@ class AddWordHintPairButton extends StatelessWidget {
             shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
             side: WidgetStatePropertyAll(BorderSide(                                                                // set border width and color
               width: 3.5,
-              color: Color.fromARGB(52, 0, 0, 0),
+              color: Theme.of(context).colorScheme.outlineVariant,
             )),
           ),
           child: Icon(
             Icons.add,
-            color: Colors.grey,
+            color: Theme.of(context).colorScheme.outlineVariant,
             size: 75,
           ),
         ),

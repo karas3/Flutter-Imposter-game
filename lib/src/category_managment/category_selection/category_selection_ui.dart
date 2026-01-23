@@ -12,7 +12,7 @@ class InfoText extends StatelessWidget {
     return Text(
       "Hold to edit category",
       style: TextStyle(
-        color: Color.fromARGB(255, 114, 114, 114)
+        color: Theme.of(context).colorScheme.inverseSurface,
       ),
     );
   }
@@ -84,10 +84,10 @@ class CategoryButton extends StatelessWidget {
           width: selected ? size : size - 10,  // Entire button width                 
           height: selected ? size : size - 10, // Entire button height
           decoration: BoxDecoration(
-            color: selected ? Color.fromARGB(101, 0, 174, 255) : Colors.transparent,
+            color: selected ? Theme.of(context).colorScheme.inversePrimary : Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(30)),
             border: Border.all(
-                color: selected ? const Color.fromARGB(255, 34, 116, 141) :  Color.fromARGB(255, 146, 146, 146),
+                color: selected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.outlineVariant,
                 width: 3.5,
             ),
           ),
@@ -117,7 +117,7 @@ class CategoryButton extends StatelessWidget {
               ),
               child: Text(
                 category,
-                style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                style: TextStyle(color: Theme.of(context).colorScheme.inverseSurface),
               ),
             ),
           ),

@@ -14,6 +14,7 @@ class CustomBottomNavigationBar extends StatelessWidget{
     return BottomNavigationBar(
       selectedFontSize: 16,
       unselectedFontSize: 12,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
       selectedItemColor: Colors.blueAccent,
       currentIndex: selectedIndex,
         onTap: (index) {

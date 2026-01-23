@@ -23,6 +23,7 @@ class Lobby{
 
   static void addPlayer() {                //adds empty player input tile
     _playerList.add(Player());
+    print(_playerList.length);
   }
 
   static void removePlayer(int index) {    //remove player input tile at index

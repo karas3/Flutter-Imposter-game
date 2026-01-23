@@ -16,19 +16,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
 
       centerTitle: true,
       title: Text(
         title,
-        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 255, 255, 255)),
-      ),   // text on top bar
+        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimaryContainer),
+      ),
 
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 7),
           child: IconButton(
-            icon: const Icon(Icons.dark_mode),
+            icon: Icon(
+              Icons.dark_mode,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
             onPressed: () {
               context.read<AppTheme>().switchTheme();
             },

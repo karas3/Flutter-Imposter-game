@@ -79,10 +79,10 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
             width: 350,
             decoration: BoxDecoration(                                // style of entire rectangle
               borderRadius: BorderRadius.all(Radius.circular(15.0)),
-              color: const Color.fromARGB(255, 197, 197, 197),
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
               boxShadow: [
                 BoxShadow(  
-                  color: const Color.fromARGB(255, 0, 0, 0),
+                  color: Theme.of(context).colorScheme.shadow,
                   offset: Offset(4, 4),
                   blurRadius: 5,
                   spreadRadius: 0,
@@ -129,13 +129,13 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
                     padding: WidgetStatePropertyAll(EdgeInsets.all(0)),
                     side: WidgetStatePropertyAll(BorderSide(  // set border width and color
                       width: 3.5,
-                      color: Colors.red,
+                      color: Theme.of(context).colorScheme.primary,
                     )),
                   ),
                   child: Icon(
                     size: 40,
                     Icons.close,
-                    color: Colors.red,
+                    color: Theme.of(context).colorScheme.primary,
                   )
                 )
               ],
@@ -167,12 +167,12 @@ class AddPlayerButton extends StatelessWidget {
         shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
         side: WidgetStatePropertyAll(BorderSide(                                                                // set border width and color
           width: 3.5,
-          color: Color.fromARGB(52, 0, 0, 0),
+          color: Theme.of(context).colorScheme.outlineVariant,
         )),
       ),
       child: Icon(
         Icons.add,
-        color: Colors.grey,
+        color: Theme.of(context).colorScheme.outlineVariant,
         size: 75,
       ),
     );
@@ -196,7 +196,7 @@ class StartButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(  
-            color: const Color.fromARGB(255, 0, 0, 0),
+            color: Theme.of(context).colorScheme.shadow,
             offset: Offset(4, 4),
             blurRadius: 5,
             spreadRadius: 0,
@@ -215,18 +215,18 @@ class StartButton extends StatelessWidget {
         },
         style: ButtonStyle(
           fixedSize: WidgetStatePropertyAll(const Size(250, 75)),
-          backgroundColor: WidgetStatePropertyAll(const Color.fromARGB(255, 66, 175, 33)),
+          backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.inversePrimary),
           shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius))),
           side: WidgetStatePropertyAll(BorderSide(                                                                // set border width and color
             width: 5,
-            color: Color.fromARGB(255, 33, 136, 1),
+            color: Theme.of(context).colorScheme.primary,
           )),
         ),
         child: Container(
           margin: EdgeInsets.only(top: 4), // Centers text
           child: Text(
             "START",
-            style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: Color.fromARGB(179, 1, 49, 8)),
+            style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimaryContainer),
             textAlign: TextAlign.center,
           ),
         )

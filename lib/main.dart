@@ -50,8 +50,6 @@ class _MyAppState extends State<MyApp> {
           ],
         ),
       
-
-
         bottomNavigationBar: CustomBottomNavigationBar(pageController: _pageController, selectedIndex: _selectedIndex)
       ),
     );

@@ -19,8 +19,18 @@ class Category {
     return Category(json["name"], json["words"], json["hints"]);
   }
 
+  void init() {
+    for (int i = 0; i < _words.length; i++) {
+      _wordsController.add(TextEditingController());
+      _wordsController[i].text = getWord(i);
+      _hintsController.add(TextEditingController());
+      _hintsController[i].text = getHint(i);
+    }
+  }
+
 //==================================    getters   ==================================
   String getName() {
+    init();
     return _name;
   }
   bool getSelected() {
@@ -36,15 +46,11 @@ class Category {
     return _hints[index].toString();
   }
 
-  TextEditingController getWordController(int index) {
-    _wordsController.add(TextEditingController());
-    _wordsController[index].text = getWord(index);
+  TextEditingController getWordController(int index) {  //used to create table of controllers in category edit page
     return _wordsController[index];
   }
 
-  TextEditingController getHintController(int index) {
-    _hintsController.add(TextEditingController());
-    _hintsController[index].text = getHint(index);
+  TextEditingController getHintController(int index) { //used to create table of controllers in category edit page
     return _hintsController[index];
   }
 

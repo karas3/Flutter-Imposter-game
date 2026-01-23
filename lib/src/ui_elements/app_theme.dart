@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 
 class AppTheme extends ChangeNotifier {
-  static bool _lightTheme = true; 
+  static bool _lightTheme = false; 
 
   ThemeData getTheme() {
     if(_lightTheme) {
       return ThemeData(
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.light,
-          dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-          seedColor: Color.fromARGB(255, 66, 140, 192),
+          seedColor: Color.fromARGB(255, 0, 153, 255),
         )
       );
     }
     return ThemeData(
       colorScheme: ColorScheme.fromSeed(
         brightness: Brightness.dark,
-        dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-        seedColor: Color.fromARGB(255, 66, 140, 192),
+        seedColor: Color.fromARGB(255, 0, 153, 255),
       )
     );
   }
