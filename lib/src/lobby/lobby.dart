@@ -19,11 +19,11 @@ class Player {
 }
 
 class Lobby{ 
-  static final List<Player> _playerList = [Player()];  
+  static final List<Player> _playerList = [Player(), Player(), Player()];  
+  static int _imposterCount = 1;
 
   static void addPlayer() {                //adds empty player input tile
     _playerList.add(Player());
-    print(_playerList.length);
   }
 
   static void removePlayer(int index) {    //remove player input tile at index
@@ -38,5 +38,21 @@ class Lobby{
 
   static int getPlayerListLenght() {   // used to display list
     return _playerList.length;
+  }
+
+  static void increaseImposterCount() {
+    if(_imposterCount < _playerList.length - 2) { //atleast 2 normal players needed
+      _imposterCount++;
+    }
+  }
+
+  static void decreaseImposterCount() {
+    if(_imposterCount > 1) {
+      _imposterCount--;
+    }
+  }
+
+  static int getImposterCount() {
+    return _imposterCount;
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'lobby_ui.dart';
 import '../ui_elements/custom_app_bar.dart';
-import '../category_managment/category_selection/category_selection_page.dart';
 
 class Lobbypage extends StatefulWidget {
 
@@ -24,7 +23,6 @@ class _LobbypageState extends State<Lobbypage> {
           children: [
           //==================================    List of players   ================================== 
             LobbyPlayerInputTileList(),
-            StartButton(nextPage: CategorySelectionPage()),
           ],
         ),
       ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'src/lobby/lobby_page.dart';
 import 'src/home_page.dart';
 import 'src/info_page.dart';
+import 'src/play/play_page.dart';
 
 import 'src/ui_elements/app_theme.dart';
 import 'src/ui_elements/custom_bottom_navigation_bar.dart';
@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
           },
           children: <Widget>[
             HomePage(),
-            Lobbypage(),
+            PlayPage(),
             InfoPage(),
           ],
         ),

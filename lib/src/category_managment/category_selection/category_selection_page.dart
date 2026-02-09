@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../ui_elements/custom_app_bar.dart';
-import '../../lobby/lobby_ui.dart' show StartButton;
 
 import '../load_categories_from_json.dart';
 import '../category_object.dart';
@@ -35,7 +34,6 @@ class _CategorySelectionPageState extends State<CategorySelectionPage> {
             children: [
               InfoText(),
               CategoriesGrid(categoriesList: snapshot.data!), 
-              StartButton(nextPage: CategorySelectionPage()),  //For now placeholder which routes to itself
             ],
           ); 
           }
