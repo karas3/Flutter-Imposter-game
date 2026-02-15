@@ -4,8 +4,8 @@ class Category {
   final String _name;
   final List<dynamic> _words;
   final List<dynamic> _hints;
-  final List<TextEditingController> _wordsController = [];
-  final List<TextEditingController> _hintsController = [];
+  final List<TextEditingController> _wordsControllerList = [];
+  final List<TextEditingController> _hintsControllerList = [];
 
   bool _selected = false;
 
@@ -21,10 +21,10 @@ class Category {
 
   void init() {
     for (int i = 0; i < _words.length; i++) {
-      _wordsController.add(TextEditingController());
-      _wordsController[i].text = getWord(i);
-      _hintsController.add(TextEditingController());
-      _hintsController[i].text = getHint(i);
+      _wordsControllerList.add(TextEditingController());
+      _wordsControllerList[i].text = getWord(i);
+      _hintsControllerList.add(TextEditingController());
+      _hintsControllerList[i].text = getHint(i);
     }
   }
 
@@ -37,7 +37,7 @@ class Category {
     return _selected;
   }
   int getLenght() {
-    return _words.length;
+    return _wordsControllerList.length;
   }
   String getWord(int index) {
     return _words[index].toString();
@@ -47,22 +47,31 @@ class Category {
   }
 
   TextEditingController getWordController(int index) {  //used to create table of controllers in category edit page
-    return _wordsController[index];
+    return _wordsControllerList[index];
   }
 
   TextEditingController getHintController(int index) { //used to create table of controllers in category edit page
-    return _hintsController[index];
+    return _hintsControllerList[index];
   }
 
-  void addEntry() {
-    _words.add("");
-    _hints.add("");
-    _wordsController.add(TextEditingController());
-    _hintsController.add(TextEditingController());
-  }
 
 //==================================    setters  ==================================
   void setSelected(bool selected) {
     _selected = selected;
+  }
+
+
+  void addEntry() {
+    _words.add("");
+    _hints.add("");
+    _wordsControllerList.add(TextEditingController());
+    _hintsControllerList.add(TextEditingController());
+  }
+
+  void removeEntry(int index) {
+    _words.removeAt(index);
+    _hints.removeAt(index);
+    _wordsControllerList.removeAt(index);
+    _hintsControllerList.removeAt(index);
   }
 }

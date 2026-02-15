@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../category_object.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
+
+// =============================================== CATEGORY TITLE =========================================================
 class CategoryTextHeader extends StatelessWidget {
   final String category;
 
@@ -11,7 +14,7 @@ class CategoryTextHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
+      padding: const EdgeInsets.only(bottom: 10.0), //invisible gap between title and table
       child: Text(
         "Category: $category",
         style: TextStyle(
@@ -44,8 +47,8 @@ class _CategoryTableState extends State<CategoryTable> {
         children: [
           Row(
             children: [
-              CategoryTableHeader(data: "Words", wordData: true),
-              CategoryTableHeader(data: "Hints", wordData: false),
+              CategoryTableHeader(data: "Words"),
+              CategoryTableHeader(data: "Hints"),
             ],
           ),
           Flexible(
@@ -58,18 +61,41 @@ class _CategoryTableState extends State<CategoryTable> {
                 itemCount: widget.category.getLenght() + 1,
                 itemBuilder: (BuildContext context, int index) {  
                   if(index < widget.category.getLenght()) {
-                    return Row(
-                      children: [
-                        CategoryTableMember(data: widget.category.getWord(index), wordData: true, controller: widget.category.getWordController(index)),
-                        CategoryTableMember(data: widget.category.getHint(index), wordData: false, controller: widget.category.getHintController(index)),
-                      ],
+                    
+                    return Slidable (
+                      // Specify a key if the Slidable is dismissible.
+                      key: const ValueKey(0),
+                      endActionPane: ActionPane(
+                      extentRatio: 0.25,
+                      motion: const DrawerMotion(),
+
+                        children: [
+                          SlidableAction(
+                            borderRadius: BorderRadius.circular(15),
+                            onPressed: (context) => setState(() {widget.category.removeEntry(index);}),
+                            backgroundColor: Color(0xFFFE4A49),
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete,
+                            label: 'Delete',
+                          ),
+                        ],
+                      ),
+
+                      // The child of the Slidable is what the user sees when the
+                      // component is not dragged.
+                      child: ListTile(
+                        minVerticalPadding: 0,
+                        contentPadding: EdgeInsets.zero,
+                        title: Row(
+                        children: [
+                          CategoryTableMember(data: widget.category.getWord(index), wordData: true, controller: widget.category.getWordController(index)),
+                          CategoryTableMember(data: widget.category.getHint(index), wordData: false, controller: widget.category.getHintController(index)),
+                        ],
+                      ),
+                    )
                     );
                   } else {
-                    return AddWordHintPairButton(callback: () {
-                      setState(() {
-                        widget.category.addEntry();
-                      });
-                    });
+                    return AddWordHintPairButton(callback: () => setState(() {widget.category.addEntry();}));
                   }
                 }
               ),
@@ -82,27 +108,18 @@ class _CategoryTableState extends State<CategoryTable> {
 }
 
 
-
+// =============================================== TOP TABLE CELLS =========================================================
 class CategoryTableHeader extends StatelessWidget {
   final double fontSize = 24;
-
-  final bool wordData;  // drawing border
   final String data;
 
   const CategoryTableHeader({super.key,
     required this.data,
-    required this.wordData,
   });
 
   @override
   Widget build(BuildContext context) {
-    double paddingLeft = 0;
-    double paddingRight = 0;
-    if(wordData) {
-      paddingRight = 2;
-    } else {
-      paddingLeft = 2;
-    }
+
 
     return Expanded(
       flex: 5,
@@ -110,8 +127,6 @@ class CategoryTableHeader extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(width: 4, color: Theme.of(context).colorScheme.outline), 
-            left: BorderSide(width: paddingLeft, color: Theme.of(context).colorScheme.outline),
-            right: BorderSide(width: paddingRight, color: Theme.of(context).colorScheme.outline), 
           ),
         ),
         child: Center(
@@ -129,7 +144,7 @@ class CategoryTableHeader extends StatelessWidget {
 }
 
 
-
+// =============================================== TABLE CELLS =========================================================
 class CategoryTableMember extends StatelessWidget {
   final double fontSize = 24;
 
@@ -145,7 +160,6 @@ class CategoryTableMember extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // to set where to draw border
     double paddingLeft = 0;
     double paddingRight = 0;
@@ -184,7 +198,7 @@ class CategoryTableMember extends StatelessWidget {
     );
   }
 }
-//==================================    Add player button (grey transparent one)   ==================================
+//==================================    ADD PLAYER BUTTON (grey transparent one)   ==================================
 class AddWordHintPairButton extends StatelessWidget {
   final VoidCallback callback;
   
