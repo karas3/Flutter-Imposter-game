@@ -6,20 +6,10 @@ class Category {
   final List<dynamic> _hints;
   final List<TextEditingController> _wordsControllerList = [];
   final List<TextEditingController> _hintsControllerList = [];
-
   bool _selected = false;
 
-  Category(
-    this._name,
-    this._words,
-    this._hints,
-  );
-
-  factory Category.createCategory(Map<String, dynamic> json) {
-    return Category(json["name"], json["words"], json["hints"]);
-  }
-
-  void init() {
+  //class initialization 
+  Category(this._name, this._words, this._hints) {
     for (int i = 0; i < _words.length; i++) {
       _wordsControllerList.add(TextEditingController());
       _wordsControllerList[i].text = getWord(i);
@@ -28,31 +18,27 @@ class Category {
     }
   }
 
+  factory Category.createCategory(Map<String, dynamic> json) {
+    return Category(json["name"], json["words"], json["hints"]);
+  }
+
 //==================================    getters   ==================================
   String getName() {
-    init();
+    // init();
     return _name;
   }
-  bool getSelected() {
-    return _selected;
-  }
+  bool getSelected() => _selected;
+  
   int getLenght() {
     return _wordsControllerList.length;
   }
-  String getWord(int index) {
-    return _words[index].toString();
-  }
-  String getHint(int index) {
-    return _hints[index].toString();
-  }
-
-  TextEditingController getWordController(int index) {  //used to create table of controllers in category edit page
-    return _wordsControllerList[index];
-  }
-
-  TextEditingController getHintController(int index) { //used to create table of controllers in category edit page
-    return _hintsControllerList[index];
-  }
+  
+  String getWord(int index) => _words[index].toString();
+  String getHint(int index) => _hints[index].toString();
+  
+  //used to create table of controllers in category edit page
+  TextEditingController getWordController(int index) => _wordsControllerList[index];
+  TextEditingController getHintController(int index) =>  _hintsControllerList[index];
 
 
 //==================================    setters  ==================================

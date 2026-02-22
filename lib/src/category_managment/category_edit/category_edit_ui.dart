@@ -16,7 +16,7 @@ class CategoryTextHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0), //invisible gap between title and table
       child: Text(
-        "Category: $category",
+        "Cat: $category",
         style: TextStyle(
           fontSize: 30,
           fontWeight: FontWeight.bold,
