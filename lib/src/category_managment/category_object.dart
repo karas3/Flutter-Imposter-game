@@ -1,44 +1,44 @@
 import 'package:flutter/material.dart';
 
 class Category {
-  final String _name;
-  final List<dynamic> _words;
-  final List<dynamic> _hints;
-  final List<TextEditingController> _wordsControllerList = [];
-  final List<TextEditingController> _hintsControllerList = [];
+  final String __fileName;
+  final TextEditingController _name;
+  final List<TextEditingController> _wordsList = [];
+  final List<TextEditingController> _hintsList = [];
   bool _selected = false;
 
-  //class initialization 
-  Category(this._name, this._words, this._hints) {
-    for (int i = 0; i < _words.length; i++) {
-      _wordsControllerList.add(TextEditingController());
-      _wordsControllerList[i].text = getWord(i);
-      _hintsControllerList.add(TextEditingController());
-      _hintsControllerList[i].text = getHint(i);
-    }
-  }
 
+  //class initialization 
   factory Category.createCategory(Map<String, dynamic> json) {
     return Category(json["name"], json["words"], json["hints"]);
   }
 
+  Category(String name, List<dynamic> words, List<dynamic> hints):
+    __fileName = name,
+    _name = TextEditingController(text: name) {
+    for (int i = 0; i < words.length; i++) {
+      _wordsList.add(TextEditingController());
+      _wordsList[i] = TextEditingController(text: words[i]);
+      _hintsList.add(TextEditingController());
+      _hintsList[i] = TextEditingController(text: hints[i]);
+    }
+  }
+
 //==================================    getters   ==================================
-  String getName() {
-    // init();
-    return _name;
-  }
+  String getName() => _name.text;
+  TextEditingController getNameController() => _name;
+
   bool getSelected() => _selected;
+  int getLenght() => _wordsList.length;
+  String getFileName() => __fileName;
   
-  int getLenght() {
-    return _wordsControllerList.length;
-  }
   
-  String getWord(int index) => _words[index].toString();
-  String getHint(int index) => _hints[index].toString();
+  String getWord(int index) => _wordsList[index].text;
+  String getHint(int index) => _hintsList[index].text;
   
   //used to create table of controllers in category edit page
-  TextEditingController getWordController(int index) => _wordsControllerList[index];
-  TextEditingController getHintController(int index) =>  _hintsControllerList[index];
+  TextEditingController getWordController(int index) => _wordsList[index];
+  TextEditingController getHintController(int index) =>  _hintsList[index];
 
 
 //==================================    setters  ==================================
@@ -46,18 +46,13 @@ class Category {
     _selected = selected;
   }
 
-
   void addEntry() {
-    _words.add("");
-    _hints.add("");
-    _wordsControllerList.add(TextEditingController());
-    _hintsControllerList.add(TextEditingController());
+    _wordsList.add(TextEditingController());
+    _hintsList.add(TextEditingController());
   }
 
   void removeEntry(int index) {
-    _words.removeAt(index);
-    _hints.removeAt(index);
-    _wordsControllerList.removeAt(index);
-    _hintsControllerList.removeAt(index);
+    _wordsList.removeAt(index);
+    _hintsList.removeAt(index);
   }
 }

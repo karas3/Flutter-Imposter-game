@@ -1,31 +1,40 @@
 import 'package:flutter/material.dart';
 import '../category_object.dart';
+import '../save_load_category.dart';
+
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 
 // =============================================== CATEGORY TITLE =========================================================
 class CategoryTextHeader extends StatelessWidget {
-  final String category;
+  final TextEditingController controller;
+  final String text;
 
   const CategoryTextHeader({super.key,
-    required this.category
+    required this.controller,
+    required this.text,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0), //invisible gap between title and table
-      child: Text(
-        "Cat: $category",
-        style: TextStyle(
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
+    return IntrinsicWidth(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0), //invisible gap between title and table
+        child: TextFormField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: text,
+            border: UnderlineInputBorder()
+          ),
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
   }
 }
-
 
 // =============================================== TABLE BUILDER =========================================================
 class CategoryTable extends StatefulWidget {
@@ -163,13 +172,13 @@ class CategoryTableMember extends StatelessWidget {
     // to set where to draw border
     double paddingLeft = 0;
     double paddingRight = 0;
-    String hint;
+    String text;
     if(wordData) {
       paddingRight = 2;
-      hint = "Enter Word";
+      text = "Enter Word";
     } else {
       paddingLeft = 2;
-      hint = "Enter Hint";
+      text = "Enter Hint";
     }
 
 // ====================================================== TEXT FILEDS ======================================================
@@ -185,7 +194,7 @@ class CategoryTableMember extends StatelessWidget {
             child: TextFormField(                   //input field
               controller: controller,
               decoration: InputDecoration(
-                hintText: hint,
+                hintText: text,
                 border: UnderlineInputBorder(),
               ),
               style: TextStyle(
@@ -229,6 +238,46 @@ class AddWordHintPairButton extends StatelessWidget {
             color: Theme.of(context).colorScheme.outlineVariant,
             size: 75,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class SaveButton extends StatelessWidget {
+  final Category category;
+
+  const SaveButton({super.key,
+    required this.category,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        margin: EdgeInsets.only(bottom: 50),
+        child: OutlinedButton(
+          onPressed: () {
+            saveToJson(category);
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Save",
+                style: TextStyle(
+                  fontSize: 32
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 10),
+                child: Icon(
+                  Icons.save,
+                  size: 32,
+                ),
+              )
+            ],
+          )
         ),
       ),
     );

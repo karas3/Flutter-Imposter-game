@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../ui_elements/custom_app_bar.dart';
 
 import 'category_edit_ui.dart';
-import '../load_categories_from_json.dart';
+import '../save_load_category.dart';
 import '../category_object.dart';
 
 class CategoryEditPage extends StatefulWidget {
@@ -34,18 +34,19 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
           }
           else {
             final Category category = snapshot.data![widget.id];    // category object
-
-// =========================== PAGE LAYOUT =========================================
+      
+      // =========================== PAGE LAYOUT =========================================
             return Column(
               children: [
-                CategoryTextHeader(category: category.getName()),
-
-                CategoryTable(category: category)
+                CategoryTextHeader(controller: category.getNameController(), text: category.getName(),),
+      
+                CategoryTable(category: category),
+                SaveButton(category: category),
               ]
             );
           }
         }
-      )
+      ),
     );
   }
 }
