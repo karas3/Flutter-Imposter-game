@@ -21,11 +21,14 @@ class InfoText extends StatelessWidget {
 
 
 // ======================================== GRID OF CATEGORIES ========================================
+
 class CategoriesGrid extends StatefulWidget {
   final List<Category> categoriesList;
+  final VoidCallback reloadPage;
 
   const CategoriesGrid({super.key,
     required this.categoriesList,
+    required this.reloadPage,
   });
 
   @override
@@ -49,6 +52,7 @@ class _CategoriesGridState extends State<CategoriesGrid> {
                   widget.categoriesList[index].getSelected() ? widget.categoriesList[index].setSelected(false) : widget.categoriesList[index].setSelected(true);
                 });
               },  
+              reloadPage: widget.reloadPage,
             ),
           );
         }),
@@ -58,18 +62,21 @@ class _CategoriesGridState extends State<CategoriesGrid> {
 }
 
 
+// ======================================== BUTTON ========================================
 
-class CategoryButton extends StatelessWidget {
+class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code above)
   final String category;
-  final Function setSelectedCallback;
+  final VoidCallback setSelectedCallback;
   final bool selected;
   final int id;
+  final VoidCallback reloadPage;
 
   const CategoryButton({super.key, 
     required this.category,
     required this.setSelectedCallback,
     required this.selected,
     required this.id,
+    required this.reloadPage,
   });
 
   final double size = 170;
@@ -83,7 +90,7 @@ class CategoryButton extends StatelessWidget {
           curve: Curves.easeInOut,                     
           width: selected ? size : size - 10,  // Entire button width                 
           height: selected ? size : size - 10, // Entire button height
-          decoration: BoxDecoration(
+          decoration: BoxDecoration(  
             color: selected ? Theme.of(context).colorScheme.inversePrimary : Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(30)),
             border: Border.all(
@@ -92,19 +99,17 @@ class CategoryButton extends StatelessWidget {
             ),
           ),
         
-          child: TextButton(
+          child: TextButton(  // change button style
             onPressed: () {
               setSelectedCallback();
             },
-            onLongPress: () {
+            onLongPress: () {   // switch page to edit_page
               Navigator.push(
                 context, 
                 MaterialPageRoute(
-                  builder: (context) => CategoryEditPage(
-                    id: id,
-                  ),
+                  builder: (context) => CategoryEditPage(id: id,),
                 ),
-              );
+              ).then((_) => reloadPage(),);   // used to update name after finishing edition
             },
             style: ButtonStyle(
               overlayColor: WidgetStatePropertyAll(Colors.transparent),   // Deletes purple circle which displays for a moment after button is clicked

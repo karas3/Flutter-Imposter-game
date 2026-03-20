@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../../ui_elements/custom_app_bar.dart';
 
-import '../save_load_category.dart';
+import '../load_category.dart';
 import '../category_object.dart';
 import 'category_selection_ui.dart';
 
 class CategorySelectionPage extends StatefulWidget {
-  const CategorySelectionPage({super.key});
+  const CategorySelectionPage({super.key});  
 
   @override
   State<CategorySelectionPage> createState() => _CategorySelectionPageState();
 }
 
 class _CategorySelectionPageState extends State<CategorySelectionPage> {
-  Future<List<Category>> categories = loadCategoryFromJson();   
-  
   @override
   Widget build(BuildContext context) {
+    final Future<List<Category>> categories = loadCategoryFromJson();
+
     return Scaffold(
       appBar: CustomAppBar(title: "Choose categories"),
       body: FutureBuilder(
@@ -33,7 +33,7 @@ class _CategorySelectionPageState extends State<CategorySelectionPage> {
            return Column(
             children: [
               InfoText(),
-              CategoriesGrid(categoriesList: snapshot.data!), 
+              CategoriesGrid(categoriesList: snapshot.data!, reloadPage: () => setState(() {print("State updated");}),), 
             ],
           ); 
           }

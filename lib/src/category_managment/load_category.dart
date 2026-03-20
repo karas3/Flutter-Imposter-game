@@ -21,35 +21,8 @@ Future<List<Category>> loadCategoryFromJson() async {
 }
 
 
-Future<void> saveToJson(Category category) async {
-  final dir = await getApplicationDocumentsDirectory();
-  final targetDir = Directory("${dir.path}/categories");
-  final File path = File("${targetDir.path}/${category.getFileName()}.json");
-
-  List<String> words = [];
-  List<String> hints = [];
-  for(int i = 0; i < category.getLenght(); i++) {
-    words.add(category.getWord(i));
-    hints.add(category.getHint(i));
-  }
-  Map<String, dynamic> data = {
-    "name": category.getName(),
-    "words": words,
-    "hints": hints,
-  };
-
-  String jsonString = jsonEncode(data);
-  try {
-    await path.writeAsString(jsonString);
-    await path.rename("${targetDir.path}/${category.getName()}.json");
-  } catch (e) {
-    print("Error $e");
-  }
-}
-
-
 // checks if assets are present inside app document directory so later they can be edited if not adds them
-Future<void> defaultCateogryExists() async {
+Future<void> ensureDefaultCateogryExists() async {
   final dir = await getApplicationDocumentsDirectory();
   final targetDir = Directory("${dir.path}/categories");
 

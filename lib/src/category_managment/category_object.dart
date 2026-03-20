@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'package:path_provider/path_provider.dart';
 
 class Category {
-  final String __fileName;
+  final String _fileName;   // used for file renaming
   final TextEditingController _name;
   final List<TextEditingController> _wordsList = [];
   final List<TextEditingController> _hintsList = [];
@@ -14,7 +17,7 @@ class Category {
   }
 
   Category(String name, List<dynamic> words, List<dynamic> hints):
-    __fileName = name,
+    _fileName = name,
     _name = TextEditingController(text: name) {
     for (int i = 0; i < words.length; i++) {
       _wordsList.add(TextEditingController());
@@ -30,8 +33,6 @@ class Category {
 
   bool getSelected() => _selected;
   int getLenght() => _wordsList.length;
-  String getFileName() => __fileName;
-  
   
   String getWord(int index) => _wordsList[index].text;
   String getHint(int index) => _hintsList[index].text;
@@ -54,5 +55,31 @@ class Category {
   void removeEntry(int index) {
     _wordsList.removeAt(index);
     _hintsList.removeAt(index);
+  }
+
+  Future<void> saveToJson() async {
+    final dir = await getApplicationDocumentsDirectory();
+    final targetDir = Directory("${dir.path}/categories");
+    final File file = File("${targetDir.path}/$_fileName.json");
+
+    List<String> words = [];
+    List<String> hints = [];
+    for(int i = 0; i < getLenght(); i++) {
+      words.add(getWord(i));
+      hints.add(getHint(i));
+    }
+    Map<String, dynamic> data = {
+      "name": getName(),
+      "words": words,
+      "hints": hints,
+    };
+
+    String jsonString = jsonEncode(data);
+    try {
+      await file.writeAsString(jsonString);
+      await file.rename("${targetDir.path}/${getName()}.json");
+    } catch (e) {
+      print("Error $e");
+    }
   }
 }

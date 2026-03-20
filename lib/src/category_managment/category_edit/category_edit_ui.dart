@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../category_object.dart';
-import '../save_load_category.dart';
-
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 
@@ -244,7 +242,9 @@ class AddWordHintPairButton extends StatelessWidget {
   }
 }
 
-class SaveButton extends StatelessWidget {
+
+
+class SaveButton extends StatefulWidget {
   final Category category;
 
   const SaveButton({super.key,
@@ -252,19 +252,37 @@ class SaveButton extends StatelessWidget {
   });
 
   @override
+  State<SaveButton> createState() => _SaveButtonState();
+}
+
+class _SaveButtonState extends State<SaveButton> {
+  IconData icon = Icons.save;
+  String text = "Save";
+
+  @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
         margin: EdgeInsets.only(bottom: 50),
         child: OutlinedButton(
-          onPressed: () {
-            saveToJson(category);
+          onPressed: () async {
+            widget.category.saveToJson();
+            // change icon and text to let user know that changes were saved
+            setState(() {
+              icon = Icons.check_rounded;
+              text = "Saved";
+            });
+            await Future.delayed(Duration(seconds: 1));
+            setState(() {
+              icon = Icons.save;
+              text = "Save";
+            });
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "Save",
+                text,
                 style: TextStyle(
                   fontSize: 32
                 ),
@@ -272,7 +290,7 @@ class SaveButton extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(left: 10),
                 child: Icon(
-                  Icons.save,
+                  icon,
                   size: 32,
                 ),
               )

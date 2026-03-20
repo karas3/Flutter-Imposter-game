@@ -24,4 +24,11 @@ class AppTheme extends ChangeNotifier {
     _lightTheme ? _lightTheme = false : _lightTheme = true;
     notifyListeners();
   }
+
+  static IconData getIcon() {   //return icon for app bar to use
+    if(_lightTheme) {
+      return Icons.dark_mode;
+    }
+    return Icons.light_mode;
+  }
 }
