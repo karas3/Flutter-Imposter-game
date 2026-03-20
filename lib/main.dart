@@ -8,7 +8,7 @@ import 'src/play/play_page.dart';
 import 'src/ui_elements/app_theme.dart';
 import 'src/ui_elements/custom_bottom_navigation_bar.dart';
 
-import 'src/category_managment/save_load_category.dart';
+import 'src/category_managment/load_category.dart';
 
 void main() {
   runApp(
@@ -18,7 +18,7 @@ void main() {
     ),
   );
 
-  defaultCateogryExists();  // checks if assets are present inside app document directory so later they can be edited if not adds them
+  ensureDefaultCateogryExists();  // checks if assets are present inside app document directory so later they can be edited if not adds them
 }
 
 class MyApp extends StatefulWidget {
