@@ -4,11 +4,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 
 // =============================================== CATEGORY TITLE =========================================================
-class CategoryTextHeader extends StatelessWidget {
+class CategoryTitle extends StatelessWidget {
   final TextEditingController controller;
   final String text;
 
-  const CategoryTextHeader({super.key,
+  const CategoryTitle({super.key,
     required this.controller,
     required this.text,
   });
@@ -65,9 +65,9 @@ class _CategoryTableState extends State<CategoryTable> {
               ),
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: widget.category.getLenght() + 1,
+                itemCount: widget.category.lenght + 1,
                 itemBuilder: (BuildContext context, int index) {  
-                  if(index < widget.category.getLenght()) {
+                  if(index < widget.category.lenght) {
                     
                     return Slidable (
                       // Specify a key if the Slidable is dismissible.
@@ -205,7 +205,7 @@ class CategoryTableMember extends StatelessWidget {
     );
   }
 }
-//==================================    ADD PLAYER BUTTON (grey transparent one)   ==================================
+//==================================    ADD BUTTON (grey transparent one)   ==================================
 class AddWordHintPairButton extends StatelessWidget {
   final VoidCallback callback;
   

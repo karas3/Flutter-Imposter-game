@@ -13,14 +13,14 @@ class _LobbyPlayerInputTileListState extends State<LobbyPlayerInputTileList> {
   Widget build(BuildContext context) {
     return Flexible(   //Fixes overflow of list
       child: ListView.builder(             
-        itemCount: Lobby.getPlayerListLenght() + 1,
+        itemCount: Lobby.playerListLenght + 1,
         itemBuilder: (_, index) {
 
-          if(index < Lobby.getPlayerListLenght()) {   // player Input Tile
+          if(index < Lobby.playerListLenght) {   // player Input Tile
             final player = Lobby.getPlayer(index);  //get Player object from list of Player objects
             return LobbyPlayerInputTile(
-              controller: player.getController(), 
-              color:  player.getColor(),   
+              controller: player.controller, 
+              color:  player.color,   
               id: index,                          //id
               removeCallbackFunction: () {  //callback to rebuild the scene and delete one of input tiles
                 setState(() {

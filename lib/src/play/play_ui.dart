@@ -71,7 +71,7 @@ class _ImposterCounterState extends State<ImposterCounter> {
               ),
           
               Text(
-                Lobby.getImposterCount().toString(),
+                Lobby.imposterCount.toString(),
                 style: TextStyle(
                   fontSize: 30,
                 ),

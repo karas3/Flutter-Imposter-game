@@ -3,15 +3,10 @@ import 'package:flutter/material.dart' show TextEditingController, Color;
 
 class Player {
   final TextEditingController _nameController = TextEditingController();    // Makes input persistent for shifting
-  final Color _color = Color.fromARGB(255, Random().nextInt(255) + 1, Random().nextInt(255) + 1, Random().nextInt(255) + 1);
+  final Color _color = Color.fromARGB(255, Random().nextInt(255) + 1, Random().nextInt(255) + 1, Random().nextInt(255) + 1);  //generate random color
 
-  TextEditingController getController() {
-    return _nameController;
-  }
-
-  Color getColor() {
-    return _color;
-  }
+  TextEditingController get controller => _nameController;
+  Color get color => _color;
 
   void dispose() {
     _nameController.dispose();
@@ -19,7 +14,7 @@ class Player {
 }
 
 class Lobby{ 
-  static final List<Player> _playerList = [Player(), Player(), Player()];  
+  static final List<Player> _playerList = [Player(), Player(), Player()];
   static int _imposterCount = 1;
 
   static void addPlayer() {                //adds empty player input tile
@@ -31,28 +26,19 @@ class Lobby{
     _playerList.removeAt(index);
   }
 
+  // used to display list
+  static Player getPlayer(int index) => _playerList[index];
+  static int get playerListLenght => _playerList.length;
 
-  static Player getPlayer(int index) {            // used to display list
-    return _playerList[index];
-  }
-
-  static int getPlayerListLenght() {   // used to display list
-    return _playerList.length;
-  }
-
+  static int get imposterCount => _imposterCount;
   static void increaseImposterCount() {
     if(_imposterCount < _playerList.length - 2) { //atleast 2 normal players needed
       _imposterCount++;
     }
   }
-
   static void decreaseImposterCount() {
     if(_imposterCount > 1) {
       _imposterCount--;
     }
-  }
-
-  static int getImposterCount() {
-    return _imposterCount;
   }
 }

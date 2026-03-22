@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../category_edit/category_edit_page.dart';
 import '../category_object.dart';
@@ -24,11 +25,9 @@ class InfoText extends StatelessWidget {
 
 class CategoriesGrid extends StatefulWidget {
   final List<Category> categoriesList;
-  final VoidCallback reloadPage;
 
   const CategoriesGrid({super.key,
     required this.categoriesList,
-    required this.reloadPage,
   });
 
   @override
@@ -41,20 +40,24 @@ class _CategoriesGridState extends State<CategoriesGrid> {
     return Flexible(
       child: GridView.count(
         crossAxisCount: 2,  // 2 columns
-        children: List.generate(widget.categoriesList.length, (index) { 
-          return Center(
+        children: List.generate(widget.categoriesList.length + 1, (index) { 
+          if(index < widget.categoriesList.length) {
+            return Center(
             child: CategoryButton(
-              category: widget.categoriesList[index].getName(),
-              selected: widget.categoriesList[index].getSelected(),
+              categoriesList: widget.categoriesList,
               id: index,
               setSelectedCallback: () {
                 setState(() {
-                  widget.categoriesList[index].getSelected() ? widget.categoriesList[index].setSelected(false) : widget.categoriesList[index].setSelected(true);
+                  widget.categoriesList[index].selected ? widget.categoriesList[index].setSelected(false) : widget.categoriesList[index].setSelected(true);
                 });
               },  
-              reloadPage: widget.reloadPage,
             ),
           );
+          } else {
+            return Center(
+              child: AddCategoryButton()
+            );
+          }
         }),
       ),
     );
@@ -65,18 +68,14 @@ class _CategoriesGridState extends State<CategoriesGrid> {
 // ======================================== BUTTON ========================================
 
 class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code above)
-  final String category;
   final VoidCallback setSelectedCallback;
-  final bool selected;
   final int id;
-  final VoidCallback reloadPage;
+  final List<Category> categoriesList;
 
   const CategoryButton({super.key, 
-    required this.category,
     required this.setSelectedCallback,
-    required this.selected,
     required this.id,
-    required this.reloadPage,
+    required this.categoriesList
   });
 
   final double size = 170;
@@ -88,13 +87,13 @@ class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code a
         AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,                     
-          width: selected ? size : size - 10,  // Entire button width                 
-          height: selected ? size : size - 10, // Entire button height
+          width: categoriesList[id].selected ? size : size - 10,   //170, 160                 
+          height: categoriesList[id].selected ? size : size - 10,
           decoration: BoxDecoration(  
-            color: selected ? Theme.of(context).colorScheme.inversePrimary : Colors.transparent,
+            color: categoriesList[id].selected ? Theme.of(context).colorScheme.inversePrimary : Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(30)),
             border: Border.all(
-                color: selected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.outlineVariant,
+                color: categoriesList[id].selected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.outlineVariant,
                 width: 3.5,
             ),
           ),
@@ -107,9 +106,9 @@ class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code a
               Navigator.push(
                 context, 
                 MaterialPageRoute(
-                  builder: (context) => CategoryEditPage(id: id,),
+                  builder: (context) => CategoryEditPage(category: categoriesList[id]),
                 ),
-              ).then((_) => reloadPage(),);   // used to update name after finishing edition
+              ).then((_) => context.read<CategoriesList>().reload());   // used to update name after finishing edition
             },
             style: ButtonStyle(
               overlayColor: WidgetStatePropertyAll(Colors.transparent),   // Deletes purple circle which displays for a moment after button is clicked
@@ -118,16 +117,53 @@ class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code a
               duration: Duration(milliseconds: 300),
               curve: Curves.easeInOut,   
               style: TextStyle(
-                fontSize: selected ? 20 : 18,
+                fontSize: categoriesList[id].selected ? 20 : 18,
               ),
               child: Text(
-                category,
+                categoriesList[id].name,
                 style: TextStyle(color: Theme.of(context).colorScheme.inverseSurface),
               ),
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+
+
+//==================================    ADD BUTTON (grey transparent one)   ==================================
+class AddCategoryButton extends StatelessWidget {
+  
+  const AddCategoryButton({super.key,
+   });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Center(
+        child: FilledButton(
+          onPressed: () {
+            context.read<CategoriesList>().add();
+          },
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.surface),
+            fixedSize: WidgetStatePropertyAll(const Size(160,160)),
+            shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
+            side: WidgetStatePropertyAll(BorderSide(                                                                // set border width and color
+              width: 3.5,
+              color: Theme.of(context).colorScheme.outlineVariant,
+            )),
+          ),
+          child: Icon(
+            Icons.add,
+            color: Theme.of(context).colorScheme.outlineVariant,
+            size: 75,
+          ),
+        ),
+      ),
     );
   }
 }
