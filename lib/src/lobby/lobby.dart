@@ -2,15 +2,11 @@ import 'dart:math' show Random;
 import 'package:flutter/material.dart' show TextEditingController, Color;
 
 class Player {
-  final TextEditingController _nameController = TextEditingController();    // Makes input persistent for shifting
+  final TextEditingController _nameController = TextEditingController();
   final Color _color = Color.fromARGB(255, Random().nextInt(255) + 1, Random().nextInt(255) + 1, Random().nextInt(255) + 1);  //generate random color
 
   TextEditingController get controller => _nameController;
   Color get color => _color;
-
-  void dispose() {
-    _nameController.dispose();
-  }
 }
 
 class Lobby{ 
@@ -22,7 +18,7 @@ class Lobby{
   }
 
   static void removePlayer(int index) {    //remove player input tile at index
-    _playerList[index].dispose();
+    _playerList[index].controller.dispose();
     _playerList.removeAt(index);
   }
 

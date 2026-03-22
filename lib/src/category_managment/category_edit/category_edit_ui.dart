@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
-import '../category_object.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import '../category_object.dart';
 
 
 // =============================================== CATEGORY TITLE =========================================================
 class CategoryTitle extends StatelessWidget {
   final TextEditingController controller;
-  final String text;
 
   const CategoryTitle({super.key,
     required this.controller,
-    required this.text,
   });
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicWidth(
+    return IntrinsicWidth(  // makes width text editing controller same as text in it
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10.0), //invisible gap between title and table
         child: TextFormField(
           controller: controller,
           decoration: InputDecoration(
-            hintText: text,
             border: UnderlineInputBorder()
           ),
           style: TextStyle(
@@ -36,10 +33,17 @@ class CategoryTitle extends StatelessWidget {
 
 // =============================================== TABLE BUILDER =========================================================
 class CategoryTable extends StatefulWidget {
-  final Category category;
+  final List<TextEditingController> wordsControllers;
+  final List<TextEditingController> hintsControllers;
+  final VoidCallback addEntry;
+  final Function removeEntry;
+
 
   const CategoryTable({super.key,
-    required this.category,
+    required this.wordsControllers,
+    required this.hintsControllers,
+    required this.addEntry,
+    required this.removeEntry,
   });
 
   @override
@@ -65,21 +69,19 @@ class _CategoryTableState extends State<CategoryTable> {
               ),
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: widget.category.lenght + 1,
+                itemCount: widget.wordsControllers.length + 1,
                 itemBuilder: (BuildContext context, int index) {  
-                  if(index < widget.category.lenght) {
-                    
+                  if(index < widget.wordsControllers.length) {
                     return Slidable (
                       // Specify a key if the Slidable is dismissible.
                       key: const ValueKey(0),
                       endActionPane: ActionPane(
                       extentRatio: 0.25,
                       motion: const DrawerMotion(),
-
                         children: [
                           SlidableAction(
                             borderRadius: BorderRadius.circular(15),
-                            onPressed: (context) => setState(() {widget.category.removeEntry(index);}),
+                            onPressed: (context) => setState(() {widget.removeEntry(index);}),
                             backgroundColor: Color(0xFFFE4A49),
                             foregroundColor: Colors.white,
                             icon: Icons.delete,
@@ -95,14 +97,14 @@ class _CategoryTableState extends State<CategoryTable> {
                         contentPadding: EdgeInsets.zero,
                         title: Row(
                         children: [
-                          CategoryTableMember(data: widget.category.getWord(index), wordData: true, controller: widget.category.getWordController(index)),
-                          CategoryTableMember(data: widget.category.getHint(index), wordData: false, controller: widget.category.getHintController(index)),
+                          CategoryTableMember(data: widget.wordsControllers[index].text, wordData: true, controller: widget.wordsControllers[index]),
+                          CategoryTableMember(data: widget.hintsControllers[index].text, wordData: false, controller: widget.hintsControllers[index]),
                         ],
                       ),
                     )
                     );
                   } else {
-                    return AddWordHintPairButton(callback: () => setState(() {widget.category.addEntry();}));
+                    return AddButton(callback: () => setState(() {widget.addEntry();}));
                   }
                 }
               ),
@@ -205,11 +207,11 @@ class CategoryTableMember extends StatelessWidget {
     );
   }
 }
-//==================================    ADD BUTTON (grey transparent one)   ==================================
-class AddWordHintPairButton extends StatelessWidget {
+//==================================    ADD BUTTON    ==================================
+class AddButton extends StatelessWidget {
   final VoidCallback callback;
   
-  const AddWordHintPairButton({super.key,
+  const AddButton({super.key,
     required this.callback,
    });
 
@@ -243,12 +245,18 @@ class AddWordHintPairButton extends StatelessWidget {
 }
 
 
-
+//==================================    SAVE BUTTON    ==================================
 class SaveButton extends StatefulWidget {
   final Category category;
+  final ValueGetter title;
+  final ValueGetter words;
+  final ValueGetter hints;
 
   const SaveButton({super.key,
     required this.category,
+    required this.title,
+    required this.words,
+    required this.hints,
   });
 
   @override
@@ -266,7 +274,7 @@ class _SaveButtonState extends State<SaveButton> {
         margin: EdgeInsets.only(bottom: 50),
         child: OutlinedButton(
           onPressed: () async {
-            widget.category.saveToJson();
+            widget.category.saveToJson(widget.title(), widget.words(), widget.hints());
             // change icon and text to let user know that changes were saved
             setState(() {
               icon = Icons.check_rounded;

@@ -48,7 +48,7 @@ class _CategoriesGridState extends State<CategoriesGrid> {
               id: index,
               setSelectedCallback: () {
                 setState(() {
-                  widget.categoriesList[index].selected ? widget.categoriesList[index].setSelected(false) : widget.categoriesList[index].setSelected(true);
+                  widget.categoriesList[index].switchSelected();
                 });
               },  
             ),
@@ -108,7 +108,10 @@ class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code a
                 MaterialPageRoute(
                   builder: (context) => CategoryEditPage(category: categoriesList[id]),
                 ),
-              ).then((_) => context.read<CategoriesList>().reload());   // used to update name after finishing edition
+              ).then((_) { 
+                context.read<CategoriesList>().reload();  // used to update name after finishing edition
+                // CategoryEditPage.dispose();
+              });   
             },
             style: ButtonStyle(
               overlayColor: WidgetStatePropertyAll(Colors.transparent),   // Deletes purple circle which displays for a moment after button is clicked

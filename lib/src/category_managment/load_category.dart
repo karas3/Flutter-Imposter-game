@@ -9,14 +9,13 @@ Future<List<Category>> loadCategoryFromJson() async {
   final dir = await getApplicationDocumentsDirectory();
   final targetDir = Directory("${dir.path}/categories");
 
-  final List<FileSystemEntity> categoriesJsonFiles = await targetDir.list().toList();
+  List<FileSystemEntity> categoriesJsonFiles = await targetDir.list().toList();
   List<Category> categories = [];
   for(final FileSystemEntity file in categoriesJsonFiles) {
     final jsonString = await File(file.path).readAsString();
     final jsonMap = jsonDecode(jsonString);
     categories.add(Category.createCategory(jsonMap));
   }
-
   return categories;
 }
 

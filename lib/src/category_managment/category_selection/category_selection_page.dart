@@ -20,12 +20,12 @@ class _CategorySelectionPageState extends State<CategorySelectionPage> {
       body: ChangeNotifierProvider(
         create: (_) => CategoriesList(),
         builder: (context, child) { 
-          context.watch<CategoriesList>().list; // needs to be here to rebuil page properly
+          context.watch<CategoriesList>().list; // needs to be here to rebuild page properly
           return FutureBuilder(   // to fix error with provider not exisitng
             future: context.read<CategoriesList>().list,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
+                return Center(child: Text('Category grid building Error: ${snapshot.error}'));
               } 
               else if (!snapshot.hasData) {               // On beggining snapshot has no data which returns unnecessary error
                 return Center(child: Text('Loading Data!'));   
