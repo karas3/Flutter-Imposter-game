@@ -7,17 +7,26 @@ import '../category_object.dart';
 
 class CategoryEditPage extends StatefulWidget {
   final Category category;
-  final TextEditingController _titleController = TextEditingController();
-  final List<TextEditingController> _wordsControllers = [];
-  final List<TextEditingController> _hintsControllers = [];
 
-  CategoryEditPage({super.key,
+  const CategoryEditPage({super.key,
     required this.category,
-  }) {
-    _titleController.text = category.name;
-    for(int i = 0; i < category.length; i++) {
-      _wordsControllers.add(TextEditingController(text: category.words[i]));
-      _hintsControllers.add(TextEditingController(text: category.hints[i]));
+  });
+
+  @override
+  State<CategoryEditPage> createState() => _CategoryEditPageState();
+}
+
+class _CategoryEditPageState extends State<CategoryEditPage> {
+  late final TextEditingController _titleController = TextEditingController(text: widget.category.name);
+  late final List<TextEditingController> _wordsControllers = [];
+  late final List<TextEditingController> _hintsControllers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    for(int i = 0; i < widget.category.length; i++) {
+      _wordsControllers.add(TextEditingController(text: widget.category.words[i]));
+      _hintsControllers.add(TextEditingController(text: widget.category.hints[i]));
     }
   }
 
@@ -50,20 +59,18 @@ class CategoryEditPage extends StatefulWidget {
     }
     return hints;
   }
-
-  void dispose() {  //TODO implement disposing in parent widget and fix the bug with changes being ereased by changing theme
+  
+  @override
+  void dispose() {
     _titleController.dispose();
     for(int i = 0; i < _wordsControllers.length; i++) {
       _wordsControllers[i].dispose();
       _hintsControllers[i].dispose();
     }
+    super.dispose();
   }
 
-  @override
-  State<CategoryEditPage> createState() => _CategoryEditPageState();
-}
 
-class _CategoryEditPageState extends State<CategoryEditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,9 +82,9 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
         // =========================== PAGE LAYOUT =========================================
             return Column(
               children: [
-                CategoryTitle(controller: widget._titleController),
-                CategoryTable(wordsControllers: widget._wordsControllers, hintsControllers: widget._hintsControllers, addEntry: widget.addEntry, removeEntry: widget.removeEntry),
-                SaveButton(category: widget.category, title: () => widget.title, words: () => widget.words, hints: () => widget.hints),
+                CategoryTitle(controller: _titleController),
+                CategoryTable(wordsControllers: _wordsControllers, hintsControllers: _hintsControllers, addEntry: addEntry, removeEntry: removeEntry),
+                SaveButton(category: widget.category, title: () => title, words: () => words, hints: () => hints),
               ]
             );
           }

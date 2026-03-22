@@ -26,6 +26,8 @@ class CategoriesList extends ChangeNotifier {
   }
 }
 
+
+
 class Category extends ChangeNotifier {
   final String _name;
   final List<String> _words = [];
