@@ -15,6 +15,8 @@ class CategorySelectionPage extends StatefulWidget {
 class _CategorySelectionPageState extends State<CategorySelectionPage> {
   @override
   Widget build(BuildContext context) {
+    final Future<List<Category>> categories = loadCategoryFromJson();
+
     return Scaffold(
       appBar: CustomAppBar(title: "Choose categories"),
       body: ChangeNotifierProvider(

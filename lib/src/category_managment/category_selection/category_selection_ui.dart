@@ -25,9 +25,11 @@ class InfoText extends StatelessWidget {
 
 class CategoriesGrid extends StatefulWidget {
   final List<Category> categoriesList;
+  final VoidCallback reloadPage;
 
   const CategoriesGrid({super.key,
     required this.categoriesList,
+    required this.reloadPage,
   });
 
   @override
@@ -51,6 +53,7 @@ class _CategoriesGridState extends State<CategoriesGrid> {
                   widget.categoriesList[index].selected ? widget.categoriesList[index].setSelected(false) : widget.categoriesList[index].setSelected(true);
                 });
               },  
+              reloadPage: widget.reloadPage,
             ),
           );
           } else {
