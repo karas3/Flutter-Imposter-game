@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 import 'lobby.dart';
 
 class LobbyPlayerInputTileList extends StatefulWidget {
-  const LobbyPlayerInputTileList({super.key});
+  final List<TextEditingController> controllers;
+  final Function addPlayer;
+  final Function removePlayer;
+
+  const LobbyPlayerInputTileList({super.key,
+    required this.controllers,
+    required this.addPlayer,
+    required this.removePlayer,
+  });
 
   @override
   State<LobbyPlayerInputTileList> createState() => _LobbyPlayerInputTileListState();
@@ -17,14 +25,14 @@ class _LobbyPlayerInputTileListState extends State<LobbyPlayerInputTileList> {
         itemBuilder: (_, index) {
 
           if(index < Lobby.playerListLenght) {   // player Input Tile
-            final player = Lobby.getPlayer(index);  //get Player object from list of Player objects
+            final player = Lobby.playerList[index];  //get Player object from list of Player objects
             return LobbyPlayerInputTile(
-              controller: player.controller, 
-              color:  player.color,   
+              controller: widget.controllers[index], 
+              color: player.color,   
               id: index,                          //id
               removeCallbackFunction: () {  //callback to rebuild the scene and delete one of input tiles
                 setState(() {
-                  Lobby.removePlayer(index);
+                  widget.removePlayer(index);
                 });
               },
             );
@@ -34,7 +42,7 @@ class _LobbyPlayerInputTileListState extends State<LobbyPlayerInputTileList> {
               child: AddPlayerButton (
                 addPlayercallback: () {   // callback to rebuild scene and create new input tile
                   setState(() {
-                    Lobby.addPlayer();
+                    widget.addPlayer();
                   });
                 }
               ),
@@ -45,8 +53,6 @@ class _LobbyPlayerInputTileListState extends State<LobbyPlayerInputTileList> {
     );
   }
 }
-
-
 
 
 class LobbyPlayerInputTile extends StatefulWidget {

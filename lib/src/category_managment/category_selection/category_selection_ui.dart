@@ -110,7 +110,6 @@ class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code a
                 ),
               ).then((_) { 
                 context.read<CategoriesList>().reload();  // used to update name after finishing edition
-                // CategoryEditPage.dispose();
               });   
             },
             style: ButtonStyle(

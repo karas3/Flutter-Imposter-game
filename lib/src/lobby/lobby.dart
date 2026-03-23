@@ -1,12 +1,9 @@
 import 'dart:math' show Random;
-import 'package:flutter/material.dart' show TextEditingController, Color;
+import 'package:flutter/material.dart';
 
 class Player {
-  final TextEditingController _nameController = TextEditingController();
-  final Color _color = Color.fromARGB(255, Random().nextInt(255) + 1, Random().nextInt(255) + 1, Random().nextInt(255) + 1);  //generate random color
-
-  TextEditingController get controller => _nameController;
-  Color get color => _color;
+  String name = "";
+  final Color color = Color.fromARGB(255, Random().nextInt(255) + 1, Random().nextInt(255) + 1, Random().nextInt(255) + 1);
 }
 
 class Lobby{ 
@@ -18,15 +15,20 @@ class Lobby{
   }
 
   static void removePlayer(int index) {    //remove player input tile at index
-    _playerList[index].controller.dispose();
     _playerList.removeAt(index);
   }
 
   // used to display list
-  static Player getPlayer(int index) => _playerList[index];
+  static List<Player> get playerList => _playerList;
   static int get playerListLenght => _playerList.length;
-
   static int get imposterCount => _imposterCount;
+
+  static set playerNames(List<String> names) {
+    for(int i = 0; i < _playerList.length; i++) {
+      _playerList[i].name = names[i];
+    }
+  }
+
   static void increaseImposterCount() {
     if(_imposterCount < _playerList.length - 2) { //atleast 2 normal players needed
       _imposterCount++;

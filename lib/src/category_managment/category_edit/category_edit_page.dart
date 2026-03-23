@@ -70,7 +70,6 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
