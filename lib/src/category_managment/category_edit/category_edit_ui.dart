@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import '../category_object.dart';
 
 
@@ -53,61 +52,39 @@ class CategoryTable extends StatefulWidget {
 class _CategoryTableState extends State<CategoryTable> {
   @override
   Widget build(BuildContext context) {
-    return Expanded(  // Fixes list view builder parent not having size
+    return Expanded( 
       child: Column(
         children: [
-          Row(
-            children: [
-              CategoryTableHeader(data: "Words"),
-              CategoryTableHeader(data: "Hints"),
-            ],
+          Container(
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(width: 5.0 , color: Theme.of(context).colorScheme.outline))
+            ),
+            child: Row(
+              children: [
+                TableCell(data: "Words", wordData: true,),
+                TableCell(data: "Hints", wordData: false),
+              ],
+            ),
           ),
-          Flexible(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [Theme.of(context).colorScheme.outline, Theme.of(context).colorScheme.surface], begin: Alignment.topCenter, end: Alignment.bottomCenter, stops: [0.5, 0.95])
-              ),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: widget.wordsControllers.length + 1,
-                itemBuilder: (BuildContext context, int index) {  
-                  if(index < widget.wordsControllers.length) {
-                    return Slidable (
-                      // Specify a key if the Slidable is dismissible.
-                      key: const ValueKey(0),
-                      endActionPane: ActionPane(
-                      extentRatio: 0.25,
-                      motion: const DrawerMotion(),
-                        children: [
-                          SlidableAction(
-                            borderRadius: BorderRadius.circular(15),
-                            onPressed: (context) => setState(() {widget.removeEntry(index);}),
-                            backgroundColor: Color(0xFFFE4A49),
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Delete',
-                          ),
-                        ],
-                      ),
-
-                      // The child of the Slidable is what the user sees when the
-                      // component is not dragged.
-                      child: ListTile(
-                        minVerticalPadding: 0,
-                        contentPadding: EdgeInsets.zero,
-                        title: Row(
-                        children: [
-                          CategoryTableMember(data: widget.wordsControllers[index].text, wordData: true, controller: widget.wordsControllers[index]),
-                          CategoryTableMember(data: widget.hintsControllers[index].text, wordData: false, controller: widget.hintsControllers[index]),
-                        ],
-                      ),
-                    )
-                    );
-                  } else {
-                    return AddButton(callback: () => setState(() {widget.addEntry();}));
-                  }
+          Expanded(
+            child: ListView.builder(
+              prototypeItem: TableRow(wordText: widget.wordsControllers[0].text, hintText: widget.hintsControllers[0].text, wordController: widget.wordsControllers[0], hintController: widget.hintsControllers[0],),
+              shrinkWrap: true,
+              itemCount: widget.wordsControllers.length + 1,
+              itemBuilder: (BuildContext context, int index) {  
+                if(index < widget.wordsControllers.length) {
+                  return Dismissible(
+                    key: ValueKey(widget.wordsControllers[index]),
+                    onDismissed: (DismissDirection direction) => setState(() => widget.removeEntry(index)),
+                    child: TableRow(
+                      wordText: widget.wordsControllers[index].text, hintText: widget.hintsControllers[index].text,
+                      wordController: widget.wordsControllers[index], hintController: widget.hintsControllers[index],
+                    ),
+                  );
+                } else {
+                  return AddButton(addEntry: () => setState(() => widget.addEntry()));
                 }
-              ),
+              }
             ),
           ),
         ],
@@ -115,104 +92,94 @@ class _CategoryTableState extends State<CategoryTable> {
     );
   }
 }
+// =============================================== TABLE ROW =========================================================
+class TableRow extends StatelessWidget {
+  final String wordText;
+  final String hintText;
+  final TextEditingController wordController;
+  final TextEditingController hintController;
 
-
-// =============================================== TOP TABLE CELLS =========================================================
-class CategoryTableHeader extends StatelessWidget {
-  final double fontSize = 24;
-  final String data;
-
-  const CategoryTableHeader({super.key,
-    required this.data,
+  const TableRow({super.key,
+    required this.wordText,
+    required this.hintText,
+    required this.wordController,
+    required this.hintController,
   });
 
   @override
   Widget build(BuildContext context) {
-
-
-    return Expanded(
-      flex: 5,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(width: 4, color: Theme.of(context).colorScheme.outline), 
-          ),
-        ),
-        child: Center(
-          child: Text(
-            data,    
-            style: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold
-            ),
-          ),
-        ),
+    return ListTile(
+      minVerticalPadding: 0,
+      contentPadding: EdgeInsets.zero,
+      title: Row(
+        children: [
+          TableCell(data: wordText, wordData: true, controller: wordController),
+          TableCell(data: hintText, wordData: false, controller: hintController),
+        ],
       ),
     );
   }
+
 }
 
 
-// =============================================== TABLE CELLS =========================================================
-class CategoryTableMember extends StatelessWidget {
+// =============================================== TABLE CELL =========================================================
+class TableCell extends StatelessWidget {
   final double fontSize = 24;
+  final double borderWidth = 2;
 
   final bool wordData;  // drawing border
   final String data;
-  final TextEditingController controller;
+  final TextEditingController? controller;
 
-  const CategoryTableMember({super.key,
+  const TableCell({super.key,
     required this.data,
     required this.wordData,
-    required this.controller,
+    this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
-    // to set where to draw border
-    double paddingLeft = 0;
-    double paddingRight = 0;
-    String text;
-    if(wordData) {
-      paddingRight = 2;
-      text = "Enter Word";
-    } else {
-      paddingLeft = 2;
-      text = "Enter Hint";
-    }
+    final Color borderColor = Theme.of(context).colorScheme.outline;
 
-// ====================================================== TEXT FILEDS ======================================================
     return Expanded(
-      flex: 5,
-      child: Padding(
-        padding: EdgeInsets.only(left: paddingLeft, right: paddingRight),
-        child: Container(
+      child: Center(
+        child: controller != null
+        ?Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
+            border: Border(bottom: BorderSide(width: borderWidth , color: borderColor), left: BorderSide(width: wordData ? 0 : borderWidth / 2, color: borderColor), right: BorderSide(width: wordData ? borderWidth / 2 : 0, color: borderColor)),
           ),
-          child: Center(
-            child: TextFormField(                   //input field
-              controller: controller,
-              decoration: InputDecoration(
-                hintText: text,
-                border: UnderlineInputBorder(),
-              ),
-              style: TextStyle(
-                fontSize: 24
-              ),
+          child: TextFormField(                   //input field
+            controller: controller,
+            decoration: InputDecoration(
+              hintText: wordData ? "Enter word" : "Enter hint",
+              hintStyle: TextStyle(fontWeight: FontWeight(2)),
             ),
+            style: TextStyle(
+              fontSize: 24
+            ),
+          ),
+        ) 
+        :Text(
+          data,    
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: FontWeight.bold
           ),
         ),
       ),
     );
   }
 }
+
+
+
 //==================================    ADD BUTTON    ==================================
 class AddButton extends StatelessWidget {
-  final VoidCallback callback;
+  final VoidCallback addEntry;
   
   const AddButton({super.key,
-    required this.callback,
+    required this.addEntry,
    });
 
   @override
@@ -221,9 +188,7 @@ class AddButton extends StatelessWidget {
       padding: const EdgeInsets.only(top: 10),
       child: Center(
         child: FilledButton(
-          onPressed: () {
-            callback();
-          },
+          onPressed: () => addEntry(),
           style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.surface),
             fixedSize: WidgetStatePropertyAll(const Size(250, 75)),
@@ -246,6 +211,7 @@ class AddButton extends StatelessWidget {
 
 
 //==================================    SAVE BUTTON    ==================================
+//TODO: rewerite look of this button
 class SaveButton extends StatefulWidget {
   final Category category;
   final ValueGetter title;

@@ -22,6 +22,29 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
   late final List<TextEditingController> _hintsControllers = [];
 
   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(title: "Edit category"),
+      body: ChangeNotifierProvider(
+        create: (_) => CategoriesList(),
+        child: Builder(
+          builder: (context) {    // to fix an error with provider not existing
+        // =========================== PAGE LAYOUT =========================================
+            return Column(
+              children: [
+                CategoryTitle(controller: _titleController),
+                CategoryTable(wordsControllers: _wordsControllers, hintsControllers: _hintsControllers, addEntry: addEntry, removeEntry: removeEntry),
+                SaveButton(category: widget.category, title: () => title, words: () => words, hints: () => hints),
+              ]
+            );
+          }
+        ),
+      ),
+    );
+  }
+
+
+  @override
   void initState() {
     super.initState();
     for(int i = 0; i < widget.category.length; i++) {
@@ -68,27 +91,5 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
       _hintsControllers[i].dispose();
     }
     super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: "Edit category"),
-      body: ChangeNotifierProvider(
-        create: (_) => CategoriesList(),
-        child: Builder(
-          builder: (context) {    // to fix an error with provider not existing
-        // =========================== PAGE LAYOUT =========================================
-            return Column(
-              children: [
-                CategoryTitle(controller: _titleController),
-                CategoryTable(wordsControllers: _wordsControllers, hintsControllers: _hintsControllers, addEntry: addEntry, removeEntry: removeEntry),
-                SaveButton(category: widget.category, title: () => title, words: () => words, hints: () => hints),
-              ]
-            );
-          }
-        ),
-      ),
-    );
   }
 }

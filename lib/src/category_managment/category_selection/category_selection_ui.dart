@@ -99,9 +99,7 @@ class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code a
           ),
         
           child: TextButton(  // change button style
-            onPressed: () {
-              setSelectedCallback();
-            },
+            onPressed: () => setSelectedCallback(),
             onLongPress: () {   // switch page to edit_page
               Navigator.push(
                 context, 
