@@ -26,15 +26,15 @@ class _LobbyPlayerInputTileListState extends State<LobbyPlayerInputTileList> {
 
           if(index < Lobby.playerListLenght) {   // player Input Tile
             final player = Lobby.playerList[index];  //get Player object from list of Player objects
-            return LobbyPlayerInputTile(
-              controller: widget.controllers[index], 
-              color: player.color,   
-              id: index,                          //id
-              removeCallbackFunction: () {  //callback to rebuild the scene and delete one of input tiles
-                setState(() {
-                  widget.removePlayer(index);
-                });
-              },
+            return Dismissible(
+              key: ValueKey(widget.controllers[index]),
+              direction: DismissDirection.endToStart,
+              onDismissed: (direction) => setState(() => widget.removePlayer(index)),
+              child: LobbyPlayerInputTile(
+                controller: widget.controllers[index], 
+                color: player.color,   
+                id: index,                          //id
+              ),
             );
           } 
           else {  // Gray button at bottom
@@ -56,13 +56,11 @@ class _LobbyPlayerInputTileListState extends State<LobbyPlayerInputTileList> {
 
 
 class LobbyPlayerInputTile extends StatefulWidget {
-  final Function removeCallbackFunction;
   final TextEditingController controller;
   final Color color;
   final int id;
 
   const LobbyPlayerInputTile({super.key, 
-    required this.removeCallbackFunction,   
     required this.controller,       // Makes input persistent for shifting  
     required this.color,
     required this.id,  // to remove object later
@@ -123,27 +121,6 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
                     ),
                   ),
                 ),
-//==================================    Delete button   ==================================
-                OutlinedButton(
-                  onPressed: () {
-                    widget.removeCallbackFunction();
-                  }, 
-                  style: ButtonStyle(
-                    minimumSize: WidgetStatePropertyAll(Size.zero),
-                    fixedSize: WidgetStatePropertyAll(const Size(40, 40)),
-                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
-                    padding: WidgetStatePropertyAll(EdgeInsets.all(0)),
-                    side: WidgetStatePropertyAll(BorderSide(  // set border width and color
-                      width: 3.5,
-                      color: Theme.of(context).colorScheme.primary,
-                    )),
-                  ),
-                  child: Icon(
-                    size: 40,
-                    Icons.close,
-                    color: Theme.of(context).colorScheme.primary,
-                  )
-                )
               ],
             ),
           ),
