@@ -13,6 +13,7 @@ class InfoText extends StatelessWidget {
     return Text(
       "Hold to edit category",
       style: TextStyle(
+        backgroundColor: Colors.transparent,
         color: Theme.of(context).colorScheme.inverseSurface,
       ),
     );
@@ -98,7 +99,7 @@ class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code a
             ),
           ),
         
-          child: TextButton(  // change button style
+          child: TextButton(
             onPressed: () => setSelectedCallback(),
             onLongPress: () {   // switch page to edit_page
               Navigator.push(
@@ -107,7 +108,7 @@ class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code a
                   builder: (context) => CategoryEditPage(category: categoriesList[id]),
                 ),
               ).then((_) { 
-                context.read<CategoriesList>().reload();  // used to update name after finishing edition
+                if(context.mounted) context.read<CategoriesList>().reload();
               });   
             },
             style: ButtonStyle(

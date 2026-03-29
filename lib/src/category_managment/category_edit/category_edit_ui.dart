@@ -209,7 +209,6 @@ class TableCell extends StatelessWidget {
 
 
 //==================================    ADD BUTTON    ==================================
-//TODO: rewerite look of this button
 class AddButton extends StatelessWidget {
   final VoidCallback addEntry;
   
@@ -226,7 +225,7 @@ class AddButton extends StatelessWidget {
           onPressed: () => addEntry(),
           style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.surface),
-            fixedSize: WidgetStatePropertyAll(const Size(250, 75)),
+            fixedSize: WidgetStatePropertyAll(const Size(175, 75)),
             shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
             side: WidgetStatePropertyAll(BorderSide(                                                                // set border width and color
               width: 3.5,
@@ -236,7 +235,7 @@ class AddButton extends StatelessWidget {
           child: Icon(
             Icons.add,
             color: Theme.of(context).colorScheme.outlineVariant,
-            size: 75,
+            size: 45,
           ),
         ),
       ),
@@ -264,7 +263,7 @@ class SaveButton extends StatefulWidget {
 }
 
 class _SaveButtonState extends State<SaveButton> {
-  IconData icon = Icons.save;
+  IconData? icon = Icons.save;
   String text = "Save";
 
   @override
@@ -274,7 +273,11 @@ class _SaveButtonState extends State<SaveButton> {
         margin: EdgeInsets.only(bottom: 50),
         child: OutlinedButton(
           onPressed: () async {
-            widget.category.saveToJson(widget.title(), widget.words(), widget.hints());
+            setState(() {
+              icon = null;
+              text = "Saving";
+            });
+            await widget.category.saveToJson(widget.title(), widget.words(), widget.hints());
             // change icon and text to let user know that changes were saved
             setState(() {
               icon = Icons.check_rounded;
@@ -297,10 +300,12 @@ class _SaveButtonState extends State<SaveButton> {
               ),
               Container(
                 margin: EdgeInsets.only(left: 10),
-                child: Icon(
+                child: icon != null
+                ? Icon(
                   icon,
                   size: 32,
-                ),
+                )
+                : CircularProgressIndicator(constraints: BoxConstraints(maxWidth: 24, maxHeight: 24, minHeight: 20, minWidth: 20),)
               )
             ],
           )

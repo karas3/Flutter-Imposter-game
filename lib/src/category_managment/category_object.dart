@@ -7,7 +7,7 @@ import 'load_category.dart';
 class CategoriesList extends ChangeNotifier {
   Future<List<Category>> _list = loadCategoryFromJson();
 
-  void reload() {   
+  void reload() {  
     _list = loadCategoryFromJson();
     notifyListeners();
   }
@@ -61,6 +61,13 @@ class Category extends ChangeNotifier {
     final dir = await getApplicationDocumentsDirectory();
     final targetDir = Directory("${dir.path}/categories");
     final File file = File("${targetDir.path}/$_name.json");  // _name is name of file
+
+    for(int i = 0; i < words.length; i++) {
+      if(words[i].isEmpty && hints[i].isEmpty) {
+        words.removeAt(i);
+        hints.removeAt(i);
+      }
+    }
 
     Map<String, dynamic> data = {
       "name": newName,
