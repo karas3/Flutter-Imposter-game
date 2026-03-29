@@ -25,11 +25,7 @@ class InfoText extends StatelessWidget {
 // ======================================== GRID OF CATEGORIES ========================================
 
 class CategoriesGrid extends StatefulWidget {
-  final List<Category> categoriesList;
-
-  const CategoriesGrid({super.key,
-    required this.categoriesList,
-  });
+  const CategoriesGrid({super.key});
 
   @override
   State<CategoriesGrid> createState() => _CategoriesGridState();
@@ -38,29 +34,119 @@ class CategoriesGrid extends StatefulWidget {
 class _CategoriesGridState extends State<CategoriesGrid> {
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: GridView.count(
-        crossAxisCount: 2,  // 2 columns
-        children: List.generate(widget.categoriesList.length + 1, (index) { 
-          if(index < widget.categoriesList.length) {
-            return Center(
-            child: CategoryButton(
-              categoriesList: widget.categoriesList,
-              id: index,
-              setSelectedCallback: () {
-                setState(() {
-                  widget.categoriesList[index].switchSelected();
-                });
-              },  
+    return FutureBuilder(
+      future: context.read<CategoriesList>().list, 
+      builder: (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text('Category grid building Error: ${snapshot.error}'));
+        } 
+        else if (!snapshot.hasData) {               // On beggining snapshot has no data which returns unnecessary error
+          return Center(child: Text('Loading Data!'));   
+        }
+        else {
+          return Flexible(
+            child: GridView.count(
+              crossAxisCount: 2,  // 2 columns
+              children: List.generate(snapshot.data!.length + 1, (index) { 
+                if(index < snapshot.data!.length) {
+                  return Dismissible(
+                    key: ValueKey(snapshot.data![index]),
+                    direction: DismissDirection.endToStart,
+                    confirmDismiss: (direction) async {
+                      return await _dialogBuilder(context, index);
+                    },
+                    onDismissed: (direction) {
+                      context.read<CategoriesList>().removeAt(index);
+                      setState(() {});
+                    },
+                    child: Center(
+                      child: CategoryButton(
+                        categoriesList: snapshot.data!,
+                        id: index,
+                        setSelectedCallback: () {
+                          setState(() {
+                            snapshot.data![index].switchSelected();
+                          });
+                        },  
+                      ),
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: AddCategoryButton()
+                  );
+                }
+              }),
             ),
           );
-          } else {
-            return Center(
-              child: AddCategoryButton()
-            );
-          }
-        }),
-      ),
+        }
+      }
+    );
+  }
+
+  Future<bool?> _dialogBuilder(BuildContext context, index) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Are you sure you want to delete this Category?',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 24
+            ),
+          ),
+          content: const Text(
+            "This action can not be undone!",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16
+            ),
+          ),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    FilledButton(
+                      style: TextButton.styleFrom(
+                        textStyle: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      child: const Text(
+                        'Confirm',
+                        style: TextStyle(
+                          fontSize: 24
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                      },
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      child: OutlinedButton(
+                        style: TextButton.styleFrom(
+                          textStyle: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        child: const Text(
+                          'Cancel',
+                          style: TextStyle(
+                            fontSize: 24
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

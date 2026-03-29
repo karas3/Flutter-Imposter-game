@@ -20,9 +20,16 @@ class CategoriesList extends ChangeNotifier {
     notifyListeners();
   }
 
-  void remove(int index) async {
+  void removeAt(int index) async {
     final List<Category> list = await _list;
+    final fileName = list[index].name;
     list.removeAt(index);
+    final dir = await getApplicationDocumentsDirectory();
+    final targetDir = Directory("${dir.path}/categories");
+    final File file = File("${targetDir.path}/$fileName.json");
+    if(await file.exists()) {
+      file.delete();
+    }
   }
 }
 

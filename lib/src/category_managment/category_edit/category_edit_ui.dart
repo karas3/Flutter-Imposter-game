@@ -78,6 +78,8 @@ class _CategoryTableState extends State<CategoryTable> {
                 if(index < widget.wordsControllers.length) {
                   return Dismissible(
                     key: ValueKey(widget.wordsControllers[index]),
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (DismissDirection right) => setState(() => widget.removeEntry(index)),
                     background: Container(
                       decoration: BoxDecoration(gradient: LinearGradient(colors: [Colors.transparent, Colors.red])),
                       child: Row(
@@ -101,7 +103,6 @@ class _CategoryTableState extends State<CategoryTable> {
                         ],
                       )
                     ),
-                    onDismissed: (DismissDirection right) => setState(() => widget.removeEntry(index)),
                     child: TableRow(
                       wordText: widget.wordsControllers[index].text, hintText: widget.hintsControllers[index].text,
                       wordController: widget.wordsControllers[index], hintController: widget.hintsControllers[index],
