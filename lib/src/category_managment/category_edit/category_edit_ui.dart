@@ -37,6 +37,9 @@ class CategoryTable extends StatefulWidget {
   final VoidCallback addEntry;
   final Function removeEntry;
 
+  final double borderWidth = 2;
+  final double fontSize = 24;
+
 
   const CategoryTable({super.key,
     required this.wordsControllers,
@@ -61,24 +64,48 @@ class _CategoryTableState extends State<CategoryTable> {
             ),
             child: Row(
               children: [
-                TableCell(data: "Words", wordData: true,),
-                TableCell(data: "Hints", wordData: false),
+                TableCell(data: "Words", wordData: true, fontSize: widget.fontSize, borderWidth: widget.borderWidth,),
+                TableCell(data: "Hints", wordData: false, fontSize: widget.fontSize, borderWidth: widget.borderWidth,),
               ],
             ),
           ),
           Expanded(
             child: ListView.builder(
-              prototypeItem: TableRow(wordText: widget.wordsControllers[0].text, hintText: widget.hintsControllers[0].text, wordController: widget.wordsControllers[0], hintController: widget.hintsControllers[0],),
+              prototypeItem: Container(decoration: BoxDecoration(border: Border(bottom: BorderSide(width: widget.borderWidth))),child: TextField(style: TextStyle(fontSize: widget.fontSize))),
               shrinkWrap: true,
               itemCount: widget.wordsControllers.length + 1,
               itemBuilder: (BuildContext context, int index) {  
                 if(index < widget.wordsControllers.length) {
                   return Dismissible(
                     key: ValueKey(widget.wordsControllers[index]),
-                    onDismissed: (DismissDirection direction) => setState(() => widget.removeEntry(index)),
+                    background: Container(
+                      decoration: BoxDecoration(gradient: LinearGradient(colors: [Colors.transparent, Colors.red])),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 5),
+                            child: Text(
+                              "Delete",
+                              style: TextStyle(
+                                fontSize: 24
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Icon(
+                              Icons.delete,
+                            ),
+                          ),
+                        ],
+                      )
+                    ),
+                    onDismissed: (DismissDirection right) => setState(() => widget.removeEntry(index)),
                     child: TableRow(
                       wordText: widget.wordsControllers[index].text, hintText: widget.hintsControllers[index].text,
                       wordController: widget.wordsControllers[index], hintController: widget.hintsControllers[index],
+                      fontSize: widget.fontSize, borderWidth: widget.borderWidth,
                     ),
                   );
                 } else {
@@ -99,11 +126,16 @@ class TableRow extends StatelessWidget {
   final TextEditingController wordController;
   final TextEditingController hintController;
 
+  final double fontSize;
+  final double borderWidth;
+
   const TableRow({super.key,
     required this.wordText,
     required this.hintText,
     required this.wordController,
     required this.hintController,
+    required this.fontSize,
+    required this.borderWidth,
   });
 
   @override
@@ -113,8 +145,8 @@ class TableRow extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       title: Row(
         children: [
-          TableCell(data: wordText, wordData: true, controller: wordController),
-          TableCell(data: hintText, wordData: false, controller: hintController),
+          TableCell(data: wordText, wordData: true, controller: wordController, fontSize: fontSize, borderWidth: borderWidth,),
+          TableCell(data: hintText, wordData: false, controller: hintController, fontSize: fontSize, borderWidth: borderWidth,),
         ],
       ),
     );
@@ -125,16 +157,18 @@ class TableRow extends StatelessWidget {
 
 // =============================================== TABLE CELL =========================================================
 class TableCell extends StatelessWidget {
-  final double fontSize = 24;
-  final double borderWidth = 2;
-
   final bool wordData;  // drawing border
   final String data;
   final TextEditingController? controller;
 
+  final double fontSize;
+  final double borderWidth;
+
   const TableCell({super.key,
     required this.data,
     required this.wordData,
+    required this.fontSize,
+    required this.borderWidth,
     this.controller,
   });
 
@@ -175,6 +209,7 @@ class TableCell extends StatelessWidget {
 
 
 //==================================    ADD BUTTON    ==================================
+//TODO: rewerite look of this button
 class AddButton extends StatelessWidget {
   final VoidCallback addEntry;
   
@@ -211,7 +246,6 @@ class AddButton extends StatelessWidget {
 
 
 //==================================    SAVE BUTTON    ==================================
-//TODO: rewerite look of this button
 class SaveButton extends StatefulWidget {
   final Category category;
   final ValueGetter title;
