@@ -23,7 +23,6 @@ class _LobbyPlayerInputTileListState extends State<LobbyPlayerInputTileList> {
       child: ListView.builder(             
         itemCount: Lobby.playerListLenght + 1,
         itemBuilder: (_, index) {
-
           if(index < Lobby.playerListLenght) {   // player Input Tile
             final player = Lobby.playerList[index];  //get Player object from list of Player objects
             return Dismissible(
