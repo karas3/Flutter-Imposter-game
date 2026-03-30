@@ -5,12 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'load_category.dart';
 
 class CategoriesList extends ChangeNotifier {
-  Future<List<Category>> _list = loadCategoryFromJson();
-
-  void reload() {  
-    _list = loadCategoryFromJson();
-    notifyListeners();
-  }
+  final Future<List<Category>> _list = loadCategoryFromJson();
 
   Future<List<Category>> get list => _list;
 
@@ -34,9 +29,9 @@ class CategoriesList extends ChangeNotifier {
 }
 
 class Category extends ChangeNotifier {
-  final String _name;
-  final List<String> _words = [];
-  final List<String> _hints = [];
+  String _name;
+  List<String> _words = [];
+  List<String> _hints = [];
   bool _selected = false;
 
   //class initialization
@@ -89,5 +84,10 @@ class Category extends ChangeNotifier {
     } catch (e) {
       print("Error $e");
     }
+
+    // Update variables after saving
+    _name = newName;
+    _words = words;
+    _hints = hints;
   }
 }

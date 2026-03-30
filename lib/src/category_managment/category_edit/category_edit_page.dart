@@ -23,7 +23,7 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    Future<bool?> _dialogBuilder(BuildContext context) {
+    Future<bool?> dialogBuilder(BuildContext context) {
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -89,7 +89,7 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
           return;
         }
         if(checkIfChangesWereMade()) {
-          final bool shouldPop = await _dialogBuilder(context) ?? false;
+          final bool shouldPop = await dialogBuilder(context) ?? false;
           if(context.mounted && shouldPop) {
             Navigator.pop(context);
           }

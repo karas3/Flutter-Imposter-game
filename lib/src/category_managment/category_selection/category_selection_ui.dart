@@ -154,7 +154,7 @@ class _CategoriesGridState extends State<CategoriesGrid> {
 
 // ======================================== BUTTON ========================================
 
-class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code above)
+class CategoryButton extends StatefulWidget {  //used by CategoriesGrid (code above)
   final VoidCallback setSelectedCallback;
   final int id;
   final List<Category> categoriesList;
@@ -165,6 +165,11 @@ class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code a
     required this.categoriesList
   });
 
+  @override
+  State<CategoryButton> createState() => _CategoryButtonState();
+}
+
+class _CategoryButtonState extends State<CategoryButton> {
   final double size = 170;
 
   @override
@@ -174,27 +179,27 @@ class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code a
         AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,                     
-          width: categoriesList[id].selected ? size : size - 10,   //170, 160                 
-          height: categoriesList[id].selected ? size : size - 10,
+          width: widget.categoriesList[widget.id].selected ? size : size - 10,   //170, 160                 
+          height: widget.categoriesList[widget.id].selected ? size : size - 10,
           decoration: BoxDecoration(  
-            color: categoriesList[id].selected ? Theme.of(context).colorScheme.inversePrimary : Colors.transparent,
+            color: widget.categoriesList[widget.id].selected ? Theme.of(context).colorScheme.inversePrimary : Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(30)),
             border: Border.all(
-                color: categoriesList[id].selected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.outlineVariant,
+                color: widget.categoriesList[widget.id].selected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.outlineVariant,
                 width: 3.5,
             ),
           ),
         
           child: TextButton(
-            onPressed: () => setSelectedCallback(),
+            onPressed: () => widget.setSelectedCallback(),
             onLongPress: () {   // switch page to edit_page
               Navigator.push(
                 context, 
                 MaterialPageRoute(
-                  builder: (context) => CategoryEditPage(category: categoriesList[id]),
+                  builder: (context) => CategoryEditPage(category: widget.categoriesList[widget.id]),
                 ),
               ).then((_) { 
-                if(context.mounted) context.read<CategoriesList>().reload();
+                setState(() {});  // rebuild page to update names
               });   
             },
             style: ButtonStyle(
@@ -204,10 +209,10 @@ class CategoryButton extends StatelessWidget {  //used by CategoriesGrid (code a
               duration: Duration(milliseconds: 300),
               curve: Curves.easeInOut,   
               style: TextStyle(
-                fontSize: categoriesList[id].selected ? 20 : 18,
+                fontSize: widget.categoriesList[widget.id].selected ? 20 : 18,
               ),
               child: Text(
-                categoriesList[id].name,
+                widget.categoriesList[widget.id].name,
                 style: TextStyle(color: Theme.of(context).colorScheme.inverseSurface),
               ),
             ),
