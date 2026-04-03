@@ -16,12 +16,15 @@ class Lobby{
 
   static void removePlayer(int index) {    //remove player input tile at index
     _playerList.removeAt(index);
+    if (_imposterCount >= maxImposterCount) decreaseImposterCount();
   }
 
   // used to display list
   static List<Player> get playerList => _playerList;
   static int get playerListLenght => _playerList.length;
   static int get imposterCount => _imposterCount;
+  static int get maxImposterCount => _playerList.length - 2;
+  static int get minImposterCount => 1;
 
   static set playerNames(List<String> names) {
     for(int i = 0; i < _playerList.length; i++) {
@@ -30,13 +33,9 @@ class Lobby{
   }
 
   static void increaseImposterCount() {
-    if(_imposterCount < _playerList.length - 2) { //atleast 2 normal players needed
-      _imposterCount++;
-    }
+    if(_imposterCount < maxImposterCount) _imposterCount++;
   }
   static void decreaseImposterCount() {
-    if(_imposterCount > 1) {
-      _imposterCount--;
-    }
+    if(_imposterCount > minImposterCount) _imposterCount--;
   }
 }

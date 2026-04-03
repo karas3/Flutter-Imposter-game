@@ -35,9 +35,7 @@ class Category extends ChangeNotifier {
   bool _selected = false;
 
   //class initialization
-  factory Category.createCategory(Map<String, dynamic> json) {
-    return Category(json["name"], json["words"], json["hints"]);
-  }
+  factory Category.createCategory(Map<String, dynamic> json) => Category(json["name"], json["words"], json["hints"]);
 
   Category(String name, List<dynamic> words, List<dynamic> hints): 
       _name = name {

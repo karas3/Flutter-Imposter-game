@@ -88,7 +88,7 @@ class ChangeColorDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var changedColor;
+    Color? changedColor;
 
     return AlertDialog(
       actions: <Widget>[
@@ -98,13 +98,12 @@ class ChangeColorDialog extends StatelessWidget {
               margin: EdgeInsets.only(top: 50),
               child: ColorPicker(pickerColor: color, onColorChanged: (color) => changedColor = color)
             ),
-
             FilledButton(
               style: TextButton.styleFrom(
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
               child: Text(
-                "change color",
+                "Change color",
                 style: TextStyle(
                   fontSize: 24
                 ),
@@ -121,7 +120,7 @@ class ChangeColorDialog extends StatelessWidget {
                   textStyle: Theme.of(context).textTheme.labelLarge,
                 ),
                 child: Text(
-                  "cancel",
+                  "Cancel",
                   style: TextStyle(
                     fontSize: 24
                   ),

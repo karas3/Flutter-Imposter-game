@@ -5,10 +5,12 @@ import '../game/game_page.dart';
 class PlayPageButton extends StatelessWidget {
   final String title;
   final Widget nextPage;
+  final VoidCallback? rebuildPage;
 
   const PlayPageButton({super.key,
     required this.title,
     required this.nextPage,
+    this.rebuildPage,
   });
 
   @override
@@ -23,7 +25,7 @@ class PlayPageButton extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => nextPage)
-          );
+          ).then((_) => rebuildPage?.call()); // rebuild page to update imposter counter
         },
         child: Text(
           title,
@@ -90,6 +92,14 @@ class _ImposterCounterState extends State<ImposterCounter> {
               ),
             ],
           ),
+          Text(
+            "(Imposter count depends on player count)",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.inverseSurface,
+            ),
+          )
         ],
       ),
     );

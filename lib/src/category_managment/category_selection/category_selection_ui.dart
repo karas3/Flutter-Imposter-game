@@ -140,9 +140,7 @@ class _CategoryButtonState extends State<CategoryButton> {
                 MaterialPageRoute(
                   builder: (context) => CategoryEditPage(category: widget.categoriesList[widget.id]),
                 ),
-              ).then((_) { 
-                setState(() {});  // rebuild page to update names
-              });   
+              ).then((_) => setState(() {}));  // rebuild page to update names   
             },
             style: ButtonStyle(
               overlayColor: WidgetStatePropertyAll(Colors.transparent),   // Deletes purple circle which displays for a moment after button is clicked
