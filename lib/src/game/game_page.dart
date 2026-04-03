@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:imposter_party_game/src/ui_elements/custom_app_bar.dart';
+import 'game_ui.dart';
 
-class InfoPage extends StatelessWidget {
-  const InfoPage({super.key});
+class GamePage extends StatelessWidget {
+  const GamePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Info page"),
+      appBar: CustomAppBar(title: "Game page"),
       body: Center(
         child: Text(
-          "Info page",
-          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+          "GamePage"
         ),
       ),
     );
   }
 }
+
+//TODO: Write an actual game

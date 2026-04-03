@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:imposter_party_game/src/ui_elements/custom_app_bar.dart';
 
-import '../../ui_elements/custom_app_bar.dart';
 import '../category_object.dart';
 import 'category_selection_ui.dart';
 

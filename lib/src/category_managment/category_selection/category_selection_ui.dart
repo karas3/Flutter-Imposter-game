@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:imposter_party_game/src/ui_elements/dialogs.dart';
 
 import '../category_edit/category_edit_page.dart';
 import '../category_object.dart';
@@ -32,6 +33,15 @@ class CategoriesGrid extends StatefulWidget {
 }
 
 class _CategoriesGridState extends State<CategoriesGrid> {
+  Future<bool?> dialogBuilder(BuildContext context, index) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmationDialog(title: "Are you sure you want to delete this Category?",description: "This action can not be undone!", confirmButtonText: "Delete", denyButtonText: "cancel");
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -52,9 +62,7 @@ class _CategoriesGridState extends State<CategoriesGrid> {
                   return Dismissible(
                     key: ValueKey(snapshot.data![index]),
                     direction: DismissDirection.endToStart,
-                    confirmDismiss: (direction) async {
-                      return await _dialogBuilder(context, index);
-                    },
+                    confirmDismiss: (direction) async => await dialogBuilder(context, index),
                     onDismissed: (direction) {
                       context.read<CategoriesList>().removeAt(index);
                       setState(() {});
@@ -81,72 +89,6 @@ class _CategoriesGridState extends State<CategoriesGrid> {
           );
         }
       }
-    );
-  }
-
-  Future<bool?> _dialogBuilder(BuildContext context, index) {
-    return showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Are you sure you want to delete this Category?',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 24
-            ),
-          ),
-          content: const Text(
-            "This action can not be undone!",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16
-            ),
-          ),
-          actions: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    FilledButton(
-                      style: TextButton.styleFrom(
-                        textStyle: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      child: const Text(
-                        'Confirm',
-                        style: TextStyle(
-                          fontSize: 24
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop(true);
-                      },
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10),
-                      child: OutlinedButton(
-                        style: TextButton.styleFrom(
-                          textStyle: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        child: const Text(
-                          'Cancel',
-                          style: TextStyle(
-                            fontSize: 24
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        );
-      },
     );
   }
 }
@@ -185,14 +127,14 @@ class _CategoryButtonState extends State<CategoryButton> {
             color: widget.categoriesList[widget.id].selected ? Theme.of(context).colorScheme.inversePrimary : Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(30)),
             border: Border.all(
-                color: widget.categoriesList[widget.id].selected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.outlineVariant,
+                color: widget.categoriesList[widget.id].selected ? Colors.transparent : Theme.of(context).colorScheme.outlineVariant,
                 width: 3.5,
             ),
           ),
         
           child: TextButton(
             onPressed: () => widget.setSelectedCallback(),
-            onLongPress: () {   // switch page to edit_page
+            onLongPress: () {
               Navigator.push(
                 context, 
                 MaterialPageRoute(

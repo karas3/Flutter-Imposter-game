@@ -188,7 +188,7 @@ class TableCell extends StatelessWidget {
             controller: controller,
             decoration: InputDecoration(
               hintText: wordData ? "Enter word" : "Enter hint",
-              hintStyle: TextStyle(fontWeight: FontWeight(2)),
+              hintStyle: TextStyle(fontWeight: FontWeight.w300),
             ),
             style: TextStyle(
               fontSize: 24
@@ -206,7 +206,6 @@ class TableCell extends StatelessWidget {
     );
   }
 }
-
 
 
 //==================================    ADD BUTTON    ==================================
@@ -272,7 +271,8 @@ class _SaveButtonState extends State<SaveButton> {
     return Center(
       child: Container(
         margin: EdgeInsets.only(bottom: 50),
-        child: OutlinedButton(
+        child: FilledButton.icon(
+          iconAlignment: IconAlignment.end,
           onPressed: () async {
             setState(() {
               icon = null;
@@ -290,26 +290,23 @@ class _SaveButtonState extends State<SaveButton> {
               text = "Save";
             });
           },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                text,
-                style: TextStyle(
-                  fontSize: 32
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 10),
-                child: icon != null
-                ? Icon(
-                  icon,
-                  size: 32,
-                )
-                : CircularProgressIndicator(constraints: BoxConstraints(maxWidth: 24, maxHeight: 24, minHeight: 20, minWidth: 20),)
-              )
-            ],
+
+          label: Text(
+            text,
+            style: TextStyle(
+              fontSize: 32,
+            ),
+          ),
+
+          icon: icon != null
+          ? Icon(
+            icon,
+            size: 32,
           )
+          : CircularProgressIndicator(
+            constraints: BoxConstraints(maxWidth: 24, maxHeight: 24, minHeight: 20, minWidth: 20), 
+            color: Theme.of(context).colorScheme.onPrimary
+          ),
         ),
       ),
     );

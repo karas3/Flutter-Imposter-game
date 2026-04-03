@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:imposter_party_game/src/ui_elements/dialogs.dart';
+
 import 'lobby.dart';
 
 class LobbyPlayerInputTileList extends StatefulWidget {
@@ -29,10 +31,15 @@ class _LobbyPlayerInputTileListState extends State<LobbyPlayerInputTileList> {
               key: ValueKey(widget.controllers[index]),
               direction: DismissDirection.endToStart,
               onDismissed: (direction) => setState(() => widget.removePlayer(index)),
-              child: LobbyPlayerInputTile(
-                controller: widget.controllers[index], 
-                color: player.color,   
-                id: index,                          //id
+              child: Stack(
+                children: [
+                  LobbyPlayerInputTile(
+                    controller: widget.controllers[index], 
+                    colorGetter: () => player.color,   
+                    colorSetter: (color) => player.color = color,
+                    id: index,                          //id
+                  ),
+                ],
               ),
             );
           } 
@@ -56,12 +63,14 @@ class _LobbyPlayerInputTileListState extends State<LobbyPlayerInputTileList> {
 
 class LobbyPlayerInputTile extends StatefulWidget {
   final TextEditingController controller;
-  final Color color;
+  final ValueGetter colorGetter;
+  final ValueSetter colorSetter;
   final int id;
 
   const LobbyPlayerInputTile({super.key, 
-    required this.controller,       // Makes input persistent for shifting  
-    required this.color,
+    required this.controller,     
+    required this.colorGetter,
+    required this.colorSetter,
     required this.id,  // to remove object later
   });
 
@@ -70,6 +79,15 @@ class LobbyPlayerInputTile extends StatefulWidget {
 }
 
 class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
+  Future<Color?> dialogBuilder(BuildContext context) {
+    return showDialog<Color>(
+      context: context,
+      builder: (BuildContext context) {
+        return ChangeColorDialog(color: widget.colorGetter());
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(      // centers elements
@@ -97,10 +115,17 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
 //==================================    Small Color Stripe   ================================== 
                 Container(                     
                   margin: EdgeInsets.only(left: 20.0),
-                  height: 100,
-                  width: 40,
-                  decoration: BoxDecoration(                          
-                    color: widget.color,
+                  child: FilledButton(
+                    style: ButtonStyle(
+                      fixedSize: WidgetStatePropertyAll(Size(40, 100)),
+                      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+                      backgroundColor: WidgetStatePropertyAll(widget.colorGetter()),
+                    ),
+                    onPressed: () async {
+                      widget.colorSetter(await dialogBuilder(context));
+                      setState(() {});
+                    },
+                    child: null,
                   ),
                 ),
 //==================================    Container for input field   ==================================
@@ -134,8 +159,9 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
 //==================================    Add player button (grey transparent one)   ==================================
 class AddPlayerButton extends StatelessWidget {
   final Function addPlayercallback;
+  
   const AddPlayerButton({super.key, 
-  required this.addPlayercallback,
+    required this.addPlayercallback,
   });
 
   @override

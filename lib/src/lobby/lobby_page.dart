@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:imposter_party_game/src/ui_elements/custom_app_bar.dart';
 
 import 'lobby_ui.dart';
 import 'lobby.dart';
-import '../ui_elements/custom_app_bar.dart';
 
 class Lobbypage extends StatefulWidget {
-  const Lobbypage({super.key, });
+  const Lobbypage({super.key});
 
   @override
   State<Lobbypage> createState() => _LobbypageState();

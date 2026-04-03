@@ -4,10 +4,8 @@ import 'package:provider/provider.dart';
 import 'src/home_page.dart';
 import 'src/info_page.dart';
 import 'src/play/play_page.dart';
-
 import 'src/ui_elements/app_theme.dart';
 import 'src/ui_elements/custom_bottom_navigation_bar.dart';
-
 import 'src/category_managment/load_category.dart';
 
 void main() {

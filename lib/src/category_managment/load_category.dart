@@ -25,7 +25,7 @@ Future<void> ensureDefaultCateogryExists() async {
   final dir = await getApplicationDocumentsDirectory();
   final targetDir = Directory("${dir.path}/categories");
 
-  if(await targetDir.exists()) {  //check if category directory exists in app documents directory if not create  it
+  if(await targetDir.exists()) {  //check if category directory exists in app documents directory, if not create it
     return;         // Delete this line to return to default state of files
   }
   await targetDir.create();

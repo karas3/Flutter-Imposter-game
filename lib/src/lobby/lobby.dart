@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class Player {
   String name = "";
-  final Color color = Color.fromARGB(255, Random().nextInt(255) + 1, Random().nextInt(255) + 1, Random().nextInt(255) + 1);
+  Color color = Color.fromARGB(255, Random().nextInt(255) + 1, Random().nextInt(255) + 1, Random().nextInt(255) + 1);
 }
 
 class Lobby{ 

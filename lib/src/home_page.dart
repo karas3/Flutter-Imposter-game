@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'ui_elements/custom_app_bar.dart';
+import 'package:imposter_party_game/src/ui_elements/custom_app_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

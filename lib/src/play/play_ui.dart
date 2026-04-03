@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../lobby/lobby.dart';
+import '../game/game_page.dart';
 
 class PlayPageButton extends StatelessWidget {
   final String title;
@@ -14,7 +15,7 @@ class PlayPageButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 30),
-      child: FilledButton.tonal(
+      child: OutlinedButton(
         style: ButtonStyle(
           fixedSize: WidgetStatePropertyAll(Size(300, 100))
         ),
@@ -59,11 +60,11 @@ class _ImposterCounterState extends State<ImposterCounter> {
             spacing: 30,
             mainAxisAlignment: MainAxisAlignment.center,  //centers row chil
             children: [
-              FilledButton.tonal(
+              IconButton(
                 onPressed: () => setState(() {
                   Lobby.decreaseImposterCount();
                 }),
-                child: Icon(
+                icon: Icon(
                   Icons.remove,
                   size: 30,
                   fontWeight: FontWeight.bold,
@@ -77,11 +78,11 @@ class _ImposterCounterState extends State<ImposterCounter> {
                 ),
               ),
           
-              FilledButton.tonal(
+              IconButton(
                 onPressed: () => setState(() {
                   Lobby.increaseImposterCount();
                 }),
-                child: Icon(
+                icon: Icon(
                   Icons.add,
                   size: 30,
                   fontWeight: FontWeight.bold,
@@ -93,4 +94,24 @@ class _ImposterCounterState extends State<ImposterCounter> {
       ),
     );
   }
+}
+
+class StartButton extends StatelessWidget {
+  const StartButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => GamePage())
+        );
+      },
+      child: Text(
+        "Start game",
+      )
+    );
+  }
+
 }

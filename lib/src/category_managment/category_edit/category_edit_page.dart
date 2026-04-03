@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../ui_elements/custom_app_bar.dart';
+import 'package:imposter_party_game/src/ui_elements/custom_app_bar.dart';
+import 'package:imposter_party_game/src/ui_elements/dialogs.dart';
 
 import 'category_edit_ui.dart';
 import '../category_object.dart';
@@ -20,68 +21,17 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
   late final TextEditingController _titleController = TextEditingController(text: widget.category.name);
   late final List<TextEditingController> _wordsControllers = [];
   late final List<TextEditingController> _hintsControllers = [];
-
-  @override
-  Widget build(BuildContext context) {
-    Future<bool?> dialogBuilder(BuildContext context) {
+  Future<bool?> dialogBuilder(BuildContext context) {
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Are you sure you want to leave without saving?',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 24
-            ),
-          ),
-          actions: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    FilledButton(
-                      style: TextButton.styleFrom(
-                        textStyle: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      child: const Text(
-                        'Leave',
-                        style: TextStyle(
-                          fontSize: 24
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop(true);
-                      },
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10),
-                      child: OutlinedButton(
-                        style: TextButton.styleFrom(
-                          textStyle: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        child: const Text(
-                          'Cancel',
-                          style: TextStyle(
-                            fontSize: 24
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        );
+        return ConfirmationDialog(title: "Are you sure you want to leave without saving?", confirmButtonText: "Leave", denyButtonText: "Cancel");
       },
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
     return PopScope<Object?>(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
