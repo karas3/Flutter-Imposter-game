@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imposter_party_game/src/ui_elements/dialogs.dart';
 
-import 'lobby.dart';
+import 'lobby_object.dart';
 
 class LobbyPlayerInputTileList extends StatefulWidget {
   final List<TextEditingController> controllers;
@@ -23,9 +23,9 @@ class _LobbyPlayerInputTileListState extends State<LobbyPlayerInputTileList> {
   Widget build(BuildContext context) {
     return Flexible(   //Fixes overflow of list
       child: ListView.builder(             
-        itemCount: Lobby.playerListLenght + 1,
+        itemCount: Lobby.numberOfPlayers + 1,
         itemBuilder: (_, index) {
-          if(index < Lobby.playerListLenght) {   // player Input Tile
+          if(index < Lobby.numberOfPlayers) {   // player Input Tile
             final player = Lobby.playerList[index];  //get Player object from list of Player objects
             return Dismissible(
               key: ValueKey(widget.controllers[index]),

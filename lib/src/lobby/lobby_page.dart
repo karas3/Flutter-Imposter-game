@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:imposter_party_game/src/ui_elements/custom_app_bar.dart';
 
 import 'lobby_ui.dart';
-import 'lobby.dart';
+import 'lobby_object.dart';
 
 class Lobbypage extends StatefulWidget {
   const Lobbypage({super.key});
@@ -16,7 +16,7 @@ class _LobbypageState extends State<Lobbypage> {
 
   @override
   void initState() {
-    for(int i = 0; i < Lobby.playerListLenght; i++) {
+    for(int i = 0; i < Lobby.numberOfPlayers; i++) {
       _controllers.add(TextEditingController(text: Lobby.playerList[i].name));
     } 
     super.initState();

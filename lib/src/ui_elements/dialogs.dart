@@ -19,63 +19,63 @@ class ConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-          title: Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 24
-            ),
-          ),
-          content: Text(
-            description ?? "",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16
-            ),
-          ),
-          actions: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      title: Text(
+        title,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 24
+        ),
+      ),
+      content: Text(
+        description ?? "",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 16
+        ),
+      ),
+      actions: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
               children: [
-                Column(
-                  children: [
-                    FilledButton(
-                      style: TextButton.styleFrom(
-                        textStyle: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      child: Text(
-                        confirmButtonText,
-                        style: TextStyle(
-                          fontSize: 24
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop(true);
-                      },
+                FilledButton(
+                  style: TextButton.styleFrom(
+                    textStyle: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  child: Text(
+                    confirmButtonText,
+                    style: TextStyle(
+                      fontSize: 24
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10),
-                      child: OutlinedButton(
-                        style: TextButton.styleFrom(
-                          textStyle: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        child: Text(
-                          denyButtonText,
-                          style: TextStyle(
-                            fontSize: 24
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: OutlinedButton(
+                    style: TextButton.styleFrom(
+                      textStyle: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    child: Text(
+                      denyButtonText,
+                      style: TextStyle(
+                        fontSize: 24
                       ),
                     ),
-                  ],
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                  ),
                 ),
               ],
             ),
           ],
-        );
+        ),
+      ],
+    );
   }
 }
 
@@ -129,6 +129,57 @@ class ChangeColorDialog extends StatelessWidget {
                   Navigator.of(context).pop(color);
                 },
               ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class WarningDialog extends StatelessWidget {
+  final String title;
+  final String? description;
+
+  const WarningDialog({super.key,
+    required this.title,
+    this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        title,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 24
+        ),
+      ),
+      content: Text(
+        description ?? "",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 16
+        ),
+      ),
+      actions: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FilledButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: Text(
+                "Ok",
+                style: TextStyle(
+                  fontSize: 24
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
           ],
         ),

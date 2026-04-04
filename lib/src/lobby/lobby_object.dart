@@ -21,7 +21,7 @@ class Lobby{
 
   // used to display list
   static List<Player> get playerList => _playerList;
-  static int get playerListLenght => _playerList.length;
+  static int get numberOfPlayers => _playerList.length;
   static int get imposterCount => _imposterCount;
   static int get maxImposterCount => _playerList.length - 2;
   static int get minImposterCount => 1;

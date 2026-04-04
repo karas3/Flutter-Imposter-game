@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../lobby/lobby.dart';
+import 'package:imposter_party_game/src/lobby/lobby_object.dart';
+import 'package:imposter_party_game/src/ui_elements/dialogs.dart';
 import '../game/game_page.dart';
+
 
 class PlayPageButton extends StatelessWidget {
   final String title;
@@ -109,14 +111,27 @@ class _ImposterCounterState extends State<ImposterCounter> {
 class StartButton extends StatelessWidget {
   const StartButton({super.key});
 
+  Future<bool?> dialogBuilder(BuildContext context, String title, String description) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return WarningDialog(title: title,description: description);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FilledButton(
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => GamePage())
-        );
+        if(Lobby.numberOfPlayers < 3) {
+          dialogBuilder(context, "Not enough players!", "Can't start game with only ${Lobby.numberOfPlayers} players. Atleast 3 players are requiered");
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => GamePage())
+          );
+        }
       },
       child: Text(
         "Start game",
