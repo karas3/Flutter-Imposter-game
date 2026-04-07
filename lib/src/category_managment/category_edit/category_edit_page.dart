@@ -72,7 +72,7 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
   @override
   void initState() {
     super.initState();
-    for(int i = 0; i < widget.category.length; i++) {
+    for(int i = 0; i < widget.category.numberOfWords; i++) {
       _wordsControllers.add(TextEditingController(text: widget.category.words[i]));
       _hintsControllers.add(TextEditingController(text: widget.category.hints[i]));
     }

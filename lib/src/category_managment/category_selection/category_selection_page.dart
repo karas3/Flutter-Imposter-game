@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:imposter_party_game/src/ui_elements/custom_app_bar.dart';
 
-import '../category_object.dart';
+import 'package:imposter_party_game/src/ui_elements/custom_app_bar.dart';
 import 'category_selection_ui.dart';
+
+import 'package:imposter_party_game/src/category_managment/category_object.dart';
 
 class CategorySelectionPage extends StatefulWidget {
   const CategorySelectionPage({super.key});  
@@ -15,19 +16,15 @@ class CategorySelectionPage extends StatefulWidget {
 class _CategorySelectionPageState extends State<CategorySelectionPage> {
   @override
   Widget build(BuildContext context) {
+    context.watch<CategoriesList>().list; // needs to be here to rebuild page properly
     return Scaffold(
       appBar: CustomAppBar(title: "Choose categories"),
-      body: ChangeNotifierProvider(
-        create: (_) => CategoriesList(),
-        builder: (context, child) { 
-          context.watch<CategoriesList>().list; // needs to be here to rebuild page properly
-          return Column(
-            children: [
-              InfoText(),
-              CategoriesGrid(), 
-            ],
-          ); 
-        }
+      body:
+      Column(
+        children: [
+          InfoText(),
+          CategoriesGrid(), 
+        ],
       ),
     );
   }

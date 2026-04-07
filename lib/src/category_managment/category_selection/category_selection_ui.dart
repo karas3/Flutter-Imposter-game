@@ -121,13 +121,13 @@ class _CategoryButtonState extends State<CategoryButton> {
         AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,                     
-          width: widget.categoriesList[widget.id].selected ? size : size - 10,   //170, 160                 
-          height: widget.categoriesList[widget.id].selected ? size : size - 10,
+          width: widget.categoriesList[widget.id].isSelected ? size : size - 10,   //170, 160                 
+          height: widget.categoriesList[widget.id].isSelected ? size : size - 10,
           decoration: BoxDecoration(  
-            color: widget.categoriesList[widget.id].selected ? Theme.of(context).colorScheme.inversePrimary : Colors.transparent,
+            color: widget.categoriesList[widget.id].isSelected ? Theme.of(context).colorScheme.inversePrimary : Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(30)),
             border: Border.all(
-                color: widget.categoriesList[widget.id].selected ? Colors.transparent : Theme.of(context).colorScheme.outlineVariant,
+                color: widget.categoriesList[widget.id].isSelected ? Colors.transparent : Theme.of(context).colorScheme.outlineVariant,
                 width: 3.5,
             ),
           ),
@@ -149,7 +149,7 @@ class _CategoryButtonState extends State<CategoryButton> {
               duration: Duration(milliseconds: 300),
               curve: Curves.easeInOut,   
               style: TextStyle(
-                fontSize: widget.categoriesList[widget.id].selected ? 20 : 18,
+                fontSize: widget.categoriesList[widget.id].isSelected ? 20 : 18,
               ),
               child: Text(
                 widget.categoriesList[widget.id].name,

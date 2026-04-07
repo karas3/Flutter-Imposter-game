@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:imposter_party_game/src/category_managment/category_object.dart';
 import 'package:imposter_party_game/src/lobby/lobby_object.dart';
 import 'package:imposter_party_game/src/ui_elements/dialogs.dart';
+import 'package:provider/provider.dart';
 import '../game/game_page.dart';
 
 
@@ -26,8 +28,11 @@ class PlayPageButton extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => nextPage)
-          ).then((_) => rebuildPage?.call()); // rebuild page to update imposter counter
+            MaterialPageRoute(builder: (_) => ChangeNotifierProvider.value(
+            value: context.read<CategoriesList>(),
+            child: nextPage,
+            ))
+          ).then((_) => rebuildPage?.call()); // rebuild page to update imposter counter, player count and if any category selected for later to check before game starts
         },
         child: Text(
           title,
@@ -62,7 +67,7 @@ class _ImposterCounterState extends State<ImposterCounter> {
           ),
           Row(
             spacing: 30,
-            mainAxisAlignment: MainAxisAlignment.center,  //centers row chil
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
                 onPressed: () => setState(() {
@@ -111,8 +116,8 @@ class _ImposterCounterState extends State<ImposterCounter> {
 class StartButton extends StatelessWidget {
   const StartButton({super.key});
 
-  Future<bool?> dialogBuilder(BuildContext context, String title, String description) {
-    return showDialog<bool>(
+  Future<void> dialogBuilder(BuildContext context, String title, String description) {
+    return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return WarningDialog(title: title,description: description);
@@ -122,21 +127,53 @@ class StartButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
-      onPressed: () {
-        if(Lobby.numberOfPlayers < 3) {
-          dialogBuilder(context, "Not enough players!", "Can't start game with only ${Lobby.numberOfPlayers} players. Atleast 3 players are requiered");
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => GamePage())
+    return FutureBuilder<bool>(
+      future: context.read<CategoriesList>().isAnySelected,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return FilledButton(
+            onPressed: () {
+              if(Lobby.numberOfPlayers < 3) {
+                dialogBuilder(context, "Not enough players!", "Can't start game with only ${Lobby.numberOfPlayers} players. Atleast 3 players are requiered.");
+              } else if(!snapshot.data!) { // If no category selected
+                dialogBuilder(context, "No categories selected!", "Can't start game without any category. Select atleast one category to start game.");
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GamePage())
+                );
+              }
+            },
+            child: Text(
+              "Start game",
+            )
+          );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                "Error while loading selected Categories",
+                style: TextStyle(fontSize: 24),
+              ),
+            );
+          } else {
+            return Row(
+            children: [
+              SizedBox(
+                width: 60,
+                height: 60,
+                child: CircularProgressIndicator(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 16),
+                child: Text(
+                  'Awaiting result...',
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),
+            ]
           );
         }
-      },
-      child: Text(
-        "Start game",
-      )
+      }
     );
   }
-
 }

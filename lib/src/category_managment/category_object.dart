@@ -8,6 +8,12 @@ class CategoriesList extends ChangeNotifier {
   final Future<List<Category>> _list = loadCategoryFromJson();
 
   Future<List<Category>> get list => _list;
+  Future<bool> get isAnySelected async {   // used to prevent game from starting if no category selected
+    for(Category category in await _list) {
+      if(category.isSelected) return true;
+    }
+    return false;
+  }
 
   void add() async {
     final List<Category> list = await _list;
@@ -18,7 +24,11 @@ class CategoriesList extends ChangeNotifier {
   void removeAt(int index) async {
     final List<Category> list = await _list;
     final fileName = list[index].name;
+
+    //remove from list
     list.removeAt(index);
+
+    // delete file
     final dir = await getApplicationDocumentsDirectory();
     final targetDir = Directory("${dir.path}/categories");
     final File file = File("${targetDir.path}/$fileName.json");
@@ -44,17 +54,17 @@ class Category extends ChangeNotifier {
       _hints.add(hints[i]);
     }
   }
-
-  //==================================    GETTERS   ==================================
-  String get name => _name;
-  int get length => _words.length;
-  List<String> get words => _words;
-  List<String> get hints => _hints;
-  bool get selected => _selected;
   
   void switchSelected() {
     _selected ? _selected = false : _selected = true;
   }
+
+  //==================================    GETTERS   ==================================
+  String get name => _name;
+  int get numberOfWords => _words.length;
+  List<String> get words => _words;
+  List<String> get hints => _hints;
+  bool get isSelected => _selected;
 
 // ============================= SAVE ========================================
   Future<void> saveToJson(String newName, List<String> words, List<String> hints) async {
