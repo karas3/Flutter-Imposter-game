@@ -10,15 +10,6 @@ class Lobby{
   static final List<Player> _playerList = [Player(), Player(), Player()];
   static int _imposterCount = 1;
 
-  static void addPlayer() {                //adds empty player input tile
-    _playerList.add(Player());
-  }
-
-  static void removePlayer(int index) {    //remove player input tile at index
-    _playerList.removeAt(index);
-    if (_imposterCount >= maxImposterCount) decreaseImposterCount();
-  }
-
   // used to display list
   static List<Player> get playerList => _playerList;
   static int get numberOfPlayers => _playerList.length;
@@ -30,6 +21,24 @@ class Lobby{
     for(int i = 0; i < _playerList.length; i++) {
       _playerList[i].name = names[i];
     }
+  }
+
+  static List<String> get playerNames {
+    List<String> names = [];
+    for(int i = 0; i < _playerList.length; i++) {
+      names.add(_playerList[i].name);
+    }
+
+    return names;
+  }
+
+  static void addPlayer() {                //adds empty player input tile
+    _playerList.add(Player());
+  }
+
+  static void removePlayer(int index) {    //remove player input tile at index
+    _playerList.removeAt(index);
+    if (_imposterCount >= maxImposterCount) decreaseImposterCount();
   }
 
   static void increaseImposterCount() {

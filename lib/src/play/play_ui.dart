@@ -140,7 +140,10 @@ class StartButton extends StatelessWidget {
               } else {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => GamePage())
+                  MaterialPageRoute(builder: (_) => ChangeNotifierProvider.value(
+                    value: context.read<CategoriesList>(),
+                    child: GamePage(),
+                  ))
                 );
               }
             },

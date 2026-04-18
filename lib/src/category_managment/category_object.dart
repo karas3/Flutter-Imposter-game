@@ -15,6 +15,32 @@ class CategoriesList extends ChangeNotifier {
     return false;
   }
 
+  Future<List<String>> get allSelectedWords async {
+    List<String> words = [];
+    for(Category category in await list) {
+      if(category.isSelected) {
+        for(String word in category.words) {
+          words.add(word);
+        }
+      }
+    }
+
+    return words;
+  }
+
+  Future<List<String>> get allSelectedHints async {
+    List<String> hints = [];
+    for(Category category in await list) {
+      if(category.isSelected) {
+        for(String hint in category.hints) {
+          hints.add(hint);
+        }
+      }
+    }
+
+    return hints;
+  }
+
   void add() async {
     final List<Category> list = await _list;
     list.add(Category("Empty ${list.length + 1}", [], []));
