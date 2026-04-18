@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imposter_party_game/src/ui_elements/dialogs.dart';
 import '../category_object.dart';
 
 
@@ -266,6 +267,15 @@ class _SaveButtonState extends State<SaveButton> {
   IconData? icon = Icons.save;
   String text = "Save";
 
+  Future<void> dialogBuilder(BuildContext context, exceptionMessage) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return WarningDialog(title: exceptionMessage);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -278,17 +288,29 @@ class _SaveButtonState extends State<SaveButton> {
               icon = null;
               text = "Saving";
             });
-            await widget.category.saveToJson(widget.title(), widget.words(), widget.hints());
-            // change icon and text to let user know that changes were saved
-            setState(() {
-              icon = Icons.check_rounded;
-              text = "Saved";
-            });
-            await Future.delayed(Duration(seconds: 1));
-            setState(() {
-              icon = Icons.save;
-              text = "Save";
-            });
+            String exceptionMessage =  await widget.category.saveToJson(widget.title(), widget.words(), widget.hints());
+            if(exceptionMessage.isNotEmpty) {
+              setState(() {
+                icon = Icons.close;
+                text = "Can't save";
+              });
+              await dialogBuilder(context, exceptionMessage);
+              await Future.delayed(Duration(seconds: 1));
+              setState(() {
+                icon = Icons.save;
+                text = "Save";
+              });
+            } else {
+              setState(() {
+                icon = Icons.check_rounded;
+                text = "Saved";
+              });
+              await Future.delayed(Duration(seconds: 1));
+              setState(() {
+                icon = Icons.save;
+                text = "Save";
+              });
+            }
           },
 
           label: Text(

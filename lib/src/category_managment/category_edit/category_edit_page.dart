@@ -79,13 +79,19 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
   }
 
   bool checkIfChangesWereMade() {
-    if(_titleController.text != widget.category.name) return true;
-    if(_wordsControllers.length != widget.category.words.length) return true;
+    if(_titleController.text != widget.category.name) return true;  //check for name change
     for(int i = 0; i < _wordsControllers.length; i++) {
-      if(_wordsControllers[i].text != widget.category.words[i] || _hintsControllers[i].text != widget.category.hints[i]) {
-        return true;
+      if(i < widget.category.numberOfWords){
+        if(_wordsControllers[i].text != widget.category.words[i] || _hintsControllers[i].text != widget.category.hints[i]) return true; //check if any old entry has a change
+      } else {
+        if(_wordsControllers.length != widget.category.words.length) { // check if any new entry was added
+          if(_wordsControllers[i].text.isNotEmpty || _hintsControllers[i].text.isNotEmpty) return true; //check if any new entry has a value
+        } else {
+          return false; // no new entry
+        }
       }
     }
+    
     return false;
   }
 

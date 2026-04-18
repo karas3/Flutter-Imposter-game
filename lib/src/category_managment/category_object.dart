@@ -15,7 +15,7 @@ class CategoriesList extends ChangeNotifier {
     return false;
   }
 
-  Future<List<String>> get allSelectedWords async {
+  Future<List<String>> get allSelectedWords async { //used for game page
     List<String> words = [];
     for(Category category in await list) {
       if(category.isSelected) {
@@ -28,7 +28,7 @@ class CategoriesList extends ChangeNotifier {
     return words;
   }
 
-  Future<List<String>> get allSelectedHints async {
+  Future<List<String>> get allSelectedHints async { //used for game page
     List<String> hints = [];
     for(Category category in await list) {
       if(category.isSelected) {
@@ -93,15 +93,21 @@ class Category extends ChangeNotifier {
   bool get isSelected => _selected;
 
 // ============================= SAVE ========================================
-  Future<void> saveToJson(String newName, List<String> words, List<String> hints) async {
+  Future<String> saveToJson(String newName, List<String> words, List<String> hints) async {
     final dir = await getApplicationDocumentsDirectory();
     final targetDir = Directory("${dir.path}/categories");
     final File file = File("${targetDir.path}/$_name.json");  // _name is name of file
 
+// check for errors and exceptions
     for(int i = 0; i < words.length; i++) {
       if(words[i].isEmpty && hints[i].isEmpty) {
         words.removeAt(i);
         hints.removeAt(i);
+      }
+    }
+    for(int i = 0; i < words.length; i++) {
+      if(words[i].isEmpty && hints[i].isNotEmpty) {
+        return "Can't leave hint without a word";
       }
     }
 
@@ -116,12 +122,14 @@ class Category extends ChangeNotifier {
       await file.writeAsString(jsonString);
       await file.rename("${targetDir.path}/$newName.json");
     } catch (e) {
-      print("Error $e");
+      return "Error $e";
     }
 
     // Update variables after saving
     _name = newName;
     _words = words;
     _hints = hints;
+
+    return "";
   }
 }
