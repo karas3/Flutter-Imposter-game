@@ -104,22 +104,25 @@ class Category extends ChangeNotifier {
   bool get isSelected => _selected;
 
 // ============================= SAVE ========================================
-  Future<String> saveToJson(String newName, List<String> words, List<String> hints) async {
+  Future<List<String>> saveToJson(String newName, List<String> words, List<String> hints) async {
     final dir = await getApplicationDocumentsDirectory();
     final targetDir = Directory("${dir.path}/categories");
     final File file = File("${targetDir.path}/$_name.json");  // _name is name of file
 
 // check for errors and exceptions
-    for(int i = 0; i < words.length; i++) {
+    for(int i = 0; i < words.length; i++) { //check for empty word hint pair
       if(words[i].isEmpty && hints[i].isEmpty) {
         words.removeAt(i);
         hints.removeAt(i);
       }
     }
-    for(int i = 0; i < words.length; i++) {
+    for(int i = 0; i < words.length; i++) { //check for hint without a word
       if(words[i].isEmpty && hints[i].isNotEmpty) {
-        return "Can't leave hint without a word";
+        return ["Can't leave hint without a word"];
       }
+    }
+    if(!RegExp(r'^[a-zA-Z0-9 _\-\.]+$').hasMatch(newName)) { //check for special characters
+      return ["Category name Can't use special characters", "Only characters allowed are letters, numbers, _, -, ."];
     }
 
     Map<String, dynamic> data = {
@@ -133,7 +136,7 @@ class Category extends ChangeNotifier {
       await file.writeAsString(jsonString);
       await file.rename("${targetDir.path}/$newName.json");
     } catch (e) {
-      return "Error $e";
+      return ["Error $e"];
     }
 
     // Update variables after saving
@@ -141,6 +144,6 @@ class Category extends ChangeNotifier {
     _words = words;
     _hints = hints;
 
-    return "";
+    return [];  //no exceptions
   }
 }

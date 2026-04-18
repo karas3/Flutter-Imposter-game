@@ -267,11 +267,11 @@ class _SaveButtonState extends State<SaveButton> {
   IconData? icon = Icons.save;
   String text = "Save";
 
-  Future<void> dialogBuilder(BuildContext context, exceptionMessage) {
+  Future<void> dialogBuilder(BuildContext context, String exceptionTitle, String? excpetionDescription) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return WarningDialog(title: exceptionMessage);
+        return WarningDialog(title: exceptionTitle, description: excpetionDescription,);
       },
     );
   }
@@ -288,13 +288,15 @@ class _SaveButtonState extends State<SaveButton> {
               icon = null;
               text = "Saving";
             });
-            String exceptionMessage =  await widget.category.saveToJson(widget.title(), widget.words(), widget.hints());
+            List<String> exceptionMessage =  await widget.category.saveToJson(widget.title(), widget.words(), widget.hints());
             if(exceptionMessage.isNotEmpty) {
               setState(() {
                 icon = Icons.close;
                 text = "Can't save";
               });
-              await dialogBuilder(context, exceptionMessage);
+              if(context.mounted) {
+                await dialogBuilder(context, exceptionMessage[0], exceptionMessage[1]);
+              }
               await Future.delayed(Duration(seconds: 1));
               setState(() {
                 icon = Icons.save;

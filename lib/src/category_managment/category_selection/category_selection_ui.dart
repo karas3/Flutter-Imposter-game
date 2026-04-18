@@ -22,7 +22,6 @@ class InfoText extends StatelessWidget {
 }
 
 
-
 // ======================================== GRID OF CATEGORIES ========================================
 
 class CategoriesGrid extends StatefulWidget {
@@ -63,8 +62,11 @@ class _CategoriesGridState extends State<CategoriesGrid> {
                     key: ValueKey(snapshot.data![index]),
                     direction: DismissDirection.endToStart,
                     confirmDismiss: (direction) async {
-                      if(!await context.read<CategoriesList>().isCategoryEmpty(index)) await dialogBuilder(context, index);
-                      return true;
+                      if(await context.read<CategoriesList>().isCategoryEmpty(index)) return true;  //if category is empty delete it without asking
+                      if(context.mounted) {
+                        return await dialogBuilder(context, index);
+                      }
+                      return null;
                     },
                     onDismissed: (direction) {
                       context.read<CategoriesList>().removeAt(index);
@@ -98,7 +100,6 @@ class _CategoriesGridState extends State<CategoriesGrid> {
 
 
 // ======================================== BUTTON ========================================
-
 class CategoryButton extends StatefulWidget {  //used by CategoriesGrid (code above)
   final VoidCallback setSelectedCallback;
   final int id;

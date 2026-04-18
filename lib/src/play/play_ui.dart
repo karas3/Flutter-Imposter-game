@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:imposter_party_game/src/category_managment/category_object.dart';
 import 'package:imposter_party_game/src/lobby/lobby_object.dart';
@@ -147,13 +149,31 @@ class StartButton extends StatelessWidget {
                 );
               }
             },
-            child: Text(
-              "Start game",
-            )
+            style: ButtonStyle(
+              padding: WidgetStatePropertyAll(EdgeInsets.zero),
+            ),
+            child: Ink(
+               decoration: const BoxDecoration(
+                gradient: LinearGradient(colors: [Color.fromARGB(255, 80, 30, 206), Color.fromARGB(255, 255, 85, 136)], transform: GradientRotation(pi/4)),
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+              ),
+              child: Container(
+                margin: EdgeInsets.zero,
+                constraints: const BoxConstraints(maxWidth: 250, maxHeight: 60), // min sizes for Material buttons
+                alignment: Alignment.center,
+                child: const Text(
+                  "Start game",
+                  style: TextStyle(
+                    fontSize: 30,
+                  ),
+                )
+              ),
+            ),
           );
+
           } else if (snapshot.hasError) {
             return Center(
-              child: Text(
+              child: const Text(
                 "Error while loading selected Categories",
                 style: TextStyle(fontSize: 24),
               ),
