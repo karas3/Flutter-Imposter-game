@@ -62,7 +62,10 @@ class _CategoriesGridState extends State<CategoriesGrid> {
                   return Dismissible(
                     key: ValueKey(snapshot.data![index]),
                     direction: DismissDirection.endToStart,
-                    confirmDismiss: (direction) async => await dialogBuilder(context, index),
+                    confirmDismiss: (direction) async {
+                      if(!await context.read<CategoriesList>().isCategoryEmpty(index)) await dialogBuilder(context, index);
+                      return true;
+                    },
                     onDismissed: (direction) {
                       context.read<CategoriesList>().removeAt(index);
                       setState(() {});

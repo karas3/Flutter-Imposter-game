@@ -14,17 +14,25 @@ class CategoriesList extends ChangeNotifier {
     }
     return false;
   }
+  
+    Future<bool> isCategoryEmpty(int index) async {
+      if((await list)[index].words.isEmpty || (await list)[index].hints.isEmpty) return true;
+      return false;
+    }
 
   Future<List<String>> get allSelectedWords async { //used for game page
     List<String> words = [];
     for(Category category in await list) {
       if(category.isSelected) {
         for(String word in category.words) {
-          words.add(word);
+          if(word.isEmpty) {
+            words.add("-");
+          } else {
+            words.add(word);
+          }
         }
       }
     }
-
     return words;
   }
 
@@ -33,11 +41,14 @@ class CategoriesList extends ChangeNotifier {
     for(Category category in await list) {
       if(category.isSelected) {
         for(String hint in category.hints) {
-          hints.add(hint);
+          if(hint.isEmpty) {
+            hints.add("-");
+          } else {
+            hints.add(hint);
+          }
         }
       }
     }
-
     return hints;
   }
 

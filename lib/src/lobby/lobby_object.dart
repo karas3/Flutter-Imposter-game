@@ -26,7 +26,11 @@ class Lobby{
   static List<String> get playerNames {
     List<String> names = [];
     for(int i = 0; i < _playerList.length; i++) {
-      names.add(_playerList[i].name);
+      if(_playerList[i].name.isEmpty) {
+        names.add("Player ${i + 1}");
+      } else {
+        names.add(_playerList[i].name);
+      }
     }
 
     return names;

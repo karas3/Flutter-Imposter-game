@@ -12,7 +12,7 @@ class TestList extends StatelessWidget {
       itemCount: context.read<GameState>().playerCount,
       itemBuilder: (context, index) {
         return Text(
-          context.read<GameState>().playerList[index].isNotEmpty ? context.read<GameState>().playerList[index] : "no name",
+          context.read<GameState>().playerList[index],
         );
       },
     );
@@ -31,10 +31,10 @@ class TestList2 extends StatelessWidget {
         return Row(
           children: [
             Text(
-              context.read<GameState>().wordsList[index].isNotEmpty ? "${context.read<GameState>().wordsList[index]} and " : "-",
+              "${context.read<GameState>().wordsList[index]} and ",
             ),
             Text(
-              context.read<GameState>().hintsList[index].isNotEmpty ? context.read<GameState>().hintsList[index] : "-",
+              context.read<GameState>().hintsList[index],
             ),
           ],
         );
