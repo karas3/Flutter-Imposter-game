@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imposter_party_game/src/ui_elements/dialogs.dart';
+import 'package:provider/provider.dart';
 import '../category_object.dart';
 
 
@@ -288,7 +289,7 @@ class _SaveButtonState extends State<SaveButton> {
               icon = null;
               text = "Saving";
             });
-            List<String> exceptionMessage =  await widget.category.saveToJson(widget.title(), widget.words(), widget.hints());
+            List<String> exceptionMessage = await widget.category.saveToJson(widget.title(), widget.words(), widget.hints(), await context.read<CategoriesList>().names);
             if(exceptionMessage.isNotEmpty) {
               setState(() {
                 icon = Icons.close;

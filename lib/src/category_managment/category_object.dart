@@ -8,6 +8,15 @@ class CategoriesList extends ChangeNotifier {
   final Future<List<Category>> _list = loadCategoryFromJson();
 
   Future<List<Category>> get list => _list;
+
+  Future<List<String>> get names async {  // used to check if new category name already exists
+    List<String> names = [];
+    for(Category category in await list) {
+      names.add(category.name);
+    }
+    return names;
+  }
+
   Future<bool> get isAnySelected async {   // used to prevent game from starting if no category selected
     for(Category category in await _list) {
       if(category.isSelected) return true;
@@ -75,6 +84,8 @@ class CategoriesList extends ChangeNotifier {
   }
 }
 
+
+
 class Category extends ChangeNotifier {
   String _name;
   List<String> _words = [];
@@ -104,26 +115,33 @@ class Category extends ChangeNotifier {
   bool get isSelected => _selected;
 
 // ============================= SAVE ========================================
-  Future<List<String>> saveToJson(String newName, List<String> words, List<String> hints) async {
+  Future<List<String>> saveToJson(String newName, List<String> words, List<String> hints, List<String> allNames) async {
     final dir = await getApplicationDocumentsDirectory();
     final targetDir = Directory("${dir.path}/categories");
     final File file = File("${targetDir.path}/$_name.json");  // _name is name of file
 
 // check for errors and exceptions
-    for(int i = 0; i < words.length; i++) { //check for empty word hint pair
+    for(int i = 0; i < words.length; i++) { // check for empty word hint pair
       if(words[i].isEmpty && hints[i].isEmpty) {
         words.removeAt(i);
         hints.removeAt(i);
       }
     }
-    for(int i = 0; i < words.length; i++) { //check for hint without a word
+    for(int i = 0; i < words.length; i++) { //c heck for hint without a word
       if(words[i].isEmpty && hints[i].isNotEmpty) {
-        return ["Can't leave hint without a word"];
+        return ["Can't leave hint without a word", ""];
       }
     }
     if(!RegExp(r'^[a-zA-Z0-9 _\-\.]+$').hasMatch(newName)) { //check for special characters
       return ["Category name Can't use special characters", "Only characters allowed are letters, numbers, _, -, ."];
     }
+
+    for(String name in allNames) {  // check if category with same name exists
+      if(newName == name) {
+        return ["Category with this name already exists", ""];
+      }
+    }
+
 
     Map<String, dynamic> data = {
       "name": newName,
