@@ -2,14 +2,48 @@ import 'dart:math';
 import 'package:imposter_party_game/src/lobby/lobby_object.dart';
 
 class GameState {
-  final List<String> playerList = Lobby.playerNames;
-  final int _imposterId = Random().nextInt(Lobby.playerList.length);
-  final List<String> wordsList;
-  final List<String> hintsList;
+  final List<String> _playerList = Lobby.playerNames;
+  final List<int> _impostersId = [];
+  int _currentIndex = 0;
 
-  GameState(this.wordsList, this.hintsList);
+  late final String _word;
+  late final String _hint;
+
+  GameState(List<String> wordsList, List<String> hintsList) {
+    // players randomization
+    List<int> numberPoll = List.generate(playerCount, (int index) => index);
+    for(int i = 0; i < Lobby.imposterCount; i++) {
+      int imposterIndex = Random().nextInt(numberPoll.length);
+      _impostersId.add(numberPoll[imposterIndex]);
+      numberPoll.removeAt(imposterIndex);
+    }
+    _playerList.shuffle();
+
+    // word randomization
+    int index = Random().nextInt(wordsList.length);
+    _word = wordsList[index];
+    _hint = hintsList[index];
+  }
   
-  int get playerCount => playerList.length;
-  int get imposterId => _imposterId;
-  int get wordsCount => wordsList.length;
+  List<String> get playerList => _playerList;
+  int get playerCount => _playerList.length;
+  int get currentIndex => _currentIndex;
+  void incrementCurrentIndex() => _currentIndex++;
+  bool get isImposter {
+    for(int i = 0; i < _impostersId.length; i++) {
+      if(_currentIndex == _impostersId[i]) return true;
+    }
+    return false;
+  }
+
+  String get word => _word;
+  String get hint => _hint;
+
+// =========================== DEBUG ===========================
+  // String whoIsPlayer(int index) {
+  //   for(int i = 0; i < _impostersId.length; i++) {
+  //     if(index == _impostersId[i]) return "Imposter";
+  //   }
+  //   return "Civilian";
+  // }
 }

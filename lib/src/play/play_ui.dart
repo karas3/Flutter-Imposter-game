@@ -133,40 +133,43 @@ class StartButton extends StatelessWidget {
       future: context.read<CategoriesList>().isAnySelected,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return FilledButton(
-            onPressed: () {
-              if(Lobby.numberOfPlayers < 3) {
-                dialogBuilder(context, "Not enough players!", "Can't start game with only ${Lobby.numberOfPlayers} players. Atleast 3 players are requiered.");
-              } else if(!snapshot.data!) { // If no category selected
-                dialogBuilder(context, "No categories selected!", "Can't start game without any category. Select atleast one category to start game.");
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => ChangeNotifierProvider.value(
-                    value: context.read<CategoriesList>(),
-                    child: GamePage(),
-                  ))
-                );
-              }
-            },
-            style: ButtonStyle(
-              padding: WidgetStatePropertyAll(EdgeInsets.zero),
-            ),
-            child: Ink(
-               decoration: const BoxDecoration(
-                gradient: LinearGradient(colors: [Color.fromARGB(255, 80, 30, 206), Color.fromARGB(255, 255, 85, 136)], transform: GradientRotation(pi/4)),
-                borderRadius: BorderRadius.all(Radius.circular(30)),
+          return Container(
+            margin: EdgeInsets.only(top: 30),
+            child: FilledButton(
+              onPressed: () {
+                if(Lobby.numberOfPlayers < 3) {
+                  dialogBuilder(context, "Not enough players!", "Can't start game with only ${Lobby.numberOfPlayers} players. Atleast 3 players are requiered.");
+                } else if(!snapshot.data!) { // If no category selected
+                  dialogBuilder(context, "No categories selected!", "Can't start game without any category. Select atleast one category to start game.");
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => ChangeNotifierProvider.value(
+                      value: context.read<CategoriesList>(),
+                      child: GamePage(),
+                    ))
+                  );
+                }
+              },
+              style: ButtonStyle(
+                padding: WidgetStatePropertyAll(EdgeInsets.zero),
               ),
-              child: Container(
-                margin: EdgeInsets.zero,
-                constraints: const BoxConstraints(maxWidth: 250, maxHeight: 60), // min sizes for Material buttons
-                alignment: Alignment.center,
-                child: const Text(
-                  "Start game",
-                  style: TextStyle(
-                    fontSize: 30,
-                  ),
-                )
+              child: Ink(
+                 decoration: const BoxDecoration(
+                  gradient: LinearGradient(colors: [Color.fromARGB(255, 80, 30, 206), Color.fromARGB(255, 255, 85, 136)], transform: GradientRotation(pi/4)),
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
+                child: Container(
+                  margin: EdgeInsets.zero,
+                  constraints: const BoxConstraints(maxWidth: 250, maxHeight: 60), // min sizes for Material buttons
+                  alignment: Alignment.center,
+                  child: const Text(
+                    "Start game",
+                    style: TextStyle(
+                      fontSize: 30,
+                    ),
+                  )
+                ),
               ),
             ),
           );

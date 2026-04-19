@@ -21,40 +21,42 @@ class LobbyPlayerInputTileList extends StatefulWidget {
 class _LobbyPlayerInputTileListState extends State<LobbyPlayerInputTileList> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(      
-      shrinkWrap: true,       
-      itemCount: Lobby.numberOfPlayers + 1,
-      itemBuilder: (_, index) {
-        if(index < Lobby.numberOfPlayers) {   // player Input Tile
-          final player = Lobby.playerList[index];  //get Player object from list of Player objects
-          return Dismissible(
-            key: ValueKey(widget.controllers[index]),
-            direction: DismissDirection.endToStart,
-            onDismissed: (direction) => setState(() => widget.removePlayer(index)),
-            child: Stack(
-              children: [
-                LobbyPlayerInputTile(
-                  controller: widget.controllers[index], 
-                  colorGetter: () => player.color,   
-                  colorSetter: (color) => player.color = color,
-                  id: index,                          //id
-                ),
-              ],
-            ),
-          );
-        } 
-        else {  // Gray button at bottom
-          return Center(  // Fixes button infinite width
-            child: AddPlayerButton (
-              addPlayercallback: () {   // callback to rebuild scene and create new input tile
-                setState(() {
-                  widget.addPlayer();
-                });
-              }
-            ),
-          );
-        }
-      },
+    return Expanded(
+      child: ListView.builder(      
+        shrinkWrap: true,       
+        itemCount: Lobby.numberOfPlayers + 1,
+        itemBuilder: (_, index) {
+          if(index < Lobby.numberOfPlayers) {   // player Input Tile
+            final player = Lobby.playerList[index];  //get Player object from list of Player objects
+            return Dismissible(
+              key: ValueKey(widget.controllers[index]),
+              direction: DismissDirection.endToStart,
+              onDismissed: (direction) => setState(() => widget.removePlayer(index)),
+              child: Stack(
+                children: [
+                  LobbyPlayerInputTile(
+                    controller: widget.controllers[index], 
+                    colorGetter: () => player.color,   
+                    colorSetter: (color) => player.color = color,
+                    id: index,                          //id
+                  ),
+                ],
+              ),
+            );
+          } 
+          else {  // Gray button at bottom
+            return Center(  // Fixes button infinite width
+              child: AddPlayerButton (
+                addPlayercallback: () {   // callback to rebuild scene and create new input tile
+                  setState(() {
+                    widget.addPlayer();
+                  });
+                }
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }
