@@ -1,11 +1,20 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'game_object.dart';
 import 'package:imposter_party_game/src/ui_elements/custom_text.dart';
 
-class TextBox extends StatelessWidget {
-  const TextBox({super.key});
+class TextBox extends StatefulWidget {
+  TextBox({super.key});
 
+  @override
+  State<TextBox> createState() => _TextBoxState();
+}
+
+class _TextBoxState extends State<TextBox> {
+  Offset containerOffset = Offset.zero;
+  
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -27,29 +36,22 @@ class TextBox extends StatelessWidget {
             )
           ],
         ),
-        Draggable(  //TODO: this is a placehodler, write an actual working thing
-          axis: Axis.vertical,
-          maxSimultaneousDrags: 1,
-          feedback: Container(
-            width: 300,
-            height: 200,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.inversePrimary,
-              borderRadius: BorderRadius.all(Radius.circular(30))
-            ),
-            child: Icon(
-              Icons.arrow_downward_rounded,
-              size: 200,
-            ),
-          ),
-          childWhenDragging: SizedBox(
-            width: 300,
-            height: 200,
-          ),
-
+        GestureDetector(
+          onPanUpdate: (details) {
+            if(containerOffset.dy + details.delta.dy > 0) { //prevents containerOffset becoming negative
+              double smoothness = 0.1;  // smaller the value more smooth the ending
+              double maxOffset = 160;
+              setState(() => containerOffset = containerOffset + details.delta / (1 + pow((e), smoothness * (containerOffset.dy - maxOffset)).toDouble())); // sigmoid function
+            }
+          },
+          onPanEnd: (details) {
+            setState(() => containerOffset = Offset.zero);
+          },
           child: Container(
             width: 300,
             height: 200,
+            transform: Matrix4.translationValues(0, containerOffset.dy, 0),
+            alignment: Alignment(0, containerOffset.dy),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.inversePrimary,
               borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -59,7 +61,7 @@ class TextBox extends StatelessWidget {
               size: 200,
             ),
           ),
-        ),
+        )
       ],
     );
   }
