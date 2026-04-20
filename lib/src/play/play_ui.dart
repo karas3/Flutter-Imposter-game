@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:imposter_party_game/src/category_managment/category_object.dart';
 import 'package:imposter_party_game/src/lobby/lobby_object.dart';
+import 'package:imposter_party_game/src/ui_elements/custom_text.dart';
 import 'package:imposter_party_game/src/ui_elements/dialogs.dart';
 import 'package:provider/provider.dart';
 import '../game/game_page.dart';
@@ -38,9 +39,7 @@ class PlayPageButton extends StatelessWidget {
         },
         child: Text(
           title,
-          style: TextStyle(
-            fontSize: 28,
-          ),
+          style: AppTextStyles.standard,
         ),
       ),
     );
@@ -63,9 +62,7 @@ class _ImposterCounterState extends State<ImposterCounter> {
         children: [
           Text(
             "Imposter count",
-            style: TextStyle(
-              fontSize: 30
-            ),
+            style: AppTextStyles.standard,
           ),
           Row(
             spacing: 30,
@@ -84,9 +81,7 @@ class _ImposterCounterState extends State<ImposterCounter> {
           
               Text(
                 Lobby.imposterCount.toString(),
-                style: TextStyle(
-                  fontSize: 30,
-                ),
+                style: AppTextStyles.standard
               ),
           
               IconButton(
@@ -104,11 +99,47 @@ class _ImposterCounterState extends State<ImposterCounter> {
           Text(
             "(Imposter count depends on player count)",
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              color: Theme.of(context).colorScheme.inverseSurface,
-            ),
+            style: AppTextStyles.hint(context),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class ShufflePlayersCheckBox extends StatefulWidget {
+  const ShufflePlayersCheckBox({super.key});
+
+  @override
+  State<ShufflePlayersCheckBox> createState() => _ShufflePlayersCheckBoxState();
+}
+
+class _ShufflePlayersCheckBoxState extends State<ShufflePlayersCheckBox> {
+  bool isChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Shuffle players:",
+            style: AppTextStyles.standard,
+          ),
+          Transform.scale(
+            scale: 1.2,
+            child: Checkbox(
+              value: isChecked, 
+              onChanged: (bool? value) {
+                setState(() {
+                  isChecked = value!;
+                });
+              },
+              semanticLabel: "Shuffle players",
+            ),
+          ),
         ],
       ),
     );
@@ -134,7 +165,7 @@ class StartButton extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Container(
-            margin: EdgeInsets.only(top: 30),
+            margin: EdgeInsets.only(top: 20),
             child: FilledButton(
               onPressed: () {
                 if(Lobby.numberOfPlayers < 3) {
@@ -163,11 +194,9 @@ class StartButton extends StatelessWidget {
                   margin: EdgeInsets.zero,
                   constraints: const BoxConstraints(maxWidth: 250, maxHeight: 60), // min sizes for Material buttons
                   alignment: Alignment.center,
-                  child: const Text(
+                  child: Text(
                     "Start game",
-                    style: TextStyle(
-                      fontSize: 30,
-                    ),
+                    style: AppTextStyles.standard,
                   )
                 ),
               ),
@@ -176,9 +205,9 @@ class StartButton extends StatelessWidget {
 
           } else if (snapshot.hasError) {
             return Center(
-              child: const Text(
+              child: Text(
                 "Error while loading selected Categories",
-                style: TextStyle(fontSize: 24),
+                style: AppTextStyles.standard,
               ),
             );
           } else {
@@ -193,7 +222,7 @@ class StartButton extends StatelessWidget {
                 padding: EdgeInsets.only(top: 16),
                 child: Text(
                   'Awaiting result...',
-                  style: TextStyle(fontSize: 24),
+                  style: AppTextStyles.standard,
                 ),
               ),
             ]

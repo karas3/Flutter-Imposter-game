@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppTheme extends ChangeNotifier {
   static bool _lightTheme = false; 
+  static final double _fontSize = 28;
 
   ThemeData getTheme() {
     if(_lightTheme) {
@@ -31,4 +32,5 @@ class AppTheme extends ChangeNotifier {
     }
     return Icons.light_mode;
   }
+  static double get fontSize => _fontSize;
 }

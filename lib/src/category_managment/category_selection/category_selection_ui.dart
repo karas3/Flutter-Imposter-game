@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imposter_party_game/src/ui_elements/custom_text.dart';
 import 'package:provider/provider.dart';
 import 'package:imposter_party_game/src/ui_elements/dialogs.dart';
 
@@ -13,10 +14,7 @@ class InfoText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       "Hold to edit category",
-      style: TextStyle(
-        backgroundColor: Colors.transparent,
-        color: Theme.of(context).colorScheme.inverseSurface,
-      ),
+      style: AppTextStyles.hint(context)
     );
   }
 }
@@ -152,9 +150,7 @@ class _CategoryButtonState extends State<CategoryButton> {
             child: AnimatedDefaultTextStyle(
               duration: Duration(milliseconds: 300),
               curve: Curves.easeInOut,   
-              style: TextStyle(
-                fontSize: widget.categoriesList[widget.id].isSelected ? 20 : 18,
-              ),
+              style: AppTextStyles.gridElement(widget.categoriesList[widget.id].isSelected),
               child: Text(
                 widget.categoriesList[widget.id].name,
                 style: TextStyle(color: Theme.of(context).colorScheme.inverseSurface),

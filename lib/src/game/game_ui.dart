@@ -1,23 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'game_object.dart';
+import 'package:imposter_party_game/src/ui_elements/custom_text.dart';
 
 class TextBox extends StatelessWidget {
   const TextBox({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
+      alignment: AlignmentGeometry.center,
       children: [
-        Text(
-          context.read<GameState>().isImposter ? "You're an imposter" : "You are a civilian",
+        Column(
+          children: [
+            Text(
+              context.read<GameState>().isImposter ? "You're an imposter" : "You are a civilian",
+              style: AppTextStyles.standard,
+            ),
+            Text(
+              context.read<GameState>().isImposter ? "Your hint is:" : "Your word is:",
+              style: AppTextStyles.standard,
+            ),
+            Text(
+              context.read<GameState>().isImposter ? context.read<GameState>().hint : context.read<GameState>().word,
+              style: AppTextStyles.standard,
+            )
+          ],
         ),
-        Text(
-          context.read<GameState>().isImposter ? "Your hint is:" : "Your word is:",
+        Draggable(  //TODO: this is a placehodler, write an actual working thing
+          axis: Axis.vertical,
+          maxSimultaneousDrags: 1,
+          feedback: Container(
+            width: 300,
+            height: 200,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.inversePrimary,
+              borderRadius: BorderRadius.all(Radius.circular(30))
+            ),
+            child: Icon(
+              Icons.arrow_downward_rounded,
+              size: 200,
+            ),
+          ),
+          childWhenDragging: SizedBox(
+            width: 300,
+            height: 200,
+          ),
+
+          child: Container(
+            width: 300,
+            height: 200,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.inversePrimary,
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            ),
+            child: Icon(
+              Icons.arrow_downward_rounded,
+              size: 200,
+            ),
+          ),
         ),
-        Text(
-          context.read<GameState>().isImposter ? context.read<GameState>().hint : context.read<GameState>().word,
-        )
       ],
     );
   }
@@ -37,13 +79,15 @@ class NextButton extends StatelessWidget {
     ? FilledButton(
         onPressed: () => incrementIndex(),
         child: Text(
-          "Next player"
+          "Next player",
+          style: AppTextStyles.standard,
         ),
       )
     : FilledButton(
       onPressed: () => (),
       child: Text(
-        "Start"
+        "Start",
+        style: AppTextStyles.standard,
       ),
     );
   }

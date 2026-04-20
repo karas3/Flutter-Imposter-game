@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imposter_party_game/src/ui_elements/custom_text.dart';
 import 'package:imposter_party_game/src/ui_elements/dialogs.dart';
 
 import 'lobby_object.dart';
@@ -141,9 +142,7 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
                       hintText: "Input player ${widget.id + 1}",
                       border: UnderlineInputBorder(),
                     ),
-                    style: TextStyle(
-                      fontSize: 24
-                    ),
+                    style: AppTextStyles.standardSmall
                   ),
                 ),
               ],

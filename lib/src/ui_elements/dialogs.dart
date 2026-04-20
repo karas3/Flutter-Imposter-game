@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:imposter_party_game/src/ui_elements/custom_text.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   final String title;
@@ -22,16 +23,12 @@ class ConfirmationDialog extends StatelessWidget {
       title: Text(
         title,
         textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 24
-        ),
+        style: AppTextStyles.dialogTitle,
       ),
       content: Text(
         description ?? "",
         textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 16
-        ),
+        style: AppTextStyles.dialogDescription
       ),
       actions: <Widget>[
         Row(
@@ -45,9 +42,7 @@ class ConfirmationDialog extends StatelessWidget {
                   ),
                   child: Text(
                     confirmButtonText,
-                    style: TextStyle(
-                      fontSize: 24
-                    ),
+                    style: AppTextStyles.dialogTitle,
                   ),
                   onPressed: () {
                     Navigator.of(context).pop(true);
@@ -61,9 +56,7 @@ class ConfirmationDialog extends StatelessWidget {
                     ),
                     child: Text(
                       denyButtonText,
-                      style: TextStyle(
-                        fontSize: 24
-                      ),
+                      style: AppTextStyles.dialogTitle,
                     ),
                     onPressed: () {
                       Navigator.of(context).pop(false);
@@ -104,9 +97,7 @@ class ChangeColorDialog extends StatelessWidget {
               ),
               child: Text(
                 "Change color",
-                style: TextStyle(
-                  fontSize: 24
-                ),
+                style: AppTextStyles.dialogTitle
               ),
               onPressed: () {
                 Navigator.of(context).pop(changedColor);
@@ -121,9 +112,7 @@ class ChangeColorDialog extends StatelessWidget {
                 ),
                 child: Text(
                   "Cancel",
-                  style: TextStyle(
-                    fontSize: 24
-                  ),
+                  style: AppTextStyles.dialogTitle
                 ),
                 onPressed: () {
                   Navigator.of(context).pop(color);
@@ -152,16 +141,12 @@ class WarningDialog extends StatelessWidget {
       title: Text(
         title,
         textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 24
-        ),
+        style: AppTextStyles.dialogTitle,
       ),
       content: Text(
         description ?? "",
         textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 16
-        ),
+        style: AppTextStyles.dialogDescription,
       ),
       actions: <Widget>[
         Row(
@@ -173,9 +158,7 @@ class WarningDialog extends StatelessWidget {
               ),
               child: Text(
                 "Ok",
-                style: TextStyle(
-                  fontSize: 24
-                ),
+                style: AppTextStyles.dialogTitle
               ),
               onPressed: () {
                 Navigator.of(context).pop();

@@ -30,6 +30,7 @@ class _PlayPageState extends State<PlayPage> {
                 PlayPageButton(title: "lobby", nextPage: Lobbypage(), rebuildPage: () => setState(() {})),  // rebuild page to update imposter counter and number of players
                 PlayPageButton(title: "Category selection", nextPage: CategorySelectionPage(),rebuildPage: () => setState(() {})),  // rebuild page to check if any category is selected
                 ImposterCounter(),
+                ShufflePlayersCheckBox(),
                 StartButton(),
               ],
             ),

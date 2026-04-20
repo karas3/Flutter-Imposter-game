@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imposter_party_game/src/ui_elements/custom_text.dart';
 import 'package:imposter_party_game/src/ui_elements/dialogs.dart';
 import 'package:provider/provider.dart';
 import '../category_object.dart';
@@ -22,10 +23,7 @@ class CategoryTitle extends StatelessWidget {
           decoration: InputDecoration(
             border: UnderlineInputBorder()
           ),
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppTextStyles.header,
         ),
       ),
     );
@@ -40,7 +38,6 @@ class CategoryTable extends StatefulWidget {
   final Function removeEntry;
 
   final double borderWidth = 2;
-  final double fontSize = 24;
 
 
   const CategoryTable({super.key,
@@ -66,14 +63,14 @@ class _CategoryTableState extends State<CategoryTable> {
             ),
             child: Row(
               children: [
-                TableCell(data: "Words", wordData: true, fontSize: widget.fontSize, borderWidth: widget.borderWidth,),
-                TableCell(data: "Hints", wordData: false, fontSize: widget.fontSize, borderWidth: widget.borderWidth,),
+                TableCell(data: "Words", wordData: true, borderWidth: widget.borderWidth,),
+                TableCell(data: "Hints", wordData: false, borderWidth: widget.borderWidth,),
               ],
             ),
           ),
           Expanded(
             child: ListView.builder(
-              prototypeItem: Container(decoration: BoxDecoration(border: Border(bottom: BorderSide(width: widget.borderWidth))),child: TextField(style: TextStyle(fontSize: widget.fontSize))),
+              prototypeItem: Container(decoration: BoxDecoration(border: Border(bottom: BorderSide(width: widget.borderWidth))),child: TextField(style: AppTextStyles.tableStandard)),
               shrinkWrap: true,
               itemCount: widget.wordsControllers.length + 1,
               itemBuilder: (BuildContext context, int index) {  
@@ -91,9 +88,7 @@ class _CategoryTableState extends State<CategoryTable> {
                             padding: const EdgeInsets.only(right: 5),
                             child: Text(
                               "Delete",
-                              style: TextStyle(
-                                fontSize: 24
-                              ),
+                              style: AppTextStyles.tableStandard
                             ),
                           ),
                           Padding(
@@ -108,7 +103,7 @@ class _CategoryTableState extends State<CategoryTable> {
                     child: TableRow(
                       wordText: widget.wordsControllers[index].text, hintText: widget.hintsControllers[index].text,
                       wordController: widget.wordsControllers[index], hintController: widget.hintsControllers[index],
-                      fontSize: widget.fontSize, borderWidth: widget.borderWidth,
+                      borderWidth: widget.borderWidth,
                     ),
                   );
                 } else {
@@ -129,7 +124,6 @@ class TableRow extends StatelessWidget {
   final TextEditingController wordController;
   final TextEditingController hintController;
 
-  final double fontSize;
   final double borderWidth;
 
   const TableRow({super.key,
@@ -137,7 +131,6 @@ class TableRow extends StatelessWidget {
     required this.hintText,
     required this.wordController,
     required this.hintController,
-    required this.fontSize,
     required this.borderWidth,
   });
 
@@ -148,8 +141,8 @@ class TableRow extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       title: Row(
         children: [
-          TableCell(data: wordText, wordData: true, controller: wordController, fontSize: fontSize, borderWidth: borderWidth,),
-          TableCell(data: hintText, wordData: false, controller: hintController, fontSize: fontSize, borderWidth: borderWidth,),
+          TableCell(data: wordText, wordData: true, controller: wordController, borderWidth: borderWidth,),
+          TableCell(data: hintText, wordData: false, controller: hintController, borderWidth: borderWidth,),
         ],
       ),
     );
@@ -164,13 +157,11 @@ class TableCell extends StatelessWidget {
   final String data;
   final TextEditingController? controller;
 
-  final double fontSize;
   final double borderWidth;
 
   const TableCell({super.key,
     required this.data,
     required this.wordData,
-    required this.fontSize,
     required this.borderWidth,
     this.controller,
   });
@@ -190,19 +181,14 @@ class TableCell extends StatelessWidget {
             controller: controller,
             decoration: InputDecoration(
               hintText: wordData ? "Enter word" : "Enter hint",
-              hintStyle: TextStyle(fontWeight: FontWeight.w300),
+              hintStyle: AppTextStyles.tableHint,
             ),
-            style: TextStyle(
-              fontSize: 24
-            ),
+            style: AppTextStyles.tableStandard
           ),
         ) 
         :Text(
           data,    
-          style: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold
-          ),
+          style: AppTextStyles.tableHeader
         ),
       ),
     );
@@ -318,9 +304,7 @@ class _SaveButtonState extends State<SaveButton> {
 
           label: Text(
             text,
-            style: TextStyle(
-              fontSize: 32,
-            ),
+            style: AppTextStyles.standard
           ),
 
           icon: icon != null
