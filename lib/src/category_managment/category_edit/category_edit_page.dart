@@ -57,7 +57,7 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
               return Column(
                 children: [
                   CategoryTitle(controller: _titleController),
-                  CategoryTable(wordsControllers: _wordsControllers, hintsControllers: _hintsControllers, addEntry: addEntry, removeEntry: removeEntry),
+                  CategoryTable(wordsControllers: _wordsControllers, hintsControllers: _hintsControllers, addEntry: addContoller, removeEntry: removeController),
                   SaveButton(category: widget.category, title: () => title, words: () => words, hints: () => hints),
                 ]
               );
@@ -94,12 +94,12 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
     return false; // no change at all
   }
 
-  void addEntry() {
+  void addContoller() {
     _wordsControllers.add(TextEditingController());
     _hintsControllers.add(TextEditingController());
   }
 
-  void removeEntry(int index) {
+  void removeController(int index) {
     _wordsControllers[index].dispose();
     _hintsControllers[index].dispose();
     _wordsControllers.removeAt(index);
