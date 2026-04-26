@@ -1,11 +1,6 @@
 import 'dart:math' show Random;
 import 'package:flutter/material.dart';
 
-class Player {
-  String name = "";
-  HSLColor color = HSLColor.fromAHSL(1.0, Random().nextDouble() * 360, Random().nextDouble(), Random().nextDouble());
-}
-
 class Lobby{ 
   static final List<Player> _playerList = [Player(), Player(), Player()];
   static int _imposterCount = 1;
@@ -60,4 +55,9 @@ class Lobby{
   static void decreaseImposterCount() {
     if(_imposterCount > minImposterCount) _imposterCount--;
   }
+}
+
+class Player {
+  String name = "";
+  HSLColor color = HSLColor.fromAHSL(1.0, Random().nextDouble() * 360, Random().nextDouble(), Random().nextDouble());
 }

@@ -127,7 +127,7 @@ class Category extends ChangeNotifier {
         hints.removeAt(i);
       }
     }
-    for(int i = 0; i < words.length; i++) { //c heck for hint without a word
+    for(int i = 0; i < words.length; i++) { //check for hint without a word
       if(words[i].isEmpty && hints[i].isNotEmpty) {
         return ["Can't leave hint without a word", ""];
       }
@@ -136,10 +136,12 @@ class Category extends ChangeNotifier {
       return ["Category name Can't use special characters", "Only characters allowed are letters, numbers, _, -, ."];
     }
 
-    for(String name in allNames) {  // check if category with same name exists
-      if(newName == name) {
-        return ["Category with this name already exists", ""];
-      }
+    if(newName != name) { // check if category with same name exists
+      for(String name in allNames) {
+        if(newName == name) {
+          return ["Category with this name already exists", ""];
+        }
+      } 
     }
 
 
