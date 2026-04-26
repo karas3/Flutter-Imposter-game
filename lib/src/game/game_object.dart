@@ -1,8 +1,10 @@
 import 'dart:math';
+import 'package:flutter/material.dart';
 import 'package:imposter_party_game/src/lobby/lobby_object.dart';
 
 class GameState {
   final List<String> _playerList = Lobby.playerNames;
+  final List<HSLColor> _playersColors = Lobby.playersColors;
   final List<int> _impostersId = [];
   int _currentIndex = 0;
 
@@ -17,7 +19,6 @@ class GameState {
       _impostersId.add(numberPoll[imposterIndex]);
       numberPoll.removeAt(imposterIndex);
     }
-    _playerList.shuffle();
 
     // word randomization
     int index = Random().nextInt(wordsList.length);
@@ -38,6 +39,7 @@ class GameState {
 
   String get word => _word;
   String get hint => _hint;
+  HSLColor get currentPlayerColor => _playersColors[currentIndex];
 
 // =========================== DEBUG ===========================
   // String whoIsPlayer(int index) {

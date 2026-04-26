@@ -107,45 +107,6 @@ class _ImposterCounterState extends State<ImposterCounter> {
   }
 }
 
-class ShufflePlayersCheckBox extends StatefulWidget {
-  const ShufflePlayersCheckBox({super.key});
-
-  @override
-  State<ShufflePlayersCheckBox> createState() => _ShufflePlayersCheckBoxState();
-}
-
-class _ShufflePlayersCheckBoxState extends State<ShufflePlayersCheckBox> {
-  bool isChecked = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Shuffle players:",
-            style: AppTextStyles.standard,
-          ),
-          Transform.scale(
-            scale: 1.2,
-            child: Checkbox(
-              value: isChecked, 
-              onChanged: (bool? value) {
-                setState(() {
-                  isChecked = value!;
-                });
-              },
-              semanticLabel: "Shuffle players",
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class StartButton extends StatelessWidget {
   const StartButton({super.key});
 

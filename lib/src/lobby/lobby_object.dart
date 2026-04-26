@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class Player {
   String name = "";
-  Color color = Color.fromARGB(255, Random().nextInt(255) + 1, Random().nextInt(255) + 1, Random().nextInt(255) + 1);
+  HSLColor color = HSLColor.fromAHSL(1.0, Random().nextDouble() * 360, Random().nextDouble(), Random().nextDouble());
 }
 
 class Lobby{ 
@@ -34,6 +34,15 @@ class Lobby{
     }
 
     return names;
+  }
+
+  static List<HSLColor> get playersColors {
+    List<HSLColor> colors = [];
+    for(int i = 0; i < _playerList.length; i++) {
+      colors.add(_playerList[i].color);
+    }
+
+    return colors;
   }
 
   static void addPlayer() {                //adds empty player input tile

@@ -38,8 +38,8 @@ class _LobbyPlayerInputTileListState extends State<LobbyPlayerInputTileList> {
                   LobbyPlayerInputTile(
                     controller: widget.controllers[index], 
                     colorGetter: () => player.color,   
-                    colorSetter: (color) => player.color = color,
-                    id: index,                          //id
+                    colorSetter: (color) => player.color = HSLColor.fromColor(color),
+                    id: index, //id
                   ),
                 ],
               ),
@@ -77,15 +77,15 @@ class LobbyPlayerInputTile extends StatefulWidget {
   });
 
   @override
-  State<LobbyPlayerInputTile> createState() => LobbyPlayerInputTileState();
+  State<LobbyPlayerInputTile> createState() => _LobbyPlayerInputTileState();
 }
 
-class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
+class _LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
   Future<Color?> dialogBuilder(BuildContext context) {
     return showDialog<Color>(
       context: context,
       builder: (BuildContext context) {
-        return ChangeColorDialog(color: widget.colorGetter());
+        return ChangeColorDialog(color: widget.colorGetter().toColor());
       },
     );
   }
@@ -121,7 +121,7 @@ class LobbyPlayerInputTileState extends State<LobbyPlayerInputTile> {
                     style: ButtonStyle(
                       fixedSize: WidgetStatePropertyAll(Size(40, 100)),
                       shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-                      backgroundColor: WidgetStatePropertyAll(widget.colorGetter()),
+                      backgroundColor: WidgetStatePropertyAll(widget.colorGetter().toColor()),
                     ),
                     onPressed: () async {
                       widget.colorSetter(await dialogBuilder(context));

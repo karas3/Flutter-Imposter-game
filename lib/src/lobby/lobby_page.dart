@@ -15,6 +15,23 @@ class _LobbypageState extends State<Lobbypage> {
   late final List<TextEditingController> _controllers = [];
 
   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(title: "Create Lobby"),
+      body: Container(
+        margin: EdgeInsets.only(top: 20),
+        child: Column(
+          children: [
+          //==================================    List of players   ================================== 
+            LobbyPlayerInputTileList(controllers: _controllers, addPlayer: addPlayer, removePlayer: removePlayer,),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  @override
   void initState() {
     for(int i = 0; i < Lobby.numberOfPlayers; i++) {
       _controllers.add(TextEditingController(text: Lobby.playerList[i].name));
@@ -43,21 +60,5 @@ class _LobbypageState extends State<Lobbypage> {
     Lobby.removePlayer(index);
     _controllers[index].dispose();
     _controllers.removeAt(index);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: "Create Lobby"),
-      body: Container(
-        margin: EdgeInsets.only(top: 20),
-        child: Column(
-          children: [
-          //==================================    List of players   ================================== 
-            LobbyPlayerInputTileList(controllers: _controllers, addPlayer: addPlayer, removePlayer: removePlayer,),
-          ],
-        ),
-      ),
-    );
   }
 }

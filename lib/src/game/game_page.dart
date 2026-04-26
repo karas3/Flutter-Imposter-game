@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:imposter_party_game/src/ui_elements/custom_app_bar.dart';
-import 'package:imposter_party_game/src/ui_elements/custom_text.dart';
 import 'package:provider/provider.dart';
-import 'package:imposter_party_game/src/category_managment/category_object.dart';
+
+import 'package:imposter_party_game/src/ui_elements/custom_app_bar.dart' show CustomAppBar;
+import 'package:imposter_party_game/src/ui_elements/custom_text.dart'; 
+import 'package:imposter_party_game/src/category_managment/category_object.dart' show CategoriesList;
 
 import 'game_ui.dart';
 import 'game_object.dart';
+import 'background.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -15,7 +17,6 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,25 +35,31 @@ class _GamePageState extends State<GamePage> {
           }
           else {
             return Provider(
-              create: (context) => GameState(snapshot.data![0], snapshot.data![1]), //[words, hints]
-              builder: (context, child) => AnimatedSwitcher(
-                duration: const Duration(milliseconds: 400),
-                transitionBuilder: (child, animation) => SlideTransition(position: Tween<Offset>(
-                  begin: Offset(1.0, 0.0),
-                  end: Offset.zero).animate(animation), child: child,
-                ),
-                child: Center(
-                  key: ValueKey(context.watch<GameState>().currentIndex),
-                  child: Column (
-                    children: [
-                      Text(
-                        context.read<GameState>().playerList[context.read<GameState>().currentIndex], style: AppTextStyles.standard,
+              create: (context) => GameState(snapshot.data![0], snapshot.data![1]), // game state creation(wordsList hintsList)
+              builder: (context, child) => Stack(
+                children: [
+//================================================== PAGE LAYOUT ==================================================
+                  Background(backgroundColor: context.read<GameState>().currentPlayerColor),
+                  AnimatedSwitcher(   // player transition animation
+                    duration: const Duration(milliseconds: 400),
+                    transitionBuilder: (child, animation) => SlideTransition(position: Tween<Offset>(
+                      begin: Offset(1.0, 0.0),
+                      end: Offset.zero).animate(animation), child: child,
+                    ),         
+                    child: Center(
+                      key: ValueKey(context.watch<GameState>().currentIndex),
+                      child: Column (
+                        children: [
+                          Text(
+                            context.read<GameState>().playerList[context.read<GameState>().currentIndex], style: AppTextStyles.standard, textAlign: TextAlign.center,
+                          ),
+                          TextBox(),
+                          NextButton(incrementIndex: () => setState(() => context.read<GameState>().incrementCurrentIndex())),
+                        ],
                       ),
-                      TextBox(),
-                      NextButton(incrementIndex: () => setState(() => context.read<GameState>().incrementCurrentIndex())),
-                    ],
+                    )
                   ),
-                )
+                ],
               ),
             );
           }
