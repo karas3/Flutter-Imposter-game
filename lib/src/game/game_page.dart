@@ -16,9 +16,9 @@ class GamePage extends StatefulWidget {
   State<GamePage> createState() => _GamePageState();
 }
 
-class _GamePageState extends State<GamePage> {
+class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Scaffold(
       appBar: CustomAppBar(title: "Game page"),
       body: FutureBuilder(
@@ -34,39 +34,85 @@ class _GamePageState extends State<GamePage> {
             return Center(child: Text('Loading Data!', style: AppTextStyles.standard,));   
           }
           else {
-            return Provider(
-              create: (context) => GameState(snapshot.data![0], snapshot.data![1]), // game state creation(wordsList hintsList)
-              builder: (context, child) => Stack(
-                children: [
-//================================================== PAGE LAYOUT ==================================================
-                  Background(backgroundColor: context.read<GameState>().currentPlayerColor),
-                  AnimatedSwitcher(   // player transition animation
-                    duration: const Duration(milliseconds: 400),
-                    transitionBuilder: (child, animation) => SlideTransition(position: Tween<Offset>(
-                      begin: Offset(1.0, 0.0),
-                      end: Offset.zero).animate(animation), child: child,
-                    ),         
-                    child: Center(
-                      key: ValueKey(context.watch<GameState>().currentIndex),
-                      child: Column (
-                        children: [
-                          Text(
-                            context.read<GameState>().playerList[context.read<GameState>().currentIndex], style: AppTextStyles.standard, textAlign: TextAlign.center,
-                          ),
-                          TextBox(),
-                          NextButton(incrementIndex: () => setState(() => context.read<GameState>().incrementCurrentIndex())),
-                        ],
-                      ),
-                    )
-                  ),
-                ],
-              ),
+            return ChangeNotifierProvider(
+              create: (context) => GameState(wordsList: snapshot.data![0], hintsList: snapshot.data![1]),
+              builder: (context, child) {
+                return Stack(
+                  children: [
+            //================================================== PAGE LAYOUT ==================================================
+                    Background(vsync: this),
+                    AnimatedSwitcher(   // player transition animation
+                      duration: const Duration(milliseconds: 400),
+                      transitionBuilder: (child, animation) => SlideTransition(position: Tween<Offset>(
+                        begin: Offset(1.0, 0.0),
+                        end: Offset.zero).animate(animation), child: child,
+                      ),         
+                      child: Center(
+                        key: ValueKey(context.watch<GameState>().currentIndex),
+                        child: Column (
+                          children: [
+                            Text(
+                              context.read<GameState>().playerList[context.read<GameState>().currentIndex], style: AppTextStyles.standard, textAlign: TextAlign.center,
+                            ),
+                            TextBox(),
+                            NextButton(),
+                          ],
+                        ),
+                      )
+                    ),
+                  ],
+                );
+              }
             );
           }
         }
-      ),
+      )
     );
   }
 }
 
-//TODO: Write an actual game
+// class GamePageLayout extends StatefulWidget {
+//   const GamePageLayout({super.key});
+
+//   @override
+//   State<GamePageLayout> createState() => _GamePageState();
+// }
+
+// class _GamePageState extends State<GamePageLayout> with SingleTickerProviderStateMixin {
+//   late final Background background;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Stack(
+//       children: [
+// //================================================== PAGE LAYOUT ==================================================
+//         background,
+//         AnimatedSwitcher(   // player transition animation
+//           duration: const Duration(milliseconds: 400),
+//           transitionBuilder: (child, animation) => SlideTransition(position: Tween<Offset>(
+//             begin: Offset(1.0, 0.0),
+//             end: Offset.zero).animate(animation), child: child,
+//           ),         
+//           child: Center(
+//             key: ValueKey(context.watch<GameState>().currentIndex),
+//             child: Column (
+//               children: [
+//                 Text(
+//                   context.read<GameState>().playerList[context.read<GameState>().currentIndex], style: AppTextStyles.standard, textAlign: TextAlign.center,
+//                 ),
+//                 TextBox(),
+//                 NextButton(incrementIndex: () => setState(() => context.read<GameState>().incrementCurrentIndex())),
+//               ],
+//             ),
+//           )
+//         ),
+//       ],
+//     );
+//   }
+
+//   @override
+//   void initState() {
+//     background = Background(backgroundColor: context.read<GameState>().currentPlayerColor, vsync: this);
+//     super.initState();
+//   }
+// }

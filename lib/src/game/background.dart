@@ -1,37 +1,67 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import 'package:vector_math/vector_math.dart' show Vector2, Matrix2;
 import 'package:vector_math/vector_math_lists.dart';
 
-class Background extends StatelessWidget {
-  final HSLColor backgroundColor;
+import 'package:imposter_party_game/src/ui_elements/app_theme.dart';
+import 'package:imposter_party_game/src/game/game_object.dart';
 
-  const Background({super.key, required this.backgroundColor});
+class Background extends StatefulWidget {
+  late final AnimationController _colorTransitionController;
+
+  Background({super.key, required TickerProvider vsync}) {
+    _colorTransitionController = AnimationController(vsync: vsync, duration: const Duration(milliseconds: 300))..forward();
+  }
 
   @override
+  State<Background> createState() => _BackgroundState();
+}
+
+class _BackgroundState extends State<Background> {
+  @override
   Widget build(BuildContext context) {
-    return CustomPaint (
-      painter: _BackgroundPainter(
-        color: backgroundColor,
-      ),
-      child: const SizedBox.expand(), // expand background for entire page
+    context.watch<GameState>().incrementCurrentIndex;
+    return AnimatedBuilder(
+      animation: widget._colorTransitionController,
+      builder: (context, _) { 
+        final double dt = widget._colorTransitionController.value;
+        return CustomPaint (
+          painter: _BackgroundPainter(
+            color: context.read<GameState>().oldPlayerColor.to(context.read<GameState>().currentPlayerColor, dt),
+          ),
+          child: const SizedBox.expand(), // expand background for entire page
+        );
+      }
     );
+  }
+
+  @override
+  void dispose() {
+    widget._colorTransitionController.dispose();
+    super.dispose();
   }
 }
 
 class _BackgroundPainter extends CustomPainter {
-  final HSLColor color;
+  HSLColor color;
   late final HSLColor backgroundColor; 
   _BackgroundPainter({required this.color}) {
-    backgroundColor = color.withLightness((color.lightness - 0.15).abs());
+    backgroundColor = color;
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color.toColor();
     final shadow = Paint()..color = Colors.black..maskFilter = MaskFilter.blur(BlurStyle.outer, 7.5);
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), Paint()..color = backgroundColor.toColor());
+    late final Paint paint;
+    
+    if(AppTheme.isLightTheme) {
+      paint = Paint()..color = color.withLightness((-color.lightness + 0.15).abs()).toColor();
+      canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), Paint()..color = backgroundColor.toColor());  //background
+    } else {
+      paint = Paint()..color = color.toColor();
+      canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), Paint()..color = backgroundColor.withLightness((color.lightness - 0.15).abs()).toColor());  //background
+    }
 
     final shapes = [
       // CustomRect(center: Vector2(size.width/2, size.height/2), size: Size(1000, 40), rotationAngle: pi/2),
@@ -55,7 +85,7 @@ class _BackgroundPainter extends CustomPainter {
 
 
   @override
-  bool shouldRepaint(_BackgroundPainter old) => false; 
+  bool shouldRepaint(_BackgroundPainter old) => false;
 }
 
 
@@ -92,4 +122,9 @@ class CustomRect {
   }
 
   Path get rectFromPath => rect;
+}
+
+
+extension on HSLColor {
+  HSLColor to(HSLColor b, double t) => HSLColor.fromColor(Color.lerp(toColor(), b.toColor(), t)!);  // change AHSL to Color so the color change doesn't go through all of the different hues
 }

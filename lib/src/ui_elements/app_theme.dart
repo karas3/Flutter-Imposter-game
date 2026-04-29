@@ -32,5 +32,6 @@ class AppTheme extends ChangeNotifier {
     }
     return Icons.light_mode;
   }
+  static bool get isLightTheme => _lightTheme;
   static double get fontSize => _fontSize;
 }

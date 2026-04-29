@@ -86,7 +86,7 @@ class CategoriesList extends ChangeNotifier {
 
 
 
-class Category extends ChangeNotifier {
+class Category {
   String _name;
   List<String> _words = [];
   List<String> _hints = [];

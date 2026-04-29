@@ -52,7 +52,7 @@ class _CategoryEditPageState extends State<CategoryEditPage> {
         body: ChangeNotifierProvider(
           create: (_) => CategoriesList(),
           child: Builder(
-            builder: (context) {    // to fix an error with provider not existing
+            builder: (context) {
           // =========================== PAGE LAYOUT =========================================
               return Column(
                 children: [

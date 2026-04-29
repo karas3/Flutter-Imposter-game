@@ -55,6 +55,10 @@ class _TextBoxState extends State<TextBox> with SingleTickerProviderStateMixin {
             width: 300,
             height: 150,
             transform: Matrix4.translationValues(0, _containerOffset, 0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+              boxShadow: [BoxShadow(color: Colors.black.withAlpha(255), blurRadius: 10.0, offset: Offset(5, 5))],
+            ),
             child: _gradient,
           ),
         )
@@ -77,7 +81,7 @@ class _TextBoxState extends State<TextBox> with SingleTickerProviderStateMixin {
       radiusChange: 0.25,
       // backgroundColor: Color(0xFF1a1230),
       // gradientColors: [HSLColor.fromAHSL(0.4, 272.89, 0.67, 0.39).toColor(), Colors.transparent,],
-      backgroundColor: context.read<GameState>().currentPlayerColor.withLightness(0.1).toColor(),
+      backgroundColor: context.read<GameState>().currentPlayerColor.withLightness(0.2).toColor(),
       gradientColors: [context.read<GameState>().currentPlayerColor.toColor() ,Colors.transparent],
 
       child: Text(
@@ -94,17 +98,13 @@ class _TextBoxState extends State<TextBox> with SingleTickerProviderStateMixin {
 }
 
 class NextButton extends StatelessWidget {
-  final VoidCallback incrementIndex;
-
-  const NextButton({super.key,
-    required this.incrementIndex,
-  });
+  const NextButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return context.read<GameState>().currentIndex + 1 < context.read<GameState>().playerCount 
     ? FilledButton(
-        onPressed: () => incrementIndex(),
+        onPressed: () => context.read<GameState>().incrementCurrentIndex(),
         child: Text(
           "Next player",
           style: AppTextStyles.standard,

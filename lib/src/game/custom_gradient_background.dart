@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 
 class AnimatedGradient extends StatefulWidget {
   late final AnimationController _animationController;
-  final TickerProvider vsync;
 
   final int circlesCount;
   final double medianRadius;
@@ -17,10 +16,8 @@ class AnimatedGradient extends StatefulWidget {
 
   final Widget? child;
 
-  AnimatedGradient({super.key, required this.vsync,  required this.circlesCount, required this.medianRadius, this.radiusChange, required this.gradientColors, this.backgroundColor, this.child}) {
-    _animationController =  AnimationController(vsync: vsync,
-    duration: const Duration(seconds: 2),
-    );
+  AnimatedGradient({super.key, required TickerProvider vsync,  required this.circlesCount, required this.medianRadius, this.radiusChange, required this.gradientColors, this.backgroundColor, this.child}) {
+    _animationController =  AnimationController(vsync: vsync, duration: const Duration(seconds: 2),);
   }
 
   @override
