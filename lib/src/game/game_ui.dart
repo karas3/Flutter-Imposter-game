@@ -6,6 +6,22 @@ import 'package:imposter_party_game/src/ui_elements/custom_text.dart';
 
 import 'custom_gradient_background.dart';
 
+class NameDisplay extends StatelessWidget {
+  final String name;
+  final HSLColor backgroundColor;
+  const NameDisplay({super.key, required this.name, required this.backgroundColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      name,
+      style: AppTextStyles.gamePageText(backgroundColor),
+      textAlign: TextAlign.center,
+    );
+  }
+
+}
+
 
 class TextBox extends StatefulWidget {
   const TextBox({super.key});
@@ -15,7 +31,7 @@ class TextBox extends StatefulWidget {
 }
 class _TextBoxState extends State<TextBox> with SingleTickerProviderStateMixin {
   double _containerOffset = 0.0;
-  late final AnimatedGradient _gradient;
+  late final AnimatedGradientBackground _gradient;
   
   @override
   Widget build(BuildContext context) {
@@ -74,16 +90,14 @@ class _TextBoxState extends State<TextBox> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    _gradient = AnimatedGradient(
+    final HSLColor color = context.read<GameState>().currentPlayerColor;
+    _gradient = AnimatedGradientBackground(
       vsync: this,
       circlesCount: 30,
       medianRadius: 90,
       radiusChange: 0.25,
-      // backgroundColor: Color(0xFF1a1230),
-      // gradientColors: [HSLColor.fromAHSL(0.4, 272.89, 0.67, 0.39).toColor(), Colors.transparent,],
-      backgroundColor: context.read<GameState>().currentPlayerColor.withLightness(0.2).toColor(),
-      gradientColors: [context.read<GameState>().currentPlayerColor.toColor() ,Colors.transparent],
-
+      backgroundColor: color.withLightness(color.lightness.clamp(0.1, 0.3)).toColor(),
+      gradientColors: [color.withLightness(color.lightness.clamp(0.3, 1)).toColor() ,Colors.transparent],
       child: Text(
         "?",
         textAlign: TextAlign.center,

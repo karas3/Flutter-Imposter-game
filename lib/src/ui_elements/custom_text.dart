@@ -38,11 +38,19 @@ class AppTextStyles {
   static TextStyle appBar(BuildContext context) => TextStyle(
     fontSize: AppTheme.fontSize, 
     fontWeight: FontWeight.bold, 
-    color: Theme.of(context).colorScheme.onPrimaryContainer
+    color: Theme.of(context).colorScheme.onPrimary
   );
 
   static TextStyle gridElement(bool selected) => TextStyle(
     fontSize: selected ? AppTheme.fontSize * 0.8 : AppTheme.fontSize * 0.65 // 22px && 18px
+  );
+  
+  static TextStyle gamePageText(HSLColor backgroundColor) => TextStyle(
+    fontSize: AppTheme.fontSize * 1.3, // 28px
+    fontWeight: FontWeight.bold,
+    color: backgroundColor.lightness < 0.5
+    ? Colors.white
+    : Colors.black
   );
 
   static TextStyle dialogTitle = TextStyle(

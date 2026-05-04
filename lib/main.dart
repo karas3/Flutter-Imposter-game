@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp( 
       debugShowCheckedModeBanner: false,
-      theme: context.watch<AppTheme>().getTheme(),
+      theme: context.watch<AppTheme>().theme,
       
       home: Scaffold(
         body: PageView(

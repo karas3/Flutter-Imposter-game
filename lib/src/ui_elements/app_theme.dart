@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AppTheme extends ChangeNotifier {
-  static bool _lightTheme = false; 
+  static const bool _light = true;
+  static const bool _dark = false;
+
+  static bool _theme = _dark; 
   static final double _fontSize = 28;
 
-  ThemeData getTheme() {
-    if(_lightTheme) {
+  ThemeData get theme {
+    if(_theme == _light) {
       return ThemeData(
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.light,
@@ -22,16 +25,17 @@ class AppTheme extends ChangeNotifier {
   }
 
   void switchTheme() {
-    _lightTheme ? _lightTheme = false : _lightTheme = true;
+    _theme == _light ? _theme = _dark : _theme = _light;
     notifyListeners();
   }
 
-  static IconData getIcon() {   //return icon for app bar to use
-    if(_lightTheme) {
-      return Icons.dark_mode;
+  static IconData get icon {   //return icon for app bar to use
+    if(_theme == _light) {
+      return Icons.dark_mode; 
+    } else {
+      return Icons.light_mode;
     }
-    return Icons.light_mode;
   }
-  static bool get isLightTheme => _lightTheme;
+  static bool get isThemeLight => _theme;
   static double get fontSize => _fontSize;
 }

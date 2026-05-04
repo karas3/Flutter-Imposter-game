@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 
-class AnimatedGradient extends StatefulWidget {
+class AnimatedGradientBackground extends StatefulWidget {
   late final AnimationController _animationController;
 
   final int circlesCount;
@@ -16,15 +16,15 @@ class AnimatedGradient extends StatefulWidget {
 
   final Widget? child;
 
-  AnimatedGradient({super.key, required TickerProvider vsync,  required this.circlesCount, required this.medianRadius, this.radiusChange, required this.gradientColors, this.backgroundColor, this.child}) {
+  AnimatedGradientBackground({super.key, required TickerProvider vsync,  required this.circlesCount, required this.medianRadius, this.radiusChange, required this.gradientColors, this.backgroundColor, this.child}) {
     _animationController =  AnimationController(vsync: vsync, duration: const Duration(seconds: 2),);
   }
 
   @override
-  State<AnimatedGradient> createState() => _AnimatedGradientState();
+  State<AnimatedGradientBackground> createState() => _AnimatedGradientState();
 }
 
-class _AnimatedGradientState extends State<AnimatedGradient> {
+class _AnimatedGradientState extends State<AnimatedGradientBackground> {
   late final BlobList blobs;
 
   @override
@@ -94,10 +94,11 @@ class _GradientPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final rrect = RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(30));
+    canvas.drawRRect(rrect, Paint()..color = (backgroundColor ?? Colors.transparent)); //background
+    canvas.clipRRect(rrect);  //clips parts of gradients outside of rectangle
 
-    // canvas.drawRRect(rrect, Paint()..color = (backgroundColor ?? Colors.transparent)..imageFilter = ImageFilter.blur(sigmaX: 10, sigmaY: 10)); // with shadow
-    canvas.clipRRect(rrect);
-    canvas.drawRRect(rrect, Paint()..color = (backgroundColor ?? Colors.transparent)..imageFilter = ImageFilter.blur(sigmaX: 10, sigmaY: 10));
+    final blurFilter = Paint()..imageFilter = ImageFilter.blur(sigmaX: 10, sigmaY: 10); //blur filter to make nebula like effect stronger
+    canvas.saveLayer(Offset.zero & size, blurFilter);
 
     for(int i = 0; i < centersData.length; i++) {
       final paint = Paint()..shader = RadialGradient(
@@ -106,6 +107,8 @@ class _GradientPainter extends CustomPainter {
 
       canvas.drawCircle(offsetWithinBounds(centersData[i], size), radiuses[i], paint);
     }
+
+    canvas.restore(); //apply blur filter
   }
 
   @override
@@ -119,13 +122,6 @@ class _GradientPainter extends CustomPainter {
   }
 }
 
-
-extension on Offset {
-  Offset to(Offset b, double t) => Offset.lerp(this, b, t)!;
-}
-extension on double {
-  double to(double b, double t) => lerpDouble(this, b, t)!;
-}
 class BlobList {
   late final int circlesCount;
 
@@ -169,4 +165,11 @@ class BlobList {
   List<double> radiusesData(double dt) => radiusChangePercentage != null ? List.generate(circlesCount, (index) => _lastRadiusesData[index].to(_newRadiusesData[index], dt)) : List.generate(circlesCount, (index) => medianRadius);
   List<Offset> centerData(double dt) => List.generate(circlesCount, (index) => _lastCentersData[index].to(_newCentersData[index], dt));
   List<Color> get colors => gradientColors;
+}
+
+extension on Offset {
+  Offset to(Offset b, double t) => Offset.lerp(this, b, t)!;
+}
+extension on double {
+  double to(double b, double t) => lerpDouble(this, b, t)!;
 }

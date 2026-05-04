@@ -19,16 +19,22 @@ class Background extends StatefulWidget {
 }
 
 class _BackgroundState extends State<Background> {
+  late final BackgroundColors colors;
+
   @override
   Widget build(BuildContext context) {
-    context.watch<GameState>().incrementCurrentIndex;
+    context.watch<GameState>().incrementCurrentIndex;   // rebuil page when switching players
+    colors.colorAssigment(context);
+
+    context.read<GameState>().didAppThemeChange = true;
     return AnimatedBuilder(
       animation: widget._colorTransitionController,
       builder: (context, _) { 
         final double dt = widget._colorTransitionController.value;
         return CustomPaint (
           painter: _BackgroundPainter(
-            color: context.read<GameState>().oldPlayerColor.to(context.read<GameState>().currentPlayerColor, dt),
+            backgroundColor: colors.backgroundColor(dt),
+            midgroundColor: colors.midgroundColor(dt),
           ),
           child: const SizedBox.expand(), // expand background for entire page
         );
@@ -37,37 +43,32 @@ class _BackgroundState extends State<Background> {
   }
 
   @override
+  void initState() {
+    colors = BackgroundColors(playerColor : context.read<GameState>().currentPlayerColor);
+    super.initState();
+  }
+  
+  @override
   void dispose() {
     widget._colorTransitionController.dispose();
     super.dispose();
   }
 }
 
+
 class _BackgroundPainter extends CustomPainter {
-  HSLColor color;
-  late final HSLColor backgroundColor; 
-  _BackgroundPainter({required this.color}) {
-    backgroundColor = color;
-  }
+  Color backgroundColor;
+  Color midgroundColor;
+  _BackgroundPainter({required this.backgroundColor, required this.midgroundColor});
 
   @override
   void paint(Canvas canvas, Size size) {
     final shadow = Paint()..color = Colors.black..maskFilter = MaskFilter.blur(BlurStyle.outer, 7.5);
-    late final Paint paint;
-    
-    if(AppTheme.isLightTheme) {
-      paint = Paint()..color = color.withLightness((-color.lightness + 0.15).abs()).toColor();
-      canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), Paint()..color = backgroundColor.toColor());  //background
-    } else {
-      paint = Paint()..color = color.toColor();
-      canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), Paint()..color = backgroundColor.withLightness((color.lightness - 0.15).abs()).toColor());  //background
-    }
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), Paint()..color = backgroundColor);  //background
 
     final shapes = [
-      // CustomRect(center: Vector2(size.width/2, size.height/2), size: Size(1000, 40), rotationAngle: pi/2),
-
-      // CustomRect(center: Vector2(300, 650), size: Size(600, 40), rotationAngle: pi/1.7),
-      // CustomRect(center: Vector2(size.width - 300, 650), size: Size(600, 40), rotationAngle: -pi/1.7),
+      CustomRect(center: Vector2(300, 650), size: Size(600, 40), rotationAngle: pi/1.7),
+      CustomRect(center: Vector2(size.width - 300, 650), size: Size(600, 40), rotationAngle: -pi/1.7),
       
       CustomRect(center: Vector2(50, 300), size: Size(700, 40), rotationAngle: -pi/2.5),
       CustomRect(center: Vector2(size.width - 50, 300), size: Size(700, 40), rotationAngle: pi/2.5),
@@ -78,16 +79,58 @@ class _BackgroundPainter extends CustomPainter {
     ];
 
     for(CustomRect shape in shapes) {
-      canvas.drawPath(shape.rectFromPath, paint);
+      canvas.drawPath(shape.rectFromPath, Paint()..color = midgroundColor);
       canvas.drawPath(shape.rectFromPath, shadow);
     }
   }
-
 
   @override
   bool shouldRepaint(_BackgroundPainter old) => false;
 }
 
+class BackgroundColors {
+  HSLColor playerColor;
+  late HSLColor _oldBackgroundColor;
+  late HSLColor _currentbackgroundColorColor;
+  late HSLColor _oldMidgroundColor;
+  late HSLColor _currentMidgroundColor;
+
+  BackgroundColors({required this.playerColor});
+
+  void colorAssigment(BuildContext context) {
+    if(context.read<GameState>().didAppThemeChange) { //theme change
+      if(AppTheme.isThemeLight) { //change from dark to light
+        _oldBackgroundColor = playerColor.withLightness(playerColor.lightness * 0.7);
+        _currentbackgroundColorColor = playerColor;
+      } else {  //change from light to dark
+        _oldBackgroundColor = playerColor;
+        _currentbackgroundColorColor = playerColor.withLightness(playerColor.lightness * 0.7);
+      }
+      _oldMidgroundColor = _currentbackgroundColorColor;
+      _currentMidgroundColor = _oldBackgroundColor;
+    } else {  // next playertk
+      if(AppTheme.isThemeLight) { //light theme
+        _oldBackgroundColor = playerColor.withLightness(playerColor.lightness * 0.7);
+        playerColor = context.read<GameState>().currentPlayerColor;
+        _currentbackgroundColorColor = playerColor;
+
+        _oldMidgroundColor = playerColor;
+        _currentMidgroundColor = playerColor.withLightness(playerColor.lightness * 0.7);
+      } else {  //dark theme
+        _oldBackgroundColor = playerColor;
+        playerColor = context.read<GameState>().currentPlayerColor;
+        _currentbackgroundColorColor = playerColor.withLightness(playerColor.lightness * 0.7);
+
+        _oldMidgroundColor = playerColor.withLightness(playerColor.lightness * 0.7);
+        _currentMidgroundColor = playerColor;
+      }
+    }
+  }
+
+  // ========================== GETTERS ==========================
+  Color backgroundColor(double dt) => _oldBackgroundColor.to(_currentbackgroundColorColor, dt).toColor();
+  Color midgroundColor(double dt) => _oldMidgroundColor.to(_currentMidgroundColor, dt).toColor();
+}
 
 class CustomRect {
   late final Path rect;

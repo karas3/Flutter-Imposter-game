@@ -51,9 +51,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         key: ValueKey(context.watch<GameState>().currentIndex),
                         child: Column (
                           children: [
-                            Text(
-                              context.read<GameState>().playerList[context.read<GameState>().currentIndex], style: AppTextStyles.standard, textAlign: TextAlign.center,
-                            ),
+                            NameDisplay(name: context.read<GameState>().currentPlayerName, backgroundColor: context.read<GameState>().currentPlayerColor),
                             TextBox(),
                             NextButton(),
                           ],
@@ -70,49 +68,3 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     );
   }
 }
-
-// class GamePageLayout extends StatefulWidget {
-//   const GamePageLayout({super.key});
-
-//   @override
-//   State<GamePageLayout> createState() => _GamePageState();
-// }
-
-// class _GamePageState extends State<GamePageLayout> with SingleTickerProviderStateMixin {
-//   late final Background background;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Stack(
-//       children: [
-// //================================================== PAGE LAYOUT ==================================================
-//         background,
-//         AnimatedSwitcher(   // player transition animation
-//           duration: const Duration(milliseconds: 400),
-//           transitionBuilder: (child, animation) => SlideTransition(position: Tween<Offset>(
-//             begin: Offset(1.0, 0.0),
-//             end: Offset.zero).animate(animation), child: child,
-//           ),         
-//           child: Center(
-//             key: ValueKey(context.watch<GameState>().currentIndex),
-//             child: Column (
-//               children: [
-//                 Text(
-//                   context.read<GameState>().playerList[context.read<GameState>().currentIndex], style: AppTextStyles.standard, textAlign: TextAlign.center,
-//                 ),
-//                 TextBox(),
-//                 NextButton(incrementIndex: () => setState(() => context.read<GameState>().incrementCurrentIndex())),
-//               ],
-//             ),
-//           )
-//         ),
-//       ],
-//     );
-//   }
-
-//   @override
-//   void initState() {
-//     background = Background(backgroundColor: context.read<GameState>().currentPlayerColor, vsync: this);
-//     super.initState();
-//   }
-// }
