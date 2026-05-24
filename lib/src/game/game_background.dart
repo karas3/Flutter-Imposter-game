@@ -5,20 +5,20 @@ import 'package:vector_math/vector_math.dart' show Vector2, Matrix2;
 import 'package:vector_math/vector_math_lists.dart';
 
 import 'package:imposter_party_game/src/ui_elements/app_theme.dart';
-import 'package:imposter_party_game/src/game/game_object.dart';
+import 'package:imposter_party_game/src/game/game_state_object.dart';
 
-class Background extends StatefulWidget {
+class Gamebackground extends StatefulWidget {
   late final AnimationController _colorTransitionController;
 
-  Background({super.key, required TickerProvider vsync}) {
+  Gamebackground({super.key, required TickerProvider vsync}) {
     _colorTransitionController = AnimationController(vsync: vsync, duration: const Duration(milliseconds: 300))..forward();
   }
 
   @override
-  State<Background> createState() => _BackgroundState();
+  State<Gamebackground> createState() => _BackgroundState();
 }
 
-class _BackgroundState extends State<Background> {
+class _BackgroundState extends State<Gamebackground> {
   late final BackgroundColors colors;
 
   @override

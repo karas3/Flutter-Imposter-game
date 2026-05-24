@@ -124,9 +124,9 @@ class _CategoryButtonState extends State<CategoryButton> {
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,                     
           width: widget.categoriesList[widget.id].isSelected ? size : size - 10,   //170, 160                 
-          height: widget.categoriesList[widget.id].isSelected ? size : size - 10,
+          height: widget.categoriesList[widget.id].isSelected ? size : size - 10, 
           decoration: BoxDecoration(  
-            color: widget.categoriesList[widget.id].isSelected ? Theme.of(context).colorScheme.inversePrimary : Colors.transparent,
+            color: widget.categoriesList[widget.id].isSelected ? Theme.of(context).colorScheme.primary : Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(30)),
             border: Border.all(
                 color: widget.categoriesList[widget.id].isSelected ? Colors.transparent : Theme.of(context).colorScheme.outlineVariant,
@@ -150,10 +150,9 @@ class _CategoryButtonState extends State<CategoryButton> {
             child: AnimatedDefaultTextStyle(
               duration: Duration(milliseconds: 300),
               curve: Curves.easeInOut,   
-              style: AppTextStyles.gridElement(widget.categoriesList[widget.id].isSelected),
+              style: AppTextStyles.gridElement(context, widget.categoriesList[widget.id].isSelected),
               child: Text(
                 widget.categoriesList[widget.id].name,
-                style: TextStyle(color: Theme.of(context).colorScheme.inverseSurface),
               ),
             ),
           ),

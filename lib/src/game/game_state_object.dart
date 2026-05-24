@@ -10,7 +10,7 @@ class GameState extends ChangeNotifier{
   late final String _word;
   late final String _hint;
 
-  bool didAppThemeChange = false;
+  bool didAppThemeChange = false; //check if app theme changed to switch colors in correct order
 
   GameState({required List<String> wordsList, required List<String> hintsList}) {
     // players randomization
@@ -27,6 +27,7 @@ class GameState extends ChangeNotifier{
     _hint = hintsList[index];
   }
 
+
   void incrementCurrentIndex() {
     didAppThemeChange = false;
     _currentIndex++;
@@ -37,13 +38,27 @@ class GameState extends ChangeNotifier{
   int get playerCount => _playerNames.length;
   String get word => _word;
   String get hint => _hint;
-  String get currentPlayerName => _playerNames[currentIndex];
-  HSLColor get currentPlayerColor => _playersColors[currentIndex];
+  String get currentPlayerName => _playerNames[_currentIndex];
+  HSLColor get currentPlayerColor => _playersColors[_currentIndex];
 
+  bool get isPlayerLast => _currentIndex + 1 < playerCount; //used for next button
   bool get isImposter {
     for(int i = 0; i < _impostersId.length; i++) {
       if(_currentIndex == _impostersId[i]) return true;
     }
     return false;
   }
+}
+
+class NextPlayerButtonState extends ChangeNotifier {
+  bool _isEnabled = false; // used to prevent player switching too fast
+
+  void enable() {
+    _isEnabled = true;
+    notifyListeners();
+  }
+  void disable() {
+    _isEnabled = false;
+  }
+  bool get isEnabled => _isEnabled;
 }

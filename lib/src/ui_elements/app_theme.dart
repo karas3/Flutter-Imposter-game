@@ -5,7 +5,6 @@ class AppTheme extends ChangeNotifier {
   static const bool _dark = false;
 
   static bool _theme = _dark; 
-  static final double _fontSize = 28;
 
   ThemeData get theme {
     if(_theme == _light) {
@@ -37,5 +36,4 @@ class AppTheme extends ChangeNotifier {
     }
   }
   static bool get isThemeLight => _theme;
-  static double get fontSize => _fontSize;
 }
